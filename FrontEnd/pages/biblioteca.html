@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+      integrity="sha512-ChzDzmAAZJAw9nKToSX3rKV4mE3bZ7ouYGE0t+w0Ni/1RWhGztBczynPnDJ1tE1m/ePuQ6bbCjvPtO59emGS1u+X+9c6V8" 
+      crossorigin="anonymous" 
+      referrerpolicy="no-referrer" 
+    />
+    <style>
+        #pesquisa {
+            margin-top: 4px;
+            width: 30vw;
+        }
+        #links-start {
+            gap: 10px;
+        }
+        h2 {
+          font-size: x-large;
+          font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="box navbar " id="navbar-flex">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <h1 class="title" id="title">Jogos Na Educação</h1>
+            </a>
+        </div>
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start" id="links-start">
+              <a class="navbar-item" href="/FrontEnd/index.html">Início</a>
+              <a class="navbar-item" href="/FrontEnd/pages/biblioteca.html">Biblioteca</a>
+              <a class="navbar-item" href="/FrontEnd/pages/materiais.html">Materiais</a>
+              <a class="navbar-item" href="/FrontEnd/pages/quemSomos.html">Quem Somos</a>
+            </div>
+            <div class="navbar-end">
+                <div class="control has-icons-left">
+                    <input class="input" type="text" placeholder="Pesquisar" id="pesquisa">
+                    <span class="icon is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+      <h2 class="subtitle">Nossos Cursos</h2>
+      <section id="courses">
+        <!-- Botão para abrir o modal -->
+        <button id="openModal" class="button is-primary">Abrir Modal</button>
+        
+        <!-- Modal -->
+        <div class="modal" id="myModal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">CURSO 1</p>
+              <button class="delete" aria-label="close" id="closeModal"></button>
+            </header>
+            <section class="modal-card-body">
+              <h3 class="title ">Como Jogar Minecraft?</h3><br>
+              <h4 class="subtitle"></h4>
+              <iframe width="853" height="480" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Official Music Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="buttons">
+                <button class="button is-success">Salvar Alterações</button>
+                <button class="button" id="cancelModal">Cancelar</button>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+        // Selecionando os elementos
+        const modal = document.getElementById('myModal');
+        const openModalBtn = document.getElementById('openModal');
+        const closeModalBtns = document.querySelectorAll('#closeModal, #cancelModal');
+
+        // Abrir o modal
+        openModalBtn.addEventListener('click', () => {
+            modal.classList.add('is-active');
+        });
+
+        // Fechar o modal
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modal.classList.remove('is-active');
+            });
+        });
+
+        // Fechar o modal clicando no fundo
+        document.querySelector('.modal-background').addEventListener('click', () => {
+            modal.classList.remove('is-active');
+        });
+    </script>
+</body>
+</html>

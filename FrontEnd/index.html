@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-ChzDzmAAZJA<ctrl61>w9nKToSX3rKV4mE3bZ7ouYGE0t+w0Ni/1RWhGztBczynPnDJ1tE1m/ePuQ6bbCjvPtO59emGS1u+X+9c6V8" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+
+    #pesquisa{
+        margin-top: 4px;
+        width: 30vw;
+    }
+    #links-start{
+        gap: 10px;
+    }
+    .divs_path {
+            width: 30vw;
+            height: 300px;
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px;
+           
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .divs_path:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .divs_path img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    main{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 60px;
+      }
+      #neymar{
+        max-width: 450px;
+      }
+      #texts{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+</style>
+</head>
+<body>
+    <header class="box navbar " id="navbar-flex">
+        <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <h1 class="title" id="title">Jogos Na Educação</h1>
+            </a>
+
+        </div>
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start" id="links-start">
+              <a class="navbar-item" href="/FrontEnd/index.html">
+                início
+              </a>
+        
+              <a class="navbar-item" href="/FrontEnd/pages/biblioteca.html">
+                Biblioteca
+              </a>
+        
+              
+                <a class="navbar-item" href="/FrontEnd/pages/materiais.html">
+                  Materiais
+                </a>
+                <a class="navbar-item" href="/FrontEnd/pages/quemSomos.html">
+                    Quem Somos
+                </a>
+                </div>
+                <div class="navbar-end">
+                    <div class="control has-icons-left">
+                        <input class="input" type="text" placeholder="Pesquisar" id="pesquisa">
+                        <span class="icon is-left">
+                        <i class="fas 1  fa-search"></i>
+                        </span>
+                        </div>
+                </div>
+                
+    </header>
+    <main>
+      <section id="texts">
+        <p class="title is-size-3" id="neymar">Quer melhorar seu aprendizado utilizando de jogos digitais incríveis para isso? Conheça nosso site:</p>
+      </section>
+      <section id="divs">
+      <div class="box divs_path" id="biblioteca_div">
+        <a href="/FrontEnd/pages/biblioteca.html">
+          <img src="/FrontEnd/assets/img/Biblioteca de.png" alt="">
+        </a>
+      </div>
+      <div class="box divs_path" id="materiais_div">
+        <img src="/FrontEnd/assets/img/Materiais.png" alt="">
+      </div>
+      <div class="box divs_path" id="quemSomos_div">
+        <img src="/FrontEnd/assets/img/Materiais (1).png" alt="">
+      </div>
+    </section>
+    </main>
+</body>
+</html>
