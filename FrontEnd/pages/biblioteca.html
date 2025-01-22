@@ -27,12 +27,27 @@
           font-size: x-large;
           font-weight: bold;
         }
+        .card {
+            width: 300px;  /* Reduzindo o tamanho */
+            margin: 10px;
+        }
+        .card .card-image img {
+            height: 180px;  /* Ajustando a altura da imagem */
+            object-fit: cover;
+        }
+        .card .content {
+            font-size: 1rem;
+        }
+        .modal-card-body iframe {
+            width: 100%;
+            height: 315px;
+        }
     </style>
 </head>
 <body>
     <header class="box navbar " id="navbar-flex">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/">
+            <a class="navbar-item" href="/FrontEnd/index.html">
                 <h1 class="title" id="title">Jogos Na Educação</h1>
             </a>
         </div>
@@ -55,39 +70,56 @@
     </header>
     <main>
       <h2 class="subtitle">Nossos Cursos</h2>
-      <section id="courses">
-        <!-- Botão para abrir o modal -->
-        <button id="openModal" class="button is-primary">Abrir Modal</button>
-        
-        <!-- Modal -->
-        <div class="modal" id="myModal">
-          <div class="modal-background"></div>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">CURSO 1</p>
-              <button class="delete" aria-label="close" id="closeModal"></button>
-            </header>
-            <section class="modal-card-body">
-              <h3 class="title ">Como Jogar Minecraft?</h3><br>
-              <h4 class="subtitle"></h4>
-              <iframe width="853" height="480" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Official Music Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </section>
-            <footer class="modal-card-foot">
-              <div class="buttons">
-                <button class="button is-success">Salvar Alterações</button>
-                <button class="button" id="cancelModal">Cancelar</button>
-              </div>
-            </footer>
-          </div>
+      <section id="courses" class="columns is-multiline">
+        <!-- Card 1 -->
+        <div class="column is-one-quarter">
+            <div class="card" id="card_1">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="/FrontEnd/assets/img/MINECRAFT.png" alt="Video Image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <p class="title is-4">Introdução ao Minecraft</p>
+                    <p class="subtitle is-6">Primeira aula do Curso de minecraft.</p>
+                    <div class="content">
+                        Aprenda a jogar o minecraft, que será utilizado em nossas aulas. <br>
+                        <button class="button is-primary" id="openModal">Assistir</button>
+                    </div>
+                </div>
+            </div>
         </div>
       </section>
+
+      <!-- Modal -->
+      <div id="myModal" class="modal" id="1">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Curso 1</p>
+                <button class="delete" aria-label="close" id="closeModal"></button>
+            </header>
+            <section class="modal-card-body">
+                <iframe width="768" height="480" src="https://www.youtube.com/embed/8H1qC_Sq8FY" title="Do básico ao Profissional Minecraft Tutorial (PI)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                <p>Aula introdutória da mecanica sobrevivência no minecraft.</p>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="buttons">
+                    <button class="button is-success" id="closeModalBtn">Concluído</button>
+                </div>
+            </footer>
+        </div>
+      </div>
+
     </main>
 
     <script>
         // Selecionando os elementos
         const modal = document.getElementById('myModal');
         const openModalBtn = document.getElementById('openModal');
-        const closeModalBtns = document.querySelectorAll('#closeModal, #cancelModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const closeModalBtns = document.querySelectorAll('#closeModal, #closeModalBtn');
 
         // Abrir o modal
         openModalBtn.addEventListener('click', () => {
