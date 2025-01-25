@@ -18,6 +18,11 @@
         #links-start{
             gap: 10px;
         }
+        iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
     </style>
 </head>
 <body>
@@ -44,6 +49,80 @@
                         </div>
                 </div>
                 
+                
     </header>
+    <section class="section">
+        <div class="container">
+          <h2 class="title">Materiais de Estudo</h2>
+          <ul id="materials-list">
+            <!-- Os materiais serão inseridos dinamicamente pelo JavaScript -->
+          </ul>
+        </div>
+      </section>
+    
+      <!-- Modal (Bulma) -->
+      <div id="pdf-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+          <div class="box">
+            <iframe id="pdf-frame" src=""></iframe>
+          </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+      </div>
+    
+      <!-- Scripts -->
+      <script>
+        // Lista de materiais
+        const materials = [
+          {
+            title: "INTRODUÇÃO À GEOMETRIA ESPACIAL COM O JOGO MINECRAFT",
+            description: "Neste PDF você aprenderá noções básicas de geometria no minecraft.",
+            pdfUrl: "https://educapes.capes.gov.br/bitstream/capes/206568/2/produto_educacional_geometria_espacial_com_minecraft.pdf" // Substitua pelo link do seu PDF
+          },
+         
+          {
+            title: "Benefícios do minecraft nos anos iniciais",
+            description: "Um artigo que visa discutir o quão útil pode ser o minecraft na educação.",
+            pdfUrl: "https://www.abed.org.br/congresso2022/77971.pdf"
+          }
+        ];
+    
+        // Elementos HTML
+        const materialsList = document.getElementById('materials-list');
+        const pdfModal = document.getElementById('pdf-modal');
+        const pdfFrame = document.getElementById('pdf-frame');
+        const closeModal = pdfModal.querySelector('.modal-close');
+        const modalBackground = pdfModal.querySelector('.modal-background');
+    
+        // Renderizando os materiais
+        materials.forEach(material => {
+          const listItem = document.createElement('li');
+          listItem.classList.add('box', 'mb-4');
+          listItem.innerHTML = `
+            <p class="title is-5">${material.title}</p>
+            <p>${material.description}</p>
+            <button class="button is-link">Ver Material</button>
+          `;
+    
+          // Evento de clique para abrir o modal
+          const button = listItem.querySelector('button');
+          button.addEventListener('click', () => {
+            pdfFrame.src = material.pdfUrl; // Carrega o PDF no iframe
+            pdfModal.classList.add('is-active'); // Exibe o modal
+          });
+    
+          materialsList.appendChild(listItem);
+        });
+    
+        // Fechar o modal
+        const closeModalFunction = () => {
+          pdfModal.classList.remove('is-active');
+          pdfFrame.src = ''; // Limpa o iframe
+        };
+    
+        closeModal.addEventListener('click', closeModalFunction);
+        modalBackground.addEventListener('click', closeModalFunction);
+      </script>
 </body>
 </html>

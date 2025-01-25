@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma de Estudo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <style>
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <p class="title">Plataforma de Estudo</p>
+      <p class="subtitle">Usando Minecraft e Roblox na educação</p>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-one-third">
+          <div class="box has-text-centered">
+            <p class="title is-4">Biblioteca</p>
+            <p>Veja nossas videoaulas</p>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="box has-text-centered">
+            <p class="title is-4">Quem Somos</p>
+            <p>Conheça o projeto e os integrantes</p>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="box has-text-centered">
+            <p class="title is-4">Materiais</p>
+            <p>Explore nossos materiais de estudo</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lista de Materiais -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title">Materiais de Estudo</h2>
+      <ul id="materials-list">
+        <!-- Os materiais serão inseridos dinamicamente pelo JavaScript -->
+      </ul>
+    </div>
+  </section>
+
+  <!-- Modal (Bulma) -->
+  <div id="pdf-modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="box">
+        <iframe id="pdf-frame" src=""></iframe>
+      </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Lista de materiais
+    const materials = [
+      {
+        title: "Material 1",
+        description: "Este é o primeiro material de estudo.",
+        pdfUrl: "https://example.com/pdf1.pdf" // Substitua pelo link do seu PDF
+      },
+      {
+        title: "Material 2",
+        description: "Este é o segundo material de estudo.",
+        pdfUrl: "https://example.com/pdf2.pdf"
+      },
+      {
+        title: "Material 3",
+        description: "Este é o terceiro material de estudo.",
+        pdfUrl: "https://example.com/pdf3.pdf"
+      }
+    ];
+
+    // Elementos HTML
+    const materialsList = document.getElementById('materials-list');
+    const pdfModal = document.getElementById('pdf-modal');
+    const pdfFrame = document.getElementById('pdf-frame');
+    const closeModal = pdfModal.querySelector('.modal-close');
+    const modalBackground = pdfModal.querySelector('.modal-background');
+
+    // Renderizando os materiais
+    materials.forEach(material => {
+      const listItem = document.createElement('li');
+      listItem.classList.add('box', 'mb-4');
+      listItem.innerHTML = `
+        <p class="title is-5">${material.title}</p>
+        <p>${material.description}</p>
+        <button class="button is-link">Ver Material</button>
+      `;
+
+      // Evento de clique para abrir o modal
+      const button = listItem.querySelector('button');
+      button.addEventListener('click', () => {
+        pdfFrame.src = material.pdfUrl; // Carrega o PDF no iframe
+        pdfModal.classList.add('is-active'); // Exibe o modal
+      });
+
+      materialsList.appendChild(listItem);
+    });
+
+    // Fechar o modal
+    const closeModalFunction = () => {
+      pdfModal.classList.remove('is-active');
+      pdfFrame.src = ''; // Limpa o iframe
+    };
+
+    closeModal.addEventListener('click', closeModalFunction);
+    modalBackground.addEventListener('click', closeModalFunction);
+  </script>
+</body>
+</html>
