@@ -1,118 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogos na Educação</title>
-    <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-ChzDzmAAZJA<ctrl61>w9nKToSX3rKV4mE3bZ7ouYGE0t+w0Ni/1RWhGztBczynPnDJ1tE1m/ePuQ6bbCjvPtO59emGS1u+X+9c6V8" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<style>
-
-    #pesquisa{
-        margin-top: 4px;
-        width: 30vw;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogos na Educação</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <style>
+    #pesquisa {
+      margin-top: 4px;
+      width: 30vw;
     }
-    #links-start{
-        gap: 10px;
+    #links-start {
+      gap: 10px;
     }
     .divs_path {
-            width: 30vw;
-            height: 300px;
-            min-width: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 8px;
-           
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .divs_path:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .divs_path img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-    main{
+      width: 30vw;
+      height: 300px;
+      min-width: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .divs_path:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .divs_path img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    main {
       display: flex;
       flex-direction: row;
       justify-content: center;
       gap: 60px;
-      }
-      #neymar{
-        max-width: 450px;
-      }
-      #texts{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-</style>
+    }
+    #neymar {
+      max-width: 450px;
+    }
+    #texts {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
-    <header class="box navbar is-primary" id="navbar-flex">
-        <div class="navbar-brand">
-        <a class="navbar-item" href="../../index.html">
-            <h1 class="title" id="title">Jogos Na Educação</h1>
-            </a>
 
+<header class="box navbar is-primary" id="navbar-flex">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="../../index.html">
+      <h1 class="title" id="title">Jogos Na Educação</h1>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start" id="links-start">
+      <a class="navbar-item" href="../../index.html">Início</a>
+      <a class="navbar-item" href="FrontEnd/pages/biblioteca.html">Biblioteca</a>
+      <a class="navbar-item" href="FrontEnd/pages/materiais.html">Materiais</a>
+      <a class="navbar-item" href="FrontEnd/pages/quemSomos.html">Quem Somos</a>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="control has-icons-left">
+          <input class="input" type="text" placeholder="Pesquisar" id="pesquisa">
+          <span class="icon is-left">
+            <i class="fas fa-search"></i>
+          </span>
         </div>
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start" id="links-start">
-              <a class="navbar-item" href="../../index.html">
-                início
-              </a>
-        
-              <a class="navbar-item" href="FrontEnd/pages/biblioteca.html">
-                Biblioteca
-              </a>
-        
-              
-                <a class="navbar-item" href="FrontEnd/pages/materiais.html">
-                  Materiais
-                </a>
-                <a class="navbar-item" href="FrontEnd/pages/quemSomos.html">
-                    Quem Somos
-                </a>
-                </div>
-                <div class="navbar-end">
-                    <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="Pesquisar" id="pesquisa">
-                        <span class="icon is-left">
-                        <i class="fas 1  fa-search"></i>
-                        </span>
-                        </div>
-                </div>
-                
-    </header>
-    <main>
-      <section id="texts">
-        <p class="title is-size-3" id="neymar">Quer melhorar seu aprendizado utilizando de jogos digitais incríveis para isso? Conheça nosso site:</p>
-      </section>
-      <section id="divs">
-      <div class="box divs_path" id="biblioteca_div">
-        <a href="FrontEnd/pages/biblioteca.html">
-          <img src="FrontEnd/assets/img/Biblioteca de.png" alt="">
-        </a>
       </div>
-      <div class="box divs_path" id="materiais_div">
+
+      <div class="navbar-item">
+        <div class="buttons">
+          <button class="button is-light" id="loginButton">
+            <strong>Entrar</strong>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="texts">
+    <p class="title is-size-3" id="neymar">
+      Quer melhorar seu aprendizado utilizando jogos digitais incríveis? Conheça nosso site:
+    </p>
+  </section>
+
+  <section id="divs">
+    <div class="box divs_path" id="biblioteca_div">
+      <a href="FrontEnd/pages/biblioteca.html">
+        <img src="FrontEnd/assets/img/Biblioteca de.png" alt="">
+      </a>
+    </div>
+    <div class="box divs_path" id="materiais_div">
+      <a href="FrontEnd/pages/materiais.html">
         <img src="FrontEnd/assets/img/Materiais.png" alt="">
-      </div>
-      <div class="box divs_path" id="quemSomos_div">
+      </a>
+    </div>
+    <div class="box divs_path" id="quemSomos_div">
+      <a href="FrontEnd/pages/quemSomos.html">
         <img src="FrontEnd/assets/img/Materiais (1).png" alt="">
+      </a>
+    </div>
+  </section>
+</main>
+
+<!-- Modal de Login -->
+<div class="modal" id="loginModal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Entrar</p>
+      <button class="delete" aria-label="close" id="closeModal"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Formulário de Login -->
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+          <input class="input" type="email" placeholder="Digite seu email" id="emailInput">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Senha</label>
+        <div class="control">
+          <input class="input" type="password" placeholder="Digite sua senha" id="passwordInput">
+        </div>
+      </div>
+
+      <div class="field">
+        <button class="button is-primary is-fullwidth" id="loginWithEmail">
+          Entrar com Email
+        </button>
+      </div>
+
+      <div class="field">
+        <button class="button is-danger is-fullwidth" id="loginWithGoogle">
+          <i class="fab fa-google"></i>&nbsp; Entrar com Google
+        </button>
+      </div>
+
+      <div class="field has-text-centered">
+        <a href="/FrontEnd/pages/cadastro.html">Não tem uma conta? Cadastre-se</a>
       </div>
     </section>
-    </main>
+  </div>
+</div>
+
+<script>
+  // Abrir modal
+  document.getElementById('loginButton').addEventListener('click', function() {
+    document.getElementById('loginModal').classList.add('is-active');
+  });
+
+  // Fechar modal
+  document.getElementById('closeModal').addEventListener('click', function() {
+    document.getElementById('loginModal').classList.remove('is-active');
+  });
+
+  document.querySelector('.modal-background').addEventListener('click', function() {
+    document.getElementById('loginModal').classList.remove('is-active');
+  });
+</script>
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+  const supabaseUrl = 'YOUR_SUPABASE_URL'; // Substitua com sua URL do Supabase
+  const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Substitua com sua chave anon do Supabase
+  // AVISO DE SEGURANÇA: Credenciais do Supabase estão expostas no frontend. Em produção, considere usar um proxy reverso ou um backend para intermediar as chamadas ao Supabase.
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // LOGIN COM EMAIL
+  const loginWithEmail = async () => {
+    const email = document.getElementById('emailInput').value;
+    const password = document.getElementById('passwordInput').value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      alert("Erro ao logar: " + error.message);
+    } else {
+      alert("Login realizado com sucesso!");
+      document.getElementById("loginModal").classList.remove("is-active");
+      document.getElementById("loginButton").style.display = "none"; // esconde o botão
+    }
+  };
+
+  document.getElementById('loginWithEmail').addEventListener('click', loginWithEmail);
+
+  // LOGIN COM GOOGLE
+  const loginWithGoogle = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+
+    if (error) {
+      alert('Erro no login com Google: ' + error.message);
+    } else {
+      window.location.href = data.url;
+    }
+  };
+
+  document.getElementById('loginWithGoogle').addEventListener('click', loginWithGoogle);
+
+  // VERIFICA SE USUÁRIO ESTÁ LOGADO E ESCONDE O BOTÃO "ENTRAR"
+  supabase.auth.getUser().then(async ({ data, error }) => {
+    if (data?.user) {
+      document.getElementById('loginButton').style.display = 'none'; // Oculta botão se logado
+
+      const { id, email, user_metadata } = data.user;
+      const nome = user_metadata?.full_name || user_metadata?.name || 'Usuário';
+
+      const { data: existente, error: selectError } = await supabase
+        .from("Users")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle(); // evita erro se não encontrar
+
+      if (!existente && !selectError) {
+        const { error: erroInsert } = await supabase
+          .from("Users")
+          .insert([{ id, email, name: nome }]);
+
+        if (erroInsert) {
+          console.error('Erro ao salvar usuário:', erroInsert.message);
+        } else {
+          console.log('Usuário salvo com sucesso');
+        }
+      } else {
+        console.log('Usuário já existe');
+      }
+    }
+  });
+</script>
+
+
 </body>
 </html>

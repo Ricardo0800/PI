@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Materiais</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; }
+        .sidebar { width: 200px; background: #333; color: #fff; height: 100vh; position: fixed; top: 0; left: 0; }
+        .sidebar a { display: block; color: #fff; padding: 1rem; text-decoration: none; }
+        .sidebar a:hover { background: #444; }
+        .sidebar h2 { text-align: center; margin: 1rem 0; }
+        .section { margin-left: 200px; }
+    </style>
+</head>
+<body>
+    
+    <div class="sidebar">
+        <h2>Admin</h2>
+        <a href="admin.html">Dashboard</a>
+        <a href="user_admin.html">Utilizadores</a>
+        <a href="cursos_admin.html">Cursos</a>
+        <a href="materiais_adm.html">Materiais</a>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Painel de Materiais</h1>
+    
+            <div class="level">
+                <div class="level-left">
+                    <button class="button is-primary" id="addMaterialBtn">+ Adicionar Material</button>
+                </div>
+            </div>
+    
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Link</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="materials-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <div class="modal" id="materialModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title" id="modal-title">Gerir Material</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field">
+                    <label class="label">Título do Material</label>
+                    <div class="control">
+                        <input class="input" type="text" id="materialTitle" placeholder="Digite o título do material">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Link do Material</label>
+                    <div class="control">
+                        <input class="input" type="url" id="materialLink" placeholder="https://drive.com/..." required>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" id="saveMaterialBtn">Salvar</button>
+                <button class="button" id="cancelMaterialModal">Cancelar</button>
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+        const backendApiUrl = 'http://localhost:3000';
+        let editingMaterialId = null;
+
+        /**
+         * Pega no token de admin e prepara os cabeçalhos para pedidos seguros.
+         */
+        function getAuthHeaders() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                alert('Acesso negado. Por favor, faça o login.');
+                window.location.href = 'login.html';
+                return null;
+            }
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+        }
+
+        /**
+         * Busca todos os materiais no backend e desenha a tabela.
+         */
+        async function fetchAndRenderMaterials() {
+            try {
+                const response = await fetch(`${backendApiUrl}/api/materiais`);
+                const materials = await response.json();
+                
+                const tableBody = document.getElementById('materials-table-body');
+                tableBody.innerHTML = ''; // Limpa a tabela
+
+                materials.forEach(material => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${material.id}</td>
+                            <td>${material.nome}</td>
+                            <td><a href="${material.link}" target="_blank" class="button is-link is-small">Ver Link</a></td>
+                            <td>
+                                <button class="button is-info is-small js-edit" data-id="${material.id}" data-nome="${material.nome}" data-link="${material.link}">Editar</button>
+                                <button class="button is-danger is-small js-delete" data-id="${material.id}">Apagar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error('Falha ao buscar materiais:', error);
+            }
+        }
+
+        /**
+         * Apaga um material usando o backend.
+         * @param {string} id - O ID do material a ser apagado.
+         */
+        async function deleteMaterial(id) {
+            if (!confirm('Tem a certeza que deseja apagar este material?')) return;
+            try {
+                const headers = getAuthHeaders();
+                if (!headers) return;
+
+                await fetch(`${backendApiUrl}/api/materiais/${id}`, { method: 'DELETE', headers });
+                fetchAndRenderMaterials(); // Atualiza a tabela
+            } catch (error) {
+                console.error('Erro ao apagar material:', error);
+            }
+        }
+
+        /**
+         * Salva um material (novo ou editado) no backend.
+         */
+        async function saveMaterial() {
+            const nome = document.getElementById('materialTitle').value;
+            const link = document.getElementById('materialLink').value;
+
+            if (!nome || !link) {
+                alert('Nome e Link são obrigatórios.');
+                return;
+            }
+
+            const headers = getAuthHeaders();
+            if (!headers) return;
+
+            const url = editingMaterialId ? `${backendApiUrl}/api/materiais/${editingMaterialId}` : `${backendApiUrl}/api/materiais`;
+            const method = editingMaterialId ? 'PUT' : 'POST';
+
+            try {
+                await fetch(url, {
+                    method: method,
+                    headers: headers,
+                    body: JSON.stringify({ nome, link })
+                });
+                closeModal();
+                fetchAndRenderMaterials();
+            } catch (error) {
+                console.error('Erro ao salvar material:', error);
+            }
+        }
+
+        // --- Funções do Modal ---
+        const materialModal = document.getElementById('materialModal');
+        const modalTitleElement = materialModal.querySelector('.modal-card-title');
+
+        function openModalForNew() {
+            editingMaterialId = null;
+            modalTitleElement.textContent = 'Adicionar Novo Material';
+            document.getElementById('materialTitle').value = '';
+            document.getElementById('materialLink').value = '';
+            materialModal.classList.add('is-active');
+        }
+
+        function openModalForEdit(id, nome, link) {
+            editingMaterialId = id;
+            modalTitleElement.textContent = 'Editar Material';
+            document.getElementById('materialTitle').value = nome;
+            document.getElementById('materialLink').value = link;
+            materialModal.classList.add('is-active');
+        }
+
+        function closeModal() {
+            materialModal.classList.remove('is-active');
+        }
+
+        // --- Ponto de Entrada da Aplicação ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verifica se o utilizador está logado como admin
+            if (!localStorage.getItem('adminToken')) {
+                alert('Acesso negado. Por favor, faça o login como administrador.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Configura os "ouvintes" de eventos
+            document.getElementById('addMaterialBtn').addEventListener('click', openModalForNew);
+            document.getElementById('saveMaterialBtn').addEventListener('click', saveMaterial);
+
+            // Fechar o modal
+            materialModal.querySelector('.modal-background').addEventListener('click', closeModal);
+            materialModal.querySelector('.delete').addEventListener('click', closeModal);
+            document.getElementById('cancelMaterialModal').addEventListener('click', closeModal);
+
+            // Ouvinte para os botões de editar e apagar na tabela
+            document.getElementById('materials-table-body').addEventListener('click', (event) => {
+                const target = event.target;
+                if (target.classList.contains('js-delete')) {
+                    deleteMaterial(target.dataset.id);
+                }
+                if (target.classList.contains('js-edit')) {
+                    openModalForEdit(target.dataset.id, target.dataset.nome, target.dataset.link);
+                }
+            });
+            
+            // Carrega os dados iniciais
+            fetchAndRenderMaterials();
+        });
+    </script>
+</body>
+</html>
+

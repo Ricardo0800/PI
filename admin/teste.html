@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.2/dist/supabase.min.js"></script>
+    <title>Gerenciar materiais</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body { font-family: Arial; margin: 0; }
+        .sidebar a { display: block; color: #fff; padding: 15px; text-decoration: none; }
+        .sidebar a:hover { background: #444; }
+        .main { margin-left: 200px; padding: 20px; }
+        .card { background: #f5f5f5; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        .sidebar {
+            width: 200px;
+            background: #333;
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .section {
+            margin-left: 200px; /* Evita que a sidebar cubra o conteúdo */
+        }
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="sidebar">
+        <h2 style="text-align:center;">Admin</h2>
+        <a href="/admin/admin.html">Dashboard</a>
+        <a href="/admin/user_admin.html">Utilizadores</a>
+        <a href="/admin/cursos_admin.html">Cursos</a>
+        <a href="/admin/materiais_adm.html">Materiais</a>
+    </div>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Painel de Materiais</h1>
+    
+            <div class="level">
+                <button class="button is-primary" id="addMaterialBtn">+ Adicionar Material</button>
+            </div>
+    
+            <div id="loading" class="loading" style="display:none;">Carregando...</div>
+            <table class="table is-fullwidth" id="materialsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Link</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <div class="modal" id="materialModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Adicionar Material</p>
+                <button class="delete" aria-label="close" id="closeMaterialModal"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field">
+                    <label class="label">Título do Material</label>
+                    <div class="control">
+                        <input class="input" type="text" id="materialTitle" placeholder="Digite o título do material">
+                    </div>
+                </div>
+    
+                <div class="field">
+                    <label class="label">Link do Material</label>
+                    <div class="control">
+                        <input class="input" type="url" id="materialLink" placeholder="https://drive.com/..." required>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" id="saveMaterialBtn">Salvar</button>
+                <button class="button" id="cancelMaterialModal">Cancelar</button>
+            </footer>
+        </div>
+    </div>
+    
+    <script type="module">
+        // Inicialize o Supabase
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        const supabaseUrl = 'YOUR_SUPABASE_URL'; // Substitua com sua URL do Supabase
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Substitua com sua chave anon do Supabase
+        // AVISO DE SEGURANÇA: Credenciais do Supabase estão expostas no frontend. Em produção, use um backend seguro para todas as operações de banco de dados.
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        
+        // Modal
+        const materialModal = document.getElementById('materialModal');
+        const addMaterialBtn = document.getElementById('addMaterialBtn');
+        const closeMaterialModalBtn = document.getElementById('closeMaterialModal');
+        const cancelMaterialModalBtn = document.getElementById('cancelMaterialModal');
+        const saveMaterialBtn = document.getElementById('saveMaterialBtn');
+        const materialTitleInput = document.getElementById('materialTitle');
+        const materialLinkInput = document.getElementById('materialLink');
+        const materialsTable = document.getElementById('materialsTable');
+        const modalTitleElement = document.querySelector('.modal-card-title');
+        const loadingIndicator = document.getElementById('loading');
+
+
+        let editingMaterialId = null; // Track ID for editing
+
+
+        addMaterialBtn.addEventListener('click', () => {
+            materialModal.classList.add('is-active');
+            modalTitleElement.textContent = 'Adicionar Material'; // Define o título do modal
+            materialTitleInput.value = '';
+            materialLinkInput.value = '';
+            editingMaterialId = null; // Limpa qualquer ID anterior
+        });
+
+        closeMaterialModalBtn.addEventListener('click', () => materialModal.classList.remove('is-active'));
+        cancelMaterialModalBtn.addEventListener('click', () => materialModal.classList.remove('is-active'));
+
+        // Função para buscar materiais do banco de dados
+        async function fetchMaterials() {
+            loadingIndicator.style.display = 'block';
+            try {
+                const { data: materials, error } = await supabase
+                    .from('Materiais')
+                    .select('*');
+
+                if (error) {
+                    console.error('Erro ao buscar materiais:', error);
+                    alert('Erro ao buscar materiais. Por favor, verifique sua conexão e tente novamente.');
+                    loadingIndicator.style.display = 'none';
+                    return; // Importante: retornar em caso de erro para evitar que o código continue
+                }
+                const materialsTableBody = materialsTable.querySelector('tbody');
+                materialsTableBody.innerHTML = ''; // Limpa a tabela
+
+                materials.forEach(material => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${material.id}</td>
+                        <td>${material.nome}</td>
+                        <td><a href="${material.link}" target="_blank">Ver</a></td>
+                        <td>
+                            <button class="button is-danger is-small" data-id="${material.id}">Excluir</button>
+                            <button class="button is-primary is-small" data-id="${material.id}">Editar</button>
+                        </td>
+                    `;
+                    materialsTableBody.appendChild(row);
+                });
+
+                // Adiciona event listeners aos botões de excluir e editar
+                addDeleteEventListeners();
+                addEditEventListeners();
+            } catch (error) {
+                console.error('Erro geral:', error);
+                alert('Ocorreu um erro ao buscar os materiais. Por favor, tente novamente mais tarde.');
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+
+        // Função para adicionar um novo material ou atualizar um existente
+        async function saveMaterial() {
+            const title = materialTitleInput.value.trim();
+            const link = materialLinkInput.value.trim();
+
+            if (!title || !link) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            loadingIndicator.style.display = 'block';
+            try {
+                if (editingMaterialId) {
+                    // Atualizar material existente
+                    const { error } = await supabase
+                        .from('Materiais')
+                        .update({ nome: title, link: link })
+                        .eq('id', editingMaterialId);
+
+                    if (error) {
+                        console.error('Erro ao atualizar material:', error);
+                        alert('Erro ao atualizar material!');
+                        loadingIndicator.style.display = 'none';
+                        return;
+                    }
+
+                    alert('Material atualizado com sucesso!');
+                } else {
+                    // Adicionar novo material
+                    const { error } = await supabase
+                        .from('Materiais')
+                        .insert({ nome: title, link: link });
+
+                    if (error) {
+                        console.error('Erro ao adicionar material:', error);
+                        alert('Erro ao adicionar material!');
+                        loadingIndicator.style.display = 'none';
+                        return;
+                    }
+                    alert('Material adicionado com sucesso!');
+
+                }
+
+
+                materialModal.classList.remove('is-active');
+                materialTitleInput.value = '';
+                materialLinkInput.value = '';
+                editingMaterialId = null; // Reset
+                fetchMaterials(); // Recarrega a tabela
+            } catch (error) {
+                console.error('Erro geral:', error);
+                alert('Ocorreu um erro ao salvar o material. Por favor, tente novamente.');
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        saveMaterialBtn.addEventListener('click', saveMaterial);
+
+
+        function addDeleteEventListeners() {
+            const deleteButtons = document.querySelectorAll('.table .button.is-danger');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const id = button.dataset.id;
+                    if (confirm('Tem certeza que deseja excluir este material?')) {
+                        loadingIndicator.style.display = 'block';
+                        try {
+                            const { error } = await supabase
+                                .from('Materiais')
+                                .delete()
+                                .eq('id', id);
+
+                            if (error) {
+                                console.error('Erro ao excluir material:', error);
+                                alert('Erro ao excluir material!');
+                                loadingIndicator.style.display = 'none';
+                                return;
+                            }
+
+                            fetchMaterials(); // Recarrega a tabela após a exclusão
+                        } catch (error) {
+                            console.error('Erro geral ao excluir:', error);
+                            alert('Ocorreu um erro ao excluir o material. Por favor, tente novamente.');
+                        } finally {
+                            loadingIndicator.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        }
+
+        function addEditEventListeners() {
+            const editButtons = document.querySelectorAll('.table .button.is-primary');
+            editButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const id = button.dataset.id;
+                    editingMaterialId = id; // Define o ID para edição
+                    modalTitleElement.textContent = 'Editar Material';
+
+                    // Busca os dados do material para o ID
+                    loadingIndicator.style.display = 'block';
+                    try {
+                        const { data: material, error } = await supabase
+                            .from('Materiais')
+                            .select('*')
+                            .eq('id', id)
+                            .single(); // Use single() para obter um único registo
+
+                        if (error) {
+                            console.error('Erro ao buscar material para edição:', error);
+                            alert('Erro ao buscar material para edição!');
+                            loadingIndicator.style.display = 'none';
+                            return;
+                        }
+
+                        if (material) {
+                            materialTitleInput.value = material.nome;
+                            materialLinkInput.value = material.link;
+                            materialModal.classList.add('is-active'); // Mostra o modal
+                        }
+
+
+                    } catch (error) {
+                        console.error('Erro geral ao buscar para edição:', error);
+                        alert('Ocorreu um erro ao buscar o material para edição. Por favor, tente novamente.');
+                    } finally {
+                        loadingIndicator.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Carrega os materiais iniciais
+        fetchMaterials();
+    </script>
+</body>
+</html>

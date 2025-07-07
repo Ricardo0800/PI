@@ -1,130 +1,544 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plataforma de Estudo</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v6.4.0/js/all.js"></script>
+
+  <title>Gerenciar Cursos</title>
   <style>
-    iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
+    body {
+      font-family: Arial;
+      margin: 0;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 15px;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover {
+      background: #444;
+    }
+
+    .main {
+      margin-left: 200px;
+      padding: 20px;
+    }
+
+    .card {
+      background: #f5f5f5;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: #333;
+      color: #fff;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .section {
+      margin-left: 200px;
     }
   </style>
 </head>
+
 <body>
-  <!-- Header -->
-  <section class="hero is-primary">
-    <div class="hero-body">
-      <p class="title">Plataforma de Estudo</p>
-      <p class="subtitle">Usando Minecraft e Roblox na educação</p>
-    </div>
-  </section>
-
-  <!-- Call to Action -->
-  <section class="section">
-    <div class="container">
-      <div class="columns">
-        <div class="column is-one-third">
-          <div class="box has-text-centered">
-            <p class="title is-4">Biblioteca</p>
-            <p>Veja nossas videoaulas</p>
-          </div>
-        </div>
-        <div class="column is-one-third">
-          <div class="box has-text-centered">
-            <p class="title is-4">Quem Somos</p>
-            <p>Conheça o projeto e os integrantes</p>
-          </div>
-        </div>
-        <div class="column is-one-third">
-          <div class="box has-text-centered">
-            <p class="title is-4">Materiais</p>
-            <p>Explore nossos materiais de estudo</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Lista de Materiais -->
-  <section class="section">
-    <div class="container">
-      <h2 class="title">Materiais de Estudo</h2>
-      <ul id="materials-list">
-        <!-- Os materiais serão inseridos dinamicamente pelo JavaScript -->
-      </ul>
-    </div>
-  </section>
-
-  <!-- Modal (Bulma) -->
-  <div id="pdf-modal" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-      <div class="box">
-        <iframe id="pdf-frame" src=""></iframe>
-      </div>
-    </div>
-    <button class="modal-close is-large" aria-label="close"></button>
+  <div class="sidebar">
+    <h2 style="text-align:center;">Admin</h2>
+    <a href="/admin/admin.html">Dashboard</a>
+    <a href="/admin/user_admin.html">Usuários</a>
+    <a href="/admin/cursos_admin.html">Cursos</a>
+    <a href="/admin/materiais_adm.html">Materiais</a>
   </div>
 
-  <!-- Scripts -->
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Painel Administrativo</h1>
+
+      <div class="tabs is-boxed">
+        <ul>
+          <li class="is-active" id="tab-cursos"><a>Cursos</a></li>
+          <li id="tab-videos"><a>Vídeos</a></li>
+        </ul>
+      </div>
+
+      <!-- Cursos -->
+      <div id="cursos-section">
+        <div class="level">
+          <button class="button is-primary" id="addCursoBtn">+ Adicionar Curso</button>
+        </div>
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaCursos"></tbody>
+        </table>
+      </div>
+
+      <!-- Vídeos -->
+      <div id="videos-section" class="is-hidden">
+        <div class="level">
+          <div class="field">
+            <div class="control">
+              <div class="select">
+                <select id="filtroCurso">
+                  <option value="todos">Todos</option>
+                  <option value="semcurso">Sem curso</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button class="button is-primary" id="addVideoBtn">+ Adicionar Vídeo</button>
+        </div>
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Curso</th>
+              <th>Link</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaVideos"></tbody>
+        </table>
+
+        <hr>
+        <h2 class="subtitle">Vídeos sem curso:</h2>
+        <ul id="listaVideosSemCurso"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Curso -->
+  <div class="modal" id="cursoModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Adicionar Curso</p>
+        <button class="delete" aria-label="close" id="closeCursoModal"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="field">
+          <label class="label">Nome do Curso</label>
+          <div class="control">
+            <input class="input" type="text" id="cursoNome" placeholder="Digite o nome do curso">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Descrição do Curso</label>
+          <div class="control">
+            <textarea class="textarea" id="cursoDescricao" placeholder="Digite a descrição do curso"></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Selecionar Vídeo Inicial (opcional)</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select id="videoInicialSelect">
+                <option value="">-- Nenhum vídeo selecionado --</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success" id="salvarCursoBtn">Salvar</button>
+        <button class="button" id="cancelCursoModal">Cancelar</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal Adicionar Vídeo -->
+  <div class="modal" id="videoModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Adicionar Vídeo</p>
+        <button class="delete" aria-label="close" id="closeVideoModal"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="field">
+          <label class="label">Título do Vídeo</label>
+          <div class="control">
+            <input class="input" type="text" id="videoTitulo" placeholder="Digite o título do vídeo">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Link do Vídeo</label>
+          <div class="control">
+            <input class="input" type="url" id="videoLink" placeholder="https://...">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Descrição</label>
+          <div class="control">
+            <textarea class="textarea" id="videoDescricao" placeholder="Descrição do vídeo..."></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Curso (opcional)</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select id="cursoSelect">
+                <option value="">-- Nenhum curso --</option>
+                <!-- Cursos serão adicionados dinamicamente -->
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success">Salvar</button>
+        <button class="button" id="cancelVideoModal">Cancelar</button>
+      </footer>
+    </div>
+  </div>
+  <div class="modal" id="editarCursoModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Editar Curso</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="field">
+          <label class="label">Nome do Curso</label>
+          <div class="control">
+            <input class="input" type="text" id="nomeCurso">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Descrição do Curso</label>
+          <div class="control">
+            <textarea class="textarea" id="descricaoCurso"></textarea>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success" id="salvarEdicaoCurso">Salvar</button>
+        <button class="button" id="cancelEditarCursoModal">Cancelar</button>
+      </footer>
+    </div>
+  </div>
+  <!-- Modal Edição de Vídeo -->
+  <div class="modal" id="editarVideoModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Editar Vídeo</p>
+        <button class="delete" aria-label="close" id="closeEditarVideoModal"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="field">
+          <label class="label">Título</label>
+          <div class="control">
+            <input class="input" type="text" id="editTitulo">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Link</label>
+          <div class="control">
+            <input class="input" type="url" id="editLink">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Descrição</label>
+          <div class="control">
+            <textarea class="textarea" id="editDescricao"></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Curso</label>
+          <div class="control">
+            <div class="select">
+              <select id="editCursoSelect"></select>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success" id="salvarEditarVideoBtn">Salvar</button>
+        <button class="button" id="cancelEditarVideoModal">Cancelar</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- JS Tabs e Modais -->
   <script>
-    // Lista de materiais
-    const materials = [
-      {
-        title: "Material 1",
-        description: "Este é o primeiro material de estudo.",
-        pdfUrl: "https://example.com/pdf1.pdf" // Substitua pelo link do seu PDF
-      },
-      {
-        title: "Material 2",
-        description: "Este é o segundo material de estudo.",
-        pdfUrl: "https://example.com/pdf2.pdf"
-      },
-      {
-        title: "Material 3",
-        description: "Este é o terceiro material de estudo.",
-        pdfUrl: "https://example.com/pdf3.pdf"
-      }
-    ];
-
-    // Elementos HTML
-    const materialsList = document.getElementById('materials-list');
-    const pdfModal = document.getElementById('pdf-modal');
-    const pdfFrame = document.getElementById('pdf-frame');
-    const closeModal = pdfModal.querySelector('.modal-close');
-    const modalBackground = pdfModal.querySelector('.modal-background');
-
-    // Renderizando os materiais
-    materials.forEach(material => {
-      const listItem = document.createElement('li');
-      listItem.classList.add('box', 'mb-4');
-      listItem.innerHTML = `
-        <p class="title is-5">${material.title}</p>
-        <p>${material.description}</p>
-        <button class="button is-link">Ver Material</button>
-      `;
-
-      // Evento de clique para abrir o modal
-      const button = listItem.querySelector('button');
-      button.addEventListener('click', () => {
-        pdfFrame.src = material.pdfUrl; // Carrega o PDF no iframe
-        pdfModal.classList.add('is-active'); // Exibe o modal
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('tab-cursos').addEventListener('click', () => {
+        document.getElementById('cursos-section').classList.remove('is-hidden');
+        document.getElementById('videos-section').classList.add('is-hidden');
+        document.getElementById('tab-cursos').classList.add('is-active');
+        document.getElementById('tab-videos').classList.remove('is-active');
+      });
+      document.getElementById('tab-videos').addEventListener('click', () => {
+        document.getElementById('cursos-section').classList.add('is-hidden');
+        document.getElementById('videos-section').classList.remove('is-hidden');
+        document.getElementById('tab-videos').classList.add('is-active');
+        document.getElementById('tab-cursos').classList.remove('is-active');
       });
 
-      materialsList.appendChild(listItem);
+      document.getElementById('addCursoBtn').addEventListener('click', () => document.getElementById('cursoModal').classList.add('is-active'));
+      document.getElementById('closeCursoModal').addEventListener('click', () => document.getElementById('cursoModal').classList.remove('is-active'));
+      document.getElementById('cancelCursoModal').addEventListener('click', () => document.getElementById('cursoModal').classList.remove('is-active'));
+
+      document.getElementById('addVideoBtn').addEventListener('click', () => document.getElementById('videoModal').classList.add('is-active'));
+      document.getElementById('closeVideoModal').addEventListener('click', () => document.getElementById('videoModal').classList.remove('is-active'));
+      document.getElementById('cancelVideoModal').addEventListener('click', () => document.getElementById('videoModal').classList.remove('is-active'));
+      document.getElementById('closeEditarVideoModal').addEventListener('click', () => document.getElementById('editarVideoModal').classList.remove('is-active'));
+      document.getElementById('cancelEditarVideoModal').addEventListener('click', () => document.getElementById('editarVideoModal').classList.remove('is-active'));
+
+      document.getElementById('filtroCurso').addEventListener('change', function () {
+        const filtro = this.value;
+        document.querySelectorAll('#tabelaVideos tr').forEach(row => {
+          const curso = row.children[2].textContent.trim().toLowerCase();
+          if (
+            filtro === 'todos' ||
+            (filtro === 'semcurso' && curso === '') ||
+            curso === filtro
+          ) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+  const supabaseUrl = 'https://mmegueeiaqwsrswgmwbx.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZWd1ZWVpYXF3c3Jzd2dtd2J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUzMjIwNjUsImV4cCI6MjA2MDg5ODA2NX0.JEEKLpDoJRG87FFGNB8YP5k8F-TPCJvbqpoJQTupdcc';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  let videoEditandoId = null;
+
+  async function fetchCursos() {
+    const { data, error } = await supabase.from('courses').select('id_course, nome, descricao');
+    const tabelaCursos = document.getElementById('tabelaCursos');
+    if (error) return console.error('Erro ao buscar cursos:', error);
+    tabelaCursos.innerHTML = '';
+    data.forEach(curso => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${curso.id_course}</td>
+        <td>${curso.nome}</td>
+        <td>
+          <button class="button is-small is-info" onclick="editarCurso(${curso.id_course})">Editar</button>
+          <button class="button is-small is-danger" onclick="excluirCurso(${curso.id_course})">Excluir</button>
+        </td>`;
+      tabelaCursos.appendChild(tr);
+    });
+  }
+
+  async function fetchVideos() {
+    const { data, error } = await supabase.from('videos').select('*');
+    if (error) return console.error('Erro ao buscar vídeos:', error);
+
+    const tabela = document.getElementById('tabelaVideos');
+    const listaSemCurso = document.getElementById('listaVideosSemCurso');
+    tabela.innerHTML = '';
+    listaSemCurso.innerHTML = '';
+
+    data.forEach(video => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${video.id}</td>
+        <td>${video.titulo}</td>
+        <td>${video.curso_id || ''}</td>
+        <td><a href="${video.url}" target="_blank">Ver</a></td>
+        <td>
+          <button class="button is-small is-info" onclick="editarVideo(${video.id})">Editar</button>
+          <button class="button is-small is-danger" onclick="excluirVideo(${video.id})">Excluir</button>
+        </td>`;
+      tabela.appendChild(tr);
+
+      if (!video.curso_id || video.curso_id === 0) {
+        const li = document.createElement('li');
+        li.textContent = `${video.titulo} (ID: ${video.id})`;
+        listaSemCurso.appendChild(li);
+      }
+    });
+  }
+
+  async function carregarCursosNoSelect() {
+    const { data, error } = await supabase.from('courses').select('id_course, nome');
+    if (error) return console.error('Erro ao carregar cursos:', error);
+    const selects = [document.getElementById('cursoSelect'), document.getElementById('editCursoSelect')];
+    selects.forEach(select => {
+      select.innerHTML = '<option value="">-- Nenhum curso --</option>';
+      data.forEach(curso => {
+        const option = document.createElement('option');
+        option.value = curso.id_course;
+        option.textContent = curso.nome;
+        select.appendChild(option.cloneNode(true));
+      });
+    });
+  }
+
+  async function preencherSelectVideos() {
+    const { data, error } = await supabase.from('videos').select('id, titulo');
+    if (error) return console.error('Erro ao carregar vídeos:', error);
+    const select = document.getElementById('videoInicialSelect');
+    select.innerHTML = '<option value="">-- Nenhum vídeo selecionado --</option>';
+    data.forEach(video => {
+      const option = document.createElement('option');
+      option.value = video.id;
+      option.textContent = video.titulo;
+      select.appendChild(option);
+    });
+  }
+
+  async function excluirCurso(id) {
+    if (!confirm('Tem certeza que deseja excluir este curso?')) return;
+    const { error } = await supabase.from('courses').delete().eq('id_course', id);
+    if (error) return console.error('Erro ao excluir curso:', error);
+    fetchCursos();
+  }
+
+  async function excluirVideo(id) {
+    if (!confirm('Tem certeza que deseja excluir este vídeo?')) return;
+    const { error } = await supabase.from('videos').delete().eq('id', id);
+    if (error) return console.error('Erro ao excluir vídeo:', error);
+    fetchVideos();
+  }
+
+  window.editarCurso = async (cursoId) => {
+    const { data, error } = await supabase.from('courses').select('*').eq('id_course', cursoId).single();
+    if (error) return console.error('Erro ao buscar curso:', error);
+
+    document.getElementById('nomeCurso').value = data.nome;
+    document.getElementById('descricaoCurso').value = data.descricao;
+
+    const modal = document.getElementById('editarCursoModal');
+    modal.classList.add('is-active');
+
+    document.getElementById('salvarEdicaoCurso').onclick = async () => {
+      const nome = document.getElementById('nomeCurso').value;
+      const descricao = document.getElementById('descricaoCurso').value;
+
+      const { error: updateError } = await supabase.from('courses').update({ nome, descricao }).eq('id_course', cursoId);
+      if (updateError) return console.error('Erro ao salvar edição:', updateError);
+
+      modal.classList.remove('is-active');
+      fetchCursos();
+    };
+  };
+
+  window.editarVideo = async (id) => {
+    videoEditandoId = id;
+    const { data, error } = await supabase.from('videos').select('*').eq('id', id).single();
+    if (error) return console.error('Erro ao buscar vídeo:', error);
+
+    document.getElementById('editTitulo').value = data.titulo;
+    document.getElementById('editLink').value = data.url;
+    document.getElementById('editDescricao').value = data.descricao;
+
+    const cursoSelect = document.getElementById('editCursoSelect');
+    const { data: cursos } = await supabase.from('courses').select('id_course, nome');
+    cursoSelect.innerHTML = '<option value="">-- Nenhum curso --</option>';
+    cursos.forEach(curso => {
+      const opt = document.createElement('option');
+      opt.value = curso.id_course;
+      opt.textContent = curso.nome;
+      if (curso.id_course === data.curso_id) opt.selected = true;
+      cursoSelect.appendChild(opt);
     });
 
-    // Fechar o modal
-    const closeModalFunction = () => {
-      pdfModal.classList.remove('is-active');
-      pdfFrame.src = ''; // Limpa o iframe
-    };
+    document.getElementById('editarVideoModal').classList.add('is-active');
+  };
 
-    closeModal.addEventListener('click', closeModalFunction);
-    modalBackground.addEventListener('click', closeModalFunction);
-  </script>
+  // Salvar novo curso
+  document.getElementById('salvarCursoBtn').addEventListener('click', async () => {
+    const nome = document.getElementById('cursoNome').value;
+    const descricao = document.getElementById('cursoDescricao').value;
+    const video_inicial = document.getElementById('videoInicialSelect').value || null;
+
+    const { error } = await supabase.from('courses').insert([
+      { nome, descricao, video_inicial_id: video_inicial }
+    ]);
+
+    if (error) return console.error('Erro ao adicionar curso:', error);
+
+    document.getElementById('cursoModal').classList.remove('is-active');
+    fetchCursos();
+    carregarCursosNoSelect();
+  });
+
+  // Salvar novo vídeo
+  document.querySelector('#videoModal .button.is-success').addEventListener('click', async () => {
+    const titulo = document.getElementById('videoTitulo').value;
+    const url = document.getElementById('videoLink').value;
+    const descricao = document.getElementById('videoDescricao').value;
+    const curso_id = document.getElementById('cursoSelect').value || null;
+
+    const { error } = await supabase.from('videos').insert([
+      { titulo, url, descricao, curso_id }
+    ]);
+
+    if (error) return console.error('Erro ao adicionar vídeo:', error);
+
+    document.getElementById('videoModal').classList.remove('is-active');
+    fetchVideos();
+  });
+
+  // Salvar edição de vídeo
+  document.querySelector('#editarVideoModal .is-success').addEventListener('click', async () => {
+    const titulo = document.getElementById('editTitulo').value;
+    const url = document.getElementById('editLink').value;
+    const descricao = document.getElementById('editDescricao').value;
+    const cursoId = document.getElementById('editCursoSelect').value || null;
+
+    const { error } = await supabase.from('videos').update({
+      titulo, url, descricao, curso_id: cursoId ? parseInt(cursoId) : null
+    }).eq('id', videoEditandoId);
+
+    if (error) return console.error('Erro ao editar vídeo:', error);
+
+    document.getElementById('editarVideoModal').classList.remove('is-active');
+    fetchVideos();
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchCursos();
+    fetchVideos();
+    carregarCursosNoSelect();
+    preencherSelectVideos();
+
+    document.getElementById('addCursoBtn').onclick = () => document.getElementById('cursoModal').classList.add('is-active');
+    document.getElementById('closeCursoModal').onclick =
+    document.getElementById('cancelCursoModal').onclick =
+      () => document.getElementById('cursoModal').classList.remove('is-active');
+
+    document.getElementById('addVideoBtn').onclick = () => document.getElementById('videoModal').classList.add('is-active');
+    document.getElementById('closeVideoModal').onclick =
+    document.getElementById('cancelVideoModal').onclick =
+      () => document.getElementById('videoModal').classList.remove('is-active');
+
+    document.getElementById('closeEditarVideoModal').onclick =
+    document.getElementById('cancelEditarVideoModal').onclick =
+      () => document.getElementById('editarVideoModal').classList.remove('is-active');
+  });
+</script>
 </body>
+
 </html>

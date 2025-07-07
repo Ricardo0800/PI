@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Cursos e Vídeos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+<script>
+// =================================================================
+// 1. CONFIGURAÇÕES GLOBAIS
+// =================================================================
+const backendApiUrl = 'http://localhost:3000';
+let todosOsCursos = [];
+
+// =================================================================
+// 2. FUNÇÕES DE LÓGICA (A-Z)
+// =================================================================
+
+async function adicionarNovoCurso() {
+    const nome = document.getElementById('curso-nome').value,
+        descricao = document.getElementById('curso-descricao').value;
+    if (!nome) { alert('O nome é obrigatório.'); return; }
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        await fetch(`${backendApiUrl}/api/cursos`, { method: 'POST', headers, body: JSON.stringify({ nome, descricao }) });
+        document.getElementById('templateModal').classList.remove('is-active');
+        buscarEExibirCursos();
+    } catch (error) { console.error('Erro ao adicionar curso:', error); }
+}
+
+async function adicionarNovoVideo() {
+    const titulo = document.getElementById('video-titulo').value,
+        descricao = document.getElementById('video-descricao').value,
+        url = document.getElementById('video-url').value;
+    let curso_id = document.getElementById('video-cursoid').value;
+    curso_id = curso_id ? parseInt(curso_id, 10) : null;
+    if (!titulo || !url) { alert('Título e URL são obrigatórios.'); return; }
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        await fetch(`${backendApiUrl}/api/videos`, { method: 'POST', headers, body: JSON.stringify({ titulo, descricao, url, curso_id }), });
+        document.getElementById('templateModal').classList.remove('is-active');
+        buscarEExibirVideos();
+    } catch (error) { console.error('Erro ao adicionar vídeo:', error); }
+}
+
+async function abrirModalParaEditarCurso(id) {
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        const response = await fetch(`${backendApiUrl}/api/cursos/${id}`, { headers });
+        if (!response.ok) throw new Error('Curso não encontrado.');
+        const curso = await response.json();
+        const modal = document.getElementById('templateModal');
+        modal.querySelector('#modalTitle').textContent = `Editar Curso: ${curso.nome}`;
+        modal.querySelector('#modalBody').innerHTML = `<div class="field"><label class="label">Nome</label><div class="control"><input class="input" id="curso-nome" value="${curso.nome}"></div></div><div class="field"><label class="label">Descrição</label><div class="control"><textarea class="textarea" id="curso-descricao">${curso.descricao || ''}</textarea></div></div>`;
+        modal.querySelector('#modalFooter').innerHTML = `<button class="button is-success" id="salvarBtn">Salvar</button><button class="button" data-action="close">Cancelar</button>`;
+        const salvarBtn = document.getElementById('salvarBtn');
+        salvarBtn.replaceWith(salvarBtn.cloneNode(true));
+        document.getElementById('salvarBtn').addEventListener('click', () => salvarAlteracoesCurso(id));
+        modal.classList.add('is-active');
+    } catch (error) { console.error('Erro ao carregar dados para edição:', error); alert(error.message); }
+}
+
+async function abrirModalParaEditarVideo(id) {
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        const response = await fetch(`${backendApiUrl}/api/videos/${id}`, { headers });
+        if (!response.ok) throw new Error('Vídeo não encontrado.');
+        const video = await response.json();
+        const modal = document.getElementById('templateModal');
+        modal.querySelector('#modalTitle').textContent = `Editar Vídeo: ${video.titulo}`;
+        let opts = todosOsCursos.map(c => `<option value="${c.id_course}" ${c.id_course === video.curso_id ? 'selected' : ''}>${c.nome}</option>`).join('');
+        modal.querySelector('#modalBody').innerHTML = `<div class="field"><label class="label">Título</label><div class="control"><input class="input" id="video-titulo" value="${video.titulo}"></div></div><div class="field"><label class="label">Descrição</label><div class="control"><textarea class="textarea" id="video-descricao">${video.descricao || ''}</textarea></div></div><div class="field"><label class="label">URL</label><div class="control"><input class="input" id="video-url" value="${video.url}"></div></div><div class="field"><label class="label">Curso</label><div class="control"><div class="select is-fullwidth"><select id="video-cursoid"><option value="">Nenhum</option>${opts}</select></div></div></div>`;
+        modal.querySelector('#modalFooter').innerHTML = `<button class="button is-success" id="salvarBtn">Salvar</button><button class="button" data-action="close">Cancelar</button>`;
+        const salvarBtn = document.getElementById('salvarBtn');
+        salvarBtn.replaceWith(salvarBtn.cloneNode(true));
+        document.getElementById('salvarBtn').addEventListener('click', () => salvarAlteracoesVideo(id));
+        modal.classList.add('is-active');
+    } catch (error) { console.error('Erro ao carregar dados do vídeo para edição:', error); }
+}
+
+function abrirModalParaNovoCurso() {
+    const modal = document.getElementById('templateModal');
+    modal.querySelector('#modalTitle').textContent = 'Adicionar Novo Curso';
+    modal.querySelector('#modalBody').innerHTML = `<div class="field"><label class="label">Nome</label><div class="control"><input class="input" id="curso-nome"></div></div><div class="field"><label class="label">Descrição</label><div class="control"><textarea class="textarea" id="curso-descricao"></textarea></div></div>`;
+    modal.querySelector('#modalFooter').innerHTML = `<button class="button is-success" id="salvarBtn">Salvar</button><button class="button" data-action="close">Cancelar</button>`;
+    const salvarBtn = document.getElementById('salvarBtn');
+    salvarBtn.replaceWith(salvarBtn.cloneNode(true));
+    document.getElementById('salvarBtn').addEventListener('click', adicionarNovoCurso);
+    modal.classList.add('is-active');
+}
+
+function abrirModalParaNovoVideo() {
+    const modal = document.getElementById('templateModal');
+    modal.querySelector('#modalTitle').textContent = 'Adicionar Novo Vídeo';
+    let opts = todosOsCursos.map(c => `<option value="${c.id_course}">${c.nome}</option>`).join('');
+    modal.querySelector('#modalBody').innerHTML = `<div class="field"><label class="label">Título</label><div class="control"><input class="input" id="video-titulo"></div></div><div class="field"><label class="label">Descrição</label><div class="control"><textarea class="textarea" id="video-descricao"></textarea></div></div><div class="field"><label class="label">URL</label><div class="control"><input class="input" id="video-url"></div></div><div class="field"><label class="label">Curso</label><div class="control"><div class="select is-fullwidth"><select id="video-cursoid"><option value="">Nenhum</option>${opts}</select></div></div></div>`;
+    modal.querySelector('#modalFooter').innerHTML = `<button class="button is-success" id="salvarBtn">Salvar</button><button class="button" data-action="close">Cancelar</button>`;
+    const salvarBtn = document.getElementById('salvarBtn');
+    salvarBtn.replaceWith(salvarBtn.cloneNode(true));
+    document.getElementById('salvarBtn').addEventListener('click', adicionarNovoVideo);
+    modal.classList.add('is-active');
+}
+
+async function buscarEExibirCursos() {
+    try {
+        const response = await fetch(`${backendApiUrl}/api/cursos`);
+        const cursos = await response.json();
+        todosOsCursos = cursos;
+        renderizarTabelaCursos(cursos);
+        popularFiltroCursos(cursos);
+    } catch (error) { console.error('Falha ao buscar cursos:', error); }
+}
+
+async function buscarEExibirVideos(filtroCursoId = 'todos') {
+    try {
+        let url = `${backendApiUrl}/api/videos`;
+        if (filtroCursoId !== 'todos' && filtroCursoId !== 'semcurso') {
+            url = `${backendApiUrl}/api/videos/curso/${filtroCursoId}`;
+        }
+        const response = await fetch(url);
+        let videos = await response.json();
+        if (filtroCursoId === 'semcurso') {
+            videos = videos.filter(video => video.curso_id === null);
+        }
+        renderizarTabelaVideos(videos);
+    } catch (error) { console.error('Falha ao buscar vídeos:', error); }
+}
+
+function configurarAbas() { const abas = document.querySelectorAll('.tabs li'); abas.forEach(aba => { aba.addEventListener('click', () => { abas.forEach(item => item.classList.remove('is-active')); aba.classList.add('is-active'); document.querySelectorAll('#cursos-section, #videos-section').forEach(section => section.classList.add('is-hidden')); document.querySelector(aba.dataset.target).classList.remove('is-hidden'); }); }); }
+function configurarBotoes() { document.getElementById('addCursoBtn').addEventListener('click', abrirModalParaNovoCurso); document.getElementById('addVideoBtn').addEventListener('click', abrirModalParaNovoVideo); }
+function configurarFiltro() { document.getElementById('filtroCurso').addEventListener('change', (event) => buscarEExibirVideos(event.target.value)); }
+function configurarModal() { document.querySelectorAll('.modal-background, [data-action="close"]').forEach(el => { el.addEventListener('click', () => document.getElementById('templateModal').classList.remove('is-active')); }); }
+function configurarOuvintesDasTabelas() { document.getElementById('cursos-section').addEventListener('click', (event) => { const botaoClicado = event.target.closest('button'); if (!botaoClicado) return; const id = botaoClicado.dataset.id; if (botaoClicado.classList.contains('js-delete-curso')) deletarCurso(id); if (botaoClicado.classList.contains('js-edit-curso')) abrirModalParaEditarCurso(id); }); document.getElementById('videos-section').addEventListener('click', (event) => { const botaoClicado = event.target.closest('button'); if (!botaoClicado) return; const id = botaoClicado.dataset.id; if (botaoClicado.classList.contains('js-delete-video')) deletarVideo(id); if (botaoClicado.classList.contains('js-edit-video')) abrirModalParaEditarVideo(id); }); }
+
+async function deletarCurso(id) {
+    if (!confirm(`Tem a certeza que deseja apagar o curso ID ${id}?`)) return;
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        await fetch(`${backendApiUrl}/api/cursos/${id}`, { method: 'DELETE', headers });
+        buscarEExibirCursos();
+    } catch (error) { console.error('Erro ao apagar curso:', error); }
+}
+
+async function deletarVideo(id) {
+    if (!confirm(`Tem a certeza que deseja apagar o vídeo ID ${id}?`)) return;
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        await fetch(`${backendApiUrl}/api/videos/${id}`, { method: 'DELETE', headers });
+        buscarEExibirVideos();
+    } catch (error) { console.error('Erro ao apagar vídeo:', error); }
+}
+
+function getAuthHeaders() {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+        alert('Acesso negado. Por favor, faça o login como administrador.');
+        window.location.href = 'login.html';
+        return null;
+    }
+    return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+}
+
+function popularFiltroCursos(cursos) {
+    const filtro = document.getElementById('filtroCurso');
+    const valorSelecionado = filtro.value;
+    const opcoesPreservadas = `<option value="todos">Todos</option><option value="semcurso">Sem curso</option>`;
+    filtro.innerHTML = opcoesPreservadas;
+    cursos.forEach(curso => filtro.innerHTML += `<option value="${curso.id_course}">${curso.nome}</option>`);
+    filtro.value = valorSelecionado;
+}
+
+function renderizarTabelaCursos(cursos) {
+    const corpoTabela = document.getElementById('tabelaCursos');
+    corpoTabela.innerHTML = '';
+    cursos.forEach(curso => {
+        corpoTabela.innerHTML += `<tr><td>${curso.id_course}</td><td>${curso.nome}</td><td><button class="button is-danger is-small js-delete-curso" data-id="${curso.id_course}">Apagar</button><button class="button is-info is-small js-edit-curso" data-id="${curso.id_course}">Editar</button></td></tr>`;
+    });
+}
+
+function renderizarTabelaVideos(videos) {
+    const corpoTabela = document.getElementById('tabelaVideos');
+    corpoTabela.innerHTML = '';
+    videos.forEach(video => {
+        const nomeCurso = todosOsCursos.find(c => c.id_course === video.curso_id)?.nome || 'Nenhum';
+        corpoTabela.innerHTML += `<tr><td>${video.id}</td><td>${video.titulo}</td><td>${nomeCurso}</td><td><a href="${video.url}" target="_blank" class="button is-small is-link">Ver Vídeo</a></td><td><button class="button is-danger is-small js-delete-video" data-id="${video.id}">Apagar</button><button class="button is-info is-small js-edit-video" data-id="${video.id}">Editar</button></td></tr>`;
+    });
+}
+
+async function salvarAlteracoesCurso(id) {
+    const nome = document.getElementById('curso-nome').value,
+        descricao = document.getElementById('curso-descricao').value;
+    if (!nome) { alert('O nome é obrigatório.'); return; }
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        await fetch(`${backendApiUrl}/api/cursos/${id}`, { method: 'PUT', headers, body: JSON.stringify({ nome, descricao }) });
+        document.getElementById('templateModal').classList.remove('is-active');
+        buscarEExibirCursos();
+    } catch (error) { console.error('Erro ao salvar alterações:', error); }
+}
+
+async function salvarAlteracoesVideo(id) {
+    const titulo = document.getElementById('video-titulo').value,
+        descricao = document.getElementById('video-descricao').value,
+        url = document.getElementById('video-url').value;
+    let curso_id = document.getElementById('video-cursoid').value;
+    curso_id = curso_id ? parseInt(curso_id, 10) : null;
+    if (!titulo || !url) { alert('Título e URL são obrigatórios.'); return; }
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        await fetch(`${backendApiUrl}/api/videos/${id}`, { method: 'PUT', headers, body: JSON.stringify({ titulo, descricao, url, curso_id }), });
+        document.getElementById('templateModal').classList.remove('is-active');
+        buscarEExibirVideos();
+    } catch (error) { console.error('Erro ao salvar alterações do vídeo:', error); }
+}
+
+// =================================================================
+// 8. PONTO DE ENTRADA PRINCIPAL DA APLICAÇÃO
+// =================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    if (!localStorage.getItem('adminToken')) {
+        alert('Acesso negado. Por favor, faça o login como administrador.');
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    configurarAbas();
+    configurarBotoes();
+    configurarFiltro();
+    configurarOuvintesDasTabelas();
+    configurarModal();
+
+    buscarEExibirCursos();
+    buscarEExibirVideos();
+});
+
+</script>
+
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            background: #333;
+            color: #fff;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #fff;
+            padding: 1rem;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background: #444;
+        }
+
+        .main,
+        .section {
+            margin-left: 200px;
+            padding: 1.5rem;
+        }
+
+        .card {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <nav>
+            <a href="/admin/admin.html">Dashboard</a>
+            <a href="/admin/user_admin.html">Usuários</a>
+            <a href="/admin/cursos_admin.html">Cursos</a>
+            <a href="/admin/materiais_adm.html">Materiais</a>
+        </nav>
+    </aside>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Gerenciamento de Cursos e Vídeos</h1>
+
+            <div class="tabs">
+                <ul>
+                    <li class="is-active" data-target="#cursos-section"><a>Cursos</a></li>
+                    <li data-target="#videos-section"><a>Vídeos</a></li>
+                </ul>
+            </div>
+
+            <section id="cursos-section" class="section">
+                <h2 class="subtitle">Cursos</h2>
+                <button class="button is-primary" id="addCursoBtn">Adicionar Curso</button>
+                <table class="table is-striped is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaCursos">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="videos-section" class="section is-hidden">
+                <h2 class="subtitle">Vídeos</h2>
+                <button class="button is-primary" id="addVideoBtn">Adicionar Vídeo</button>
+
+                <div class="field">
+                    <label class="label">Filtrar por Curso</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id="filtroCurso">
+                                <option value="todos">Todos</option>
+                                <option value="semcurso">Sem curso</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table is-striped is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Curso ID</th>
+                            <th>URL</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaVideos">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div>
+                    <strong>Vídeos sem curso atribuído:</strong>
+                    <ul id="listaVideosSemCurso">
+                    </ul>
+                </div>
+            </section>
+
+            <div class="modal" id="templateModal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title" id="modalTitle"></p>
+                        <button class="delete" aria-label="close" data-action="close"></button>
+                    </header>
+                    <section class="modal-card-body" id="modalBody">
+                    </section>
+                    <footer class="modal-card-foot" id="modalFooter">
+                        <button class="button" data-action="close">Cancelar</button>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

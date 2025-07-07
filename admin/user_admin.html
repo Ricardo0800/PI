@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administração de Usuários</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; }
+        .sidebar { width: 200px; background: #333; color: #fff; height: 100vh; position: fixed; top: 0; left: 0; }
+        .sidebar a { display: block; color: #fff; padding: 15px; text-decoration: none; }
+        .sidebar a:hover { background: #444; }
+        .sidebar h2 { text-align: center; margin: 1rem 0; }
+        .main { margin-left: 200px; padding: 20px; }
+        .section { margin-left: 200px; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 style="text-align:center;">Admin</h2>
+        <a href="admin.html">Dashboard</a>
+        <a href="user_admin.html">Usuários</a>
+        <a href="cursos_admin.html">Cursos</a>
+        <a href="materiais_adm.html">Materiais</a>
+    </div>
+
+    <div class="main">
+        <section class="section">
+            <div class="container">
+                <h1 class="title">Administração de Usuários</h1>
+                <button class="button is-primary" id="addUserBtn">+ Adicionar Usuário</button>
+                <table class="table is-fullwidth is-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th>ID do Perfil</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Função</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal" id="userModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head"><p class="modal-card-title">Adicionar Novo Usuário</p><button class="delete" aria-label="close"></button></header>
+            <section class="modal-card-body">
+                <div class="field"><label class="label">Nome</label><div class="control"><input id="userName" class="input" type="text"></div></div>
+                <div class="field"><label class="label">Email</label><div class="control"><input id="userEmail" class="input" type="email"></div></div>
+                <div class="field"><label class="label">Senha</label><div class="control"><input id="userPassword" class="input" type="password"></div></div>
+                <div class="field"><label class="label">Função</label><div class="control"><div class="select is-fullwidth"><select id="userRole"><option value="1">Utilizador</option><option value="2">Administrador</option></select></div></div></div>
+            </section>
+            <footer class="modal-card-foot"><button class="button is-success" id="saveUserBtn">Salvar</button><button class="button" id="cancelUserModal">Cancelar</button></footer>
+        </div>
+    </div>
+
+     <script>
+// =================================================================
+// SCRIPT FINAL E ROBUSTO PARA user_admin.html
+// =================================================================
+const backendApiUrl = 'http://localhost:3000';
+
+function getAuthHeaders() {const token = localStorage.getItem('adminToken'); if (!token) { alert('Acesso negado.'); window.location.href = 'login.html'; return null; } return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };}
+
+async function fetchAndRenderUsers() {
+    try {
+        console.log('[DIAGNÓSTICO] A iniciar fetchAndRenderUsers...');
+        const headers = getAuthHeaders(); if (!headers) return;
+        const response = await fetch(`${backendApiUrl}/api/users`, { headers });
+        if (!response.ok) throw new Error('Falha ao buscar utilizadores.');
+        
+        const users = await response.json();
+        const tableBody = document.getElementById('users-table-body');
+        tableBody.innerHTML = '';
+
+        if (users.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5">Nenhum utilizador encontrado.</td></tr>';
+        } else {
+            users.forEach(user => {
+                const userRole = user.categorias ? user.categorias.nome : 'Indefinida';
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name || ''}</td>
+                        <td>${user.email}</td>
+                        <td>${userRole}</td>
+                        <td>
+                            <div class="select is-small">
+                                <select class="user-role-selector" data-userid="${user.id}">
+                                    <option value="1" ${user.categorias.id_categoria === 1 ? 'selected' : ''}>Utilizador</option>
+                                    <option value="2" ${user.categorias.id_categoria === 2 ? 'selected' : ''}>Admin</option>
+                                </select>
+                            </div>
+                            <button class="button is-danger is-small ml-2 js-delete-user" data-authid="${user.auth_user_id}" data-name="${user.name || user.email}">Apagar</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+        console.log('[DIAGNÓSTICO] Tabela de utilizadores redesenhada com sucesso.');
+    } catch (error) { console.error('Erro em fetchAndRenderUsers:', error); alert(error.message); }
+}
+
+async function changeUserRole(userId, newRoleId, selectElement) {
+    const originalOption = selectElement.querySelector('option[selected]');
+    const originalValue = originalOption ? originalOption.value : newRoleId;
+
+    if (!confirm(`Tem a certeza que deseja alterar a função deste utilizador?`)) {
+        selectElement.value = originalValue; return;
+    }
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        await fetch(`${backendApiUrl}/api/users/${userId}/categoria`, { method: 'PUT', headers, body: JSON.stringify({ id_categoria: newRoleId }) });
+        alert('Função atualizada!');
+        await fetchAndRenderUsers();
+    } catch (error) { console.error('Erro ao alterar função:', error); alert('Ocorreu um erro.'); selectElement.value = originalValue; }
+}
+
+async function deleteUser(authUserId, userName) {
+    if (!confirm(`Tem a certeza que deseja APAGAR PERMANENTEMENTE o utilizador "${userName}"?`)) return;
+    try {
+        console.log(`[DIAGNÓSTICO] A iniciar a remoção do utilizador auth_id: ${authUserId}`);
+        const headers = getAuthHeaders(); if (!headers) return;
+        
+        const response = await fetch(`${backendApiUrl}/api/users/${authUserId}`, { method: 'DELETE', headers });
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error || 'Falha ao apagar no backend.');
+        }
+
+        console.log('[DIAGNÓSTICO] Utilizador apagado no backend. A redesenhar a tabela...');
+        // *** MUDANÇA IMPORTANTE: Espera que a tabela seja redesenhada ANTES de mostrar o alerta ***
+        await fetchAndRenderUsers(); 
+        console.log('[DIAGNÓSTICO] Tabela redesenhada. A mostrar alerta de sucesso.');
+        alert('Utilizador apagado com sucesso.');
+
+    } catch (error) { console.error('Erro ao apagar utilizador:', error); alert(`Ocorreu um erro ao apagar: ${error.message}`); }
+}
+
+async function saveNewUser() {
+    const name = document.getElementById('userName').value;
+    const email = document.getElementById('userEmail').value;
+    const password = document.getElementById('userPassword').value;
+    const id_categoria = document.getElementById('userRole').value;
+    if (!name || !email || !password) { alert('Todos os campos são obrigatórios.'); return; }
+    try {
+        const headers = getAuthHeaders(); if (!headers) return;
+        const response = await fetch(`${backendApiUrl}/api/users`, { method: 'POST', headers, body: JSON.stringify({ name, email, password, id_categoria }) });
+        if (!response.ok) { const err = await response.json(); throw new Error(err.error); }
+        document.getElementById('userModal').classList.remove('is-active');
+        await fetchAndRenderUsers();
+        alert('Utilizador criado com sucesso!');
+    } catch (error) { console.error('Erro ao criar utilizador:', error); alert(`Falha ao criar utilizador: ${error.message}`); }
+}
+
+function setupEventListeners() {
+    const userModal = document.getElementById('userModal');
+    document.getElementById('addUserBtn').addEventListener('click', () => userModal.classList.add('is-active'));
+    userModal.querySelector('.delete').addEventListener('click', () => userModal.classList.remove('is-active'));
+    document.getElementById('cancelUserModal').addEventListener('click', () => userModal.classList.remove('is-active'));
+    document.getElementById('saveUserBtn').addEventListener('click', saveNewUser);
+
+    const tableBody = document.getElementById('users-table-body');
+    tableBody.addEventListener('change', (event) => {
+        if (event.target.classList.contains('user-role-selector')) {
+            changeUserRole(event.target.dataset.userid, event.target.value, event.target);
+        }
+    });
+    tableBody.addEventListener('click', (event) => {
+        if (event.target.classList.contains('js-delete-user')) {
+            deleteUser(event.target.dataset.authid, event.target.dataset.name);
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!localStorage.getItem('adminToken')) {
+        alert('Acesso negado.'); window.location.href = 'login.html'; return;
+    }
+    setupEventListeners();
+    fetchAndRenderUsers();
+});
+</script>
+</body>
+</html>

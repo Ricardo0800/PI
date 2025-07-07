@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login de Administrador</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        html, body { height: 100%; }
+        body { display: flex; align-items: center; justify-content: center; background-color: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <div class="box" style="width: 400px;">
+        <h1 class="title has-text-centered">Acesso Restrito</h1>
+        <p class="subtitle has-text-centered">Painel de Administração</p>
+        
+        <form id="admin-login-form">
+            <div class="field">
+                <label class="label" for="email">Email</label>
+                <div class="control">
+                    <input class="input" type="email" id="email" placeholder="seu-email@exemplo.com" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="password">Palavra-passe</label>
+                <div class="control">
+                    <input class="input" type="password" id="password" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <button class="button is-primary is-fullwidth" type="submit">Entrar</button>
+            </div>
+        </form>
+        <p id="error-message" class="has-text-danger has-text-centered"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // --- CONFIGURAÇÃO DO SUPABASE ---
+        const SUPABASE_URL = 'https://mmegueeiaqwsrswgmwbx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZWd1ZWVpYXF3c3Jzd2dtd2J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUzMjIwNjUsImV4cCI6MjA2MDg5ODA2NX0.JEEKLpDoJRG87FFGNB8YP5k8F-TPCJvbqpoJQTupdcc';
+        
+        // *** A CORREÇÃO ESTÁ AQUI: 'supabase' em minúsculas ***
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        const form = document.getElementById('admin-login-form');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            errorMessage.textContent = ''; 
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                // 1. Tenta autenticar
+                const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (authError) throw authError;
+
+                // 2. Verifica se é admin
+                const { data: profileData, error: profileError } = await supabaseClient
+                    .from('Users')
+                    .select('id_categoria')
+                    .eq('auth_user_id', authData.user.id)
+                    .single();
+                if (profileError) throw new Error('Perfil de utilizador não encontrado ou erro ao buscar.');
+
+                // 3. Verifica a categoria (assumimos admin = 2)
+                if (profileData && profileData.id_categoria === 2) {
+                    localStorage.setItem('adminToken', authData.session.access_token);
+                    window.location.href = 'cursos_admin.html';
+                } else {
+                    throw new Error('Acesso negado. Esta conta não tem privilégios de administrador.');
+                }
+            } catch (error) {
+                console.error('Erro no login:', error.message);
+                errorMessage.textContent = error.message;
+                await supabaseClient.auth.signOut();
+            }
+        });
+    </script>
+</body>
+</html>
+

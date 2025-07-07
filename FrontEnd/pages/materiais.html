@@ -124,5 +124,29 @@
         closeModal.addEventListener('click', closeModalFunction);
         modalBackground.addEventListener('click', closeModalFunction);
       </script>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+  const supabaseUrl = 'YOUR_SUPABASE_URL'; // Substitua com sua URL do Supabase
+  const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Substitua com sua chave anon do Supabase
+  // AVISO DE SEGURANÇA: Credenciais do Supabase estão expostas no frontend. Em produção, considere usar um proxy reverso ou um backend para intermediar as chamadas ao Supabase.
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // Redirecionar para a página de login se não estiver logado
+  const redirectToLoginIfNotLoggedIn = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+          window.location.href = '../../index.html'; // Ajuste o caminho para a sua página inicial
+      } else {
+          // Se estiver logado, você pode buscar informações do usuário aqui, se necessário
+          console.log('Usuário logado:', user);
+          // Se você quiser fazer algo quando o usuário está logado nessas páginas, faça aqui.
+      }
+  };
+
+  // Verificar o estado da sessão ao carregar a página
+  redirectToLoginIfNotLoggedIn();
+</script>
 </body>
 </html>
