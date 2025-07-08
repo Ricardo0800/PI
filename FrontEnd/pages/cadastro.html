@@ -1,165 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f4f4f9;
-    }
-    .container {
-      width: 100%;
-      max-width: 400px;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .button {
-      width: 100%;
-    }
-    .field {
-      margin-bottom: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Jogos na Educação</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html, body { height: 100%; }
+        body { display: flex; align-items: center; justify-content: center; background-color: #f5f5f5; }
+        .container { width: 100%; max-width: 400px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+        .field { margin-bottom: 20px; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h2 class="title has-text-centered">Crie a sua Conta</h2>
+        
+        <form id="signup-form">
+            <div class="field">
+                <label class="label" for="name">Nome Completo</label>
+                <div class="control">
+                    <input class="input" type="text" id="name" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="email">Email</label>
+                <div class="control">
+                    <input class="input" type="email" id="email" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="password">Senha (mínimo 6 caracteres)</label>
+                <div class="control">
+                    <input class="input" type="password" id="password" required>
+                </div>
+            </div>
+            <div class="field">
+                <button class="button is-primary is-fullwidth" type="submit">Criar Conta</button>
+            </div>
+        </form>
 
-  <div class="container">
-    <h2 class="title has-text-centered">Cadastro</h2>
-
-    <!-- Formulário de Cadastro -->
-    <div class="field">
-      <label class="label">Nome</label>
-      <div class="control">
-        <input class="input" type="text" placeholder="Digite seu nome" id="nameInput">
-      </div>
+        <div class="field">
+            <button class="button is-danger is-fullwidth" id="registerWithGoogle">
+                <span class="icon"><i class="fab fa-google"></i></span>
+                <span>Cadastrar com Google</span>
+            </button>
+        </div>
+        
+        <p id="message" class="has-text-centered mt-2"></p>
+        <div class="has-text-centered mt-4">
+            <a href="../../index.html">Já tem uma conta? Faça o login</a>
+        </div>
     </div>
 
-    <div class="field">
-      <label class="label">Email</label>
-      <div class="control">
-        <input class="input" type="email" placeholder="Digite seu email" id="emailInput">
-      </div>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://mmegueeiaqwsrswgmwbx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZWd1ZWVpYXF3c3Jzd2dtd2J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTg3NDYxODgsImV4cCI6MjAzNDMyMjE4OH0.Cr9UML3qEMHwzUOKp5k9ub99w0s9aPzn22E94N2Hx20';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    <div class="field">
-      <label class="label">Senha</label>
-      <div class="control">
-        <input class="input" type="password" placeholder="Digite sua senha" id="passwordInput">
-      </div>
-    </div>
+        const form = document.getElementById('signup-form');
+        const googleButton = document.getElementById('registerWithGoogle');
+        const messageEl = document.getElementById('message');
 
-    <div class="field">
-      <button class="button is-primary" id="registerWithEmail">Cadastrar com Email</button>
-    </div>
+        // Cadastro com Email
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            messageEl.textContent = '';
+            messageEl.classList.remove('has-text-success', 'has-text-danger');
 
-    <div class="field">
-      <button class="button is-danger" id="registerWithGoogle">
-        <i class="fab fa-google"></i>&nbsp; Cadastrar com Google
-      </button>
-    </div>
-    
-    <div class="field has-text-centered">
-      <a href="#">Já tem uma conta? Faça login</a>
-    </div>
-  </div>
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-  
-    const supabaseUrl = 'YOUR_SUPABASE_URL'; // Substitua com sua URL do Supabase
-    const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Substitua com sua chave anon do Supabase
-    // AVISO DE SEGURANÇA: Credenciais do Supabase estão expostas no frontend. Em produção, considere usar um backend seguro para todas as operações de banco de dados.
-    const supabase = createClient(supabaseUrl, supabaseKey);
-  
-    // CADASTRO COM EMAIL E SENHA
-    const registerWithEmail = async () => {
-      const name = document.getElementById('nameInput').value;
-      const email = document.getElementById('emailInput').value;
-      const password = document.getElementById("passwordInput").value;
+            try {
+                const { error } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: { data: { full_name: name } }
+                });
+                if (error) throw error;
+                
+                messageEl.textContent = 'Sucesso! Verifique o seu email para confirmar a conta.';
+                messageEl.classList.add('has-text-success');
+                form.reset();
+            } catch (error) {
+                messageEl.textContent = error.message;
+                messageEl.classList.add('has-text-danger');
+            }
+        });
 
-      if (!name || !email || !password) {
-        alert("Por favor, preencha todos os campos.");
-        return;
-      }
-
-      if (!/^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
-        alert("Por favor, insira um email válido.");
-        return;
-      }
-
-      if (password.length < 6) {
-        alert("A senha deve ter pelo menos 6 caracteres.");
-        return;
-      }
-
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-      });
-
-      if (signUpError) {
-        console.error("Erro ao cadastrar:", signUpError);
-        alert("Erro ao cadastrar: " + signUpError.message);
-        return;
-      }
-
-      if (!signUpData.user) {
-        alert("Erro ao obter dados do usuário após o cadastro.");
-        return;
-      }
-
-      // Salvar dados extras no banco
-      const { error: insertError } = await supabase
-        .from("Users")
-        .insert([
-          {
-            email: email,
-            name: name,
-            provider: "email",
-            auth_user_id: signUpData.user.id, // Adiciona o ID do usuário do Supabase Auth
-          },
-        ]);
-
-      if (insertError) {
-        alert("Erro ao salvar usuário no banco: " + insertError.message);
-      } else {
-        alert("Cadastro realizado com sucesso!");
-        console.log(signUpData);
-      }
-  
-    document.getElementById('registerWithEmail').addEventListener('click', registerWithEmail);
-  
-    // CADASTRO COM GOOGLE
-    const registerWithGoogle = async () => {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: 
-            window.location.origin + 
-            "/FrontEnd/pages/biblioteca.html", // Use o domínio atual e um caminho relativo
-        },
-      });
-  
-      if (error) {
-        alert('Erro no cadastro com Google: ' + error.message);
-      }
-      // O redirecionamento será feito automaticamente
-    };
-  
-    document.getElementById('registerWithGoogle').addEventListener('click', registerWithGoogle);
-  </script>
-  
-
+        // Cadastro com Google
+        googleButton.addEventListener('click', async () => {
+            messageEl.textContent = '';
+            const { error } = await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
+            if (error) {
+                messageEl.textContent = 'Erro ao tentar cadastro com o Google.';
+                messageEl.classList.add('has-text-danger');
+            }
+        });
+    </script>
 </body>
 </html>

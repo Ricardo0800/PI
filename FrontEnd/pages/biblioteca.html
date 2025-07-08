@@ -6,30 +6,31 @@
     <title>Biblioteca de Cursos</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <style>
-        /* O seu CSS original aqui, sem alterações */
-        #pesquisa { margin-top: 4px; width: 30vw; }
-        #links-start { gap: 10px; }
-        h2 { font-size: x-large; font-weight: bold; }
+        /* O seu CSS original */
+        main { padding: 2rem; }
         .card { width: 300px; margin: 10px; }
         .card .card-image img { height: 180px; object-fit: cover; }
         .modal-card-body iframe { width: 100%; height: 315px; }
-        .progress-container { margin-top: 15px; margin-bottom: 15px; }
-        .video-navigation { display: flex; justify-content: space-between; margin-top: 15px; }
-        .video-counter { text-align: center; margin: 10px 0; font-weight: bold; }
-        .loading { display: flex; justify-content: center; align-items: center; height: 200px; }
-        .curso-progresso { position: absolute; top: 10px; right: 10px; background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px 10px; border-radius: 10px; font-size: 0.8rem; }
+        .curso-progresso { position: absolute; top: 10px; right: 10px; background-color: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 10px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
-    <header class="box navbar" id="navbar-flex">
-        <div class="navbar-brand"><a class="navbar-item" href="../../index.html"><h1 class="title" id="title">Jogos Na Educação</h1></a></div>
-        <div id="navbarBasicExample" class="navbar-menu"><div class="navbar-start" id="links-start"><a class="navbar-item" href="../../index.html">Início</a><a class="navbar-item" href="biblioteca.html">Biblioteca</a><a class="navbar-item" href="materiais.html">Materiais</a><a class="navbar-item" href="quemSomos.html">Quem Somos</a></div><div class="navbar-end"><div class="control has-icons-left"><input class="input" type="text" placeholder="Pesquisar" id="pesquisa"><span class="icon is-left"><i class="fas fa-search"></i></span></div></div></div>
+    <header class="box navbar is-primary">
+        <div class="navbar-brand"><a class="navbar-item" href="../../index.html"><h1 class="title">Jogos Na Educação</h1></a></div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="../../index.html">Início</a>
+                <a class="navbar-item" href="biblioteca.html">Biblioteca</a>
+                <a class="navbar-item" href="materiais.html">Materiais</a>
+                <a class="navbar-item" href="quemSomos.html">Quem Somos</a>
+            </div>
+        </div>
     </header>
 
     <main class="section">
         <h2 class="subtitle">Nossos Cursos</h2>
         <section id="courses-container" class="columns is-multiline">
-            <div id="loading-cursos" class="column is-full loading">
+            <div id="loading-cursos" class="column is-full has-text-centered">
                 <button class="button is-loading is-large">Carregando</button>
             </div>
         </section>
@@ -40,12 +41,10 @@
                 <header class="modal-card-head"><p class="modal-card-title" id="modal-title">Carregando...</p><button class="delete"></button></header>
                 <section class="modal-card-body">
                     <div id="video-container"></div>
-                    <div class="progress-container"><progress id="video-progress" class="progress is-primary" value="0" max="100"></progress></div>
                     <div class="video-counter" id="video-counter"></div>
                     <p id="video-description"></p>
-                    <div class="video-navigation"><button class="button is-info" id="prevVideo" disabled>Anterior</button><button class="button is-success" id="markAsWatched">Marcar como assistido</button><button class="button is-info" id="nextVideo" disabled>Próximo</button></div>
+                    <div class="video-navigation mt-4"><button class="button is-info" id="prevVideo" disabled>Anterior</button><button class="button is-success" id="markAsWatched">Marcar como assistido</button><button class="button is-info" id="nextVideo" disabled>Próximo</button></div>
                 </section>
-                <footer class="modal-card-foot"><button class="button" id="closeModalBtn">Fechar</button></footer>
             </div>
         </div>
     </main>
@@ -54,23 +53,18 @@
         const backendApiUrl = 'http://localhost:3000';
         let currentVideos = [];
         let currentVideoIndex = 0;
-        
-        // Função "ajudante" para obter o token do utilizador logado
+
+        // Função "ajudante" que usa o passe do utilizador
         function getAuthHeaders() {
-            // No frontend do cliente, o token é guardado pelo Supabase Auth.
-            // O nome padrão é `sb-access-token`, mas vamos usar o que o nosso script de login guarda
-            // para ser consistente. Vamos assumir que o login do cliente também guarda um 'userToken'.
-            // (Se o seu login de cliente for diferente, teremos de ajustar aqui)
-            const token = localStorage.getItem('userToken'); // ASSUMINDO que o login guarda um 'userToken'
+            const token = localStorage.getItem('userToken');
             if (!token) {
-                alert('Você precisa de estar logado para ver os cursos.');
-                window.location.href = '../../index.html'; // Redireciona para o login principal
+                alert('Você precisa estar logado para ver esta página.');
+                window.location.href = '../../index.html'; // Redireciona para o login
                 return null;
             }
             return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
         }
 
-        // Função para buscar e desenhar os cursos
         async function fetchAndRenderCourses() {
             const coursesContainer = document.getElementById('courses-container');
             try {
@@ -82,17 +76,17 @@
                 
                 document.getElementById('loading-cursos').style.display = 'none';
                 if (cursos.length === 0) {
-                    coursesContainer.innerHTML = '<div class="notification is-info">Nenhum curso disponível no momento.</div>';
+                    coursesContainer.innerHTML = '<div class="notification is-info">Nenhum curso disponível.</div>';
                     return;
                 }
 
-                coursesContainer.innerHTML = ''; // Limpa a área
+                coursesContainer.innerHTML = '';
                 cursos.forEach(curso => {
                     coursesContainer.innerHTML += `
                         <div class="column is-one-quarter">
-                            <div class="card" data-curso-id="${curso.id_course}">
+                            <div class="card">
                                 <div class="card-image">
-                                    <figure class="image is-4by3"><img src="/frontend/assets/img/MINECRAFT.png" alt="${curso.nome}"><div class="curso-progresso">${curso.progresso}% concluído</div></figure>
+                                    <figure class="image is-4by3"><img src="../assets/img/MINECRAFT.png" alt="${curso.nome}"><div class="curso-progresso">${curso.progresso}% concluído</div></figure>
                                 </div>
                                 <div class="card-content">
                                     <p class="title is-4">${curso.nome}</p>
@@ -108,7 +102,6 @@
             }
         }
 
-        // Função para abrir o modal do curso
         async function openCourseModal(cursoId, cursoNome) {
             const videoModal = document.getElementById('videoModal');
             try {
@@ -117,7 +110,7 @@
 
                 const headers = getAuthHeaders(); if (!headers) return;
                 const response = await fetch(`${backendApiUrl}/api/biblioteca/curso/${cursoId}/videos`, { headers });
-                if (!response.ok) throw new Error('Não foi possível carregar os vídeos deste curso.');
+                if (!response.ok) throw new Error('Não foi possível carregar os vídeos.');
                 
                 currentVideos = await response.json();
                 
@@ -129,7 +122,6 @@
                 const primeiroNaoAssistido = currentVideos.findIndex(v => !v.assistido);
                 currentVideoIndex = primeiroNaoAssistido >= 0 ? primeiroNaoAssistido : 0;
                 renderVideo(currentVideoIndex);
-
             } catch (error) {
                 console.error('Erro ao abrir curso:', error);
                 alert(error.message);
@@ -137,14 +129,8 @@
             }
         }
         
-        // Função para renderizar o vídeo atual no modal
-       // Substitua APENAS esta função no seu script da biblioteca.html
-
         function renderVideo(index) {
             const video = currentVideos[index];
-
-            // *** A CORREÇÃO ESTÁ AQUI ***
-            // A expressão regular para extrair o ID do YouTube foi corrigida.
             const url = video.url || '';
             const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
             const videoId = (match && match[2].length === 11) ? match[2] : null;
@@ -165,7 +151,7 @@
             document.getElementById('prevVideo').disabled = index === 0;
             document.getElementById('nextVideo').disabled = index === currentVideos.length - 1;
         }
-        // Função para marcar um vídeo como assistido
+
         async function markVideoAsWatched() {
             const video = currentVideos[currentVideoIndex];
             try {
@@ -178,34 +164,21 @@
                 
                 video.assistido = true;
                 renderVideo(currentVideoIndex);
-                
-                if (currentVideoIndex < currentVideos.length - 1) {
-                    if (confirm('Vídeo marcado como assistido! Avançar para o próximo?')) {
-                        currentVideoIndex++;
-                        renderVideo(currentVideoIndex);
-                    }
-                } else {
-                    alert('Parabéns, você concluiu o curso!');
-                }
-                // Recarrega a página de cursos em segundo plano para atualizar o progresso
-                fetchAndRenderCourses();
+                await fetchAndRenderCourses();
             } catch (error) {
                 console.error('Erro ao marcar como assistido:', error);
             }
         }
 
-        // --- Ponto de Entrada da Aplicação ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Verifica o login antes de fazer qualquer coisa
-            if (!localStorage.getItem('userToken')) { // IMPORTANTE: Ajuste 'userToken' para o nome que o seu login de cliente usa
-                alert('Você precisa de estar logado para ver os cursos.');
-                window.location.href = '../../index.html'; // Ajuste o caminho para a sua página de login principal
+            if (!localStorage.getItem('userToken')) {
+                alert('Acesso negado. Faça o login para continuar.');
+                window.location.href = '../../index.html';
                 return;
             }
 
             fetchAndRenderCourses();
 
-            // Event Listeners
             document.getElementById('courses-container').addEventListener('click', (event) => {
                 const button = event.target.closest('.open-curso');
                 if (button) {

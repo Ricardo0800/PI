@@ -43,11 +43,27 @@ app.listen(port, () => {
 });
 
 // Adicione estas novas rotas no seu server.js
+app.get('/api/auth/session', autenticar, async (req, res) => {
+    // Se o pedido chegou aqui, o middleware 'autenticar' já confirmou que o token é válido.
+    // Agora, vamos buscar o perfil correspondente na nossa tabela 'Users'.
+    const { data: perfil, error } = await supabase
+        .from('Users')
+        .select('id, name, email, id_categoria') // Selecionamos apenas os dados seguros
+        .eq('auth_user_id', req.user.id) // req.user foi adicionado pelo middleware 'autenticar'
+        .single();
 
+    if (error || !perfil) {
+        // Se não houver perfil, recusa o acesso
+        return res.status(404).json({ message: 'Perfil de utilizador não encontrado.' });
+    }
+
+    // Se encontrou, devolve os dados do perfil para o frontend
+    res.status(200).json(perfil);
+});
 // --- ROTAS PARA MATERIAIS (Materiais) ---
 
 // GET: Obter todos os materiais (público)
-app.get('/api/materiais', async (req, res) => {
+app.get('/api/materiais',autenticar, async (req, res) => {
     const { data, error } = await supabase.from('Materiais').select('*');
     if (error) return res.status(500).json({ error: error.message });
     res.status(200).json(data);

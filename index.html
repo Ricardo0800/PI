@@ -1,252 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogos na Educação</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
-  <style>
-    #pesquisa {
-      margin-top: 4px;
-      width: 30vw;
-    }
-    #links-start {
-      gap: 10px;
-    }
-    .divs_path {
-      width: 30vw;
-      height: 300px;
-      min-width: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border-radius: 8px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .divs_path:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    .divs_path img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    main {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      gap: 60px;
-    }
-    #neymar {
-      max-width: 450px;
-    }
-    #texts {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogos na Educação</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        main { display: flex; flex-direction: row; justify-content: center; gap: 60px; padding: 2rem; flex-wrap: wrap; }
+        .divs_path { width: 30vw; height: 300px; min-width: 300px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; transition: transform 0.2s, box-shadow 0.2s; }
+        .divs_path:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+        .divs_path img { max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 8px; }
+        #texts { display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 450px; }
+    </style>
 </head>
 <body>
 
 <header class="box navbar is-primary" id="navbar-flex">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="../../index.html">
-      <h1 class="title" id="title">Jogos Na Educação</h1>
-    </a>
-  </div>
-
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start" id="links-start">
-      <a class="navbar-item" href="../../index.html">Início</a>
-      <a class="navbar-item" href="FrontEnd/pages/biblioteca.html">Biblioteca</a>
-      <a class="navbar-item" href="FrontEnd/pages/materiais.html">Materiais</a>
-      <a class="navbar-item" href="FrontEnd/pages/quemSomos.html">Quem Somos</a>
-    </div>
-
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="control has-icons-left">
-          <input class="input" type="text" placeholder="Pesquisar" id="pesquisa">
-          <span class="icon is-left">
-            <i class="fas fa-search"></i>
-          </span>
+    <div class="navbar-brand"><a class="navbar-item" href="index.html"><h1 class="title" id="title">Jogos Na Educação</h1></a></div>
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="index.html">Início</a>
+            <a class="navbar-item" href="frontend/pages/biblioteca.html">Biblioteca</a>
+            <a class="navbar-item" href="frontend/pages/materiais.html">Materiais</a>
+            <a class="navbar-item" href="frontend/pages/quemSomos.html">Quem Somos</a>
         </div>
-      </div>
-
-      <div class="navbar-item">
-        <div class="buttons">
-          <button class="button is-light" id="loginButton">
-            <strong>Entrar</strong>
-          </button>
+        <div class="navbar-end">
+            <div class="navbar-item" id="nav-buttons">
+                <div class="buttons">
+                    <button class="button is-light" id="loginButton"><strong>Entrar</strong></button>
+                    <button class="button is-danger is-hidden" id="logoutButton"><strong>Sair</strong></button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </header>
 
 <main>
-  <section id="texts">
-    <p class="title is-size-3" id="neymar">
-      Quer melhorar seu aprendizado utilizando jogos digitais incríveis? Conheça nosso site:
-    </p>
-  </section>
-
-  <section id="divs">
-    <div class="box divs_path" id="biblioteca_div">
-      <a href="FrontEnd/pages/biblioteca.html">
-        <img src="FrontEnd/assets/img/Biblioteca de.png" alt="">
-      </a>
-    </div>
-    <div class="box divs_path" id="materiais_div">
-      <a href="FrontEnd/pages/materiais.html">
-        <img src="FrontEnd/assets/img/Materiais.png" alt="">
-      </a>
-    </div>
-    <div class="box divs_path" id="quemSomos_div">
-      <a href="FrontEnd/pages/quemSomos.html">
-        <img src="FrontEnd/assets/img/Materiais (1).png" alt="">
-      </a>
-    </div>
-  </section>
+    <section id="texts"><p class="title is-size-3">Quer melhorar seu aprendizado utilizando jogos digitais incríveis? Conheça nosso site:</p></section>
+    <section id="divs">
+        <div class="box divs_path"><a href="pages/biblioteca.html"><img src="assets/img/Biblioteca de.png" alt="Biblioteca"></a></div>
+        <div class="box divs_path"><a href="pages/materiais.html"><img src="assets/img/Materiais.png" alt="Materiais"></a></div>
+        <div class="box divs_path"><a href="pages/quemSomos.html"><img src="assets/img/Materiais (1).png" alt="Quem Somos"></a></div>
+    </section>
 </main>
 
-<!-- Modal de Login -->
 <div class="modal" id="loginModal">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Entrar</p>
-      <button class="delete" aria-label="close" id="closeModal"></button>
-    </header>
-    <section class="modal-card-body">
-      <!-- Formulário de Login -->
-      <div class="field">
-        <label class="label">Email</label>
-        <div class="control">
-          <input class="input" type="email" placeholder="Digite seu email" id="emailInput">
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Senha</label>
-        <div class="control">
-          <input class="input" type="password" placeholder="Digite sua senha" id="passwordInput">
-        </div>
-      </div>
-
-      <div class="field">
-        <button class="button is-primary is-fullwidth" id="loginWithEmail">
-          Entrar com Email
-        </button>
-      </div>
-
-      <div class="field">
-        <button class="button is-danger is-fullwidth" id="loginWithGoogle">
-          <i class="fab fa-google"></i>&nbsp; Entrar com Google
-        </button>
-      </div>
-
-      <div class="field has-text-centered">
-        <a href="/FrontEnd/pages/cadastro.html">Não tem uma conta? Cadastre-se</a>
-      </div>
-    </section>
-  </div>
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head"><p class="modal-card-title">Entrar</p><button class="delete" aria-label="close"></button></header>
+        <section class="modal-card-body">
+            <div class="field"><label class="label">Email</label><div class="control"><input class="input" type="email" id="emailInput"></div></div>
+            <div class="field"><label class="label">Senha</label><div class="control"><input class="input" type="password" id="passwordInput"></div></div>
+            <div class="field"><button class="button is-primary is-fullwidth" id="loginWithEmail">Entrar com Email</button></div>
+            <div class="field"><button class="button is-danger is-fullwidth" id="loginWithGoogle"><span class="icon"><i class="fab fa-google"></i></span><span>Entrar com Google</span></button></div>
+            <div class="field has-text-centered"><a href="pages/cadastro.html">Não tem uma conta? Cadastre-se</a></div>
+            <p id="error-message" class="has-text-danger has-text-centered mt-2"></p>
+        </section>
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Abrir modal
-  document.getElementById('loginButton').addEventListener('click', function() {
-    document.getElementById('loginModal').classList.add('is-active');
-  });
+    const SUPABASE_URL = 'https://mmegueeiaqwsrswgmwbx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZWd1ZWVpYXF3c3Jzd2dtd2J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUzMjIwNjUsImV4cCI6MjA2MDg5ODA2NX0.JEEKLpDoJRG87FFGNB8YP5k8F-TPCJvbqpoJQTupdcc';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // Fechar modal
-  document.getElementById('closeModal').addEventListener('click', function() {
-    document.getElementById('loginModal').classList.remove('is-active');
-  });
-
-  document.querySelector('.modal-background').addEventListener('click', function() {
-    document.getElementById('loginModal').classList.remove('is-active');
-  });
-</script>
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-  const supabaseUrl = 'YOUR_SUPABASE_URL'; // Substitua com sua URL do Supabase
-  const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Substitua com sua chave anon do Supabase
-  // AVISO DE SEGURANÇA: Credenciais do Supabase estão expostas no frontend. Em produção, considere usar um proxy reverso ou um backend para intermediar as chamadas ao Supabase.
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
-  // LOGIN COM EMAIL
-  const loginWithEmail = async () => {
-    const email = document.getElementById('emailInput').value;
-    const password = document.getElementById('passwordInput').value;
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      alert("Erro ao logar: " + error.message);
-    } else {
-      alert("Login realizado com sucesso!");
-      document.getElementById("loginModal").classList.remove("is-active");
-      document.getElementById("loginButton").style.display = "none"; // esconde o botão
-    }
-  };
-
-  document.getElementById('loginWithEmail').addEventListener('click', loginWithEmail);
-
-  // LOGIN COM GOOGLE
-  const loginWithGoogle = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-
-    if (error) {
-      alert('Erro no login com Google: ' + error.message);
-    } else {
-      window.location.href = data.url;
-    }
-  };
-
-  document.getElementById('loginWithGoogle').addEventListener('click', loginWithGoogle);
-
-  // VERIFICA SE USUÁRIO ESTÁ LOGADO E ESCONDE O BOTÃO "ENTRAR"
-  supabase.auth.getUser().then(async ({ data, error }) => {
-    if (data?.user) {
-      document.getElementById('loginButton').style.display = 'none'; // Oculta botão se logado
-
-      const { id, email, user_metadata } = data.user;
-      const nome = user_metadata?.full_name || user_metadata?.name || 'Usuário';
-
-      const { data: existente, error: selectError } = await supabase
-        .from("Users")
-        .select("*")
-        .eq("id", id)
-        .maybeSingle(); // evita erro se não encontrar
-
-      if (!existente && !selectError) {
-        const { error: erroInsert } = await supabase
-          .from("Users")
-          .insert([{ id, email, name: nome }]);
-
-        if (erroInsert) {
-          console.error('Erro ao salvar usuário:', erroInsert.message);
-        } else {
-          console.log('Usuário salvo com sucesso');
+    const loginModal = document.getElementById('loginModal');
+    const loginButton = document.getElementById('loginButton');
+    const logoutButton = document.getElementById('logoutButton');
+    const errorMessage = document.getElementById('error-message');
+    
+    async function handleEmailLogin() {
+        errorMessage.textContent = '';
+        const email = document.getElementById('emailInput').value;
+        const password = document.getElementById('passwordInput').value;
+        try {
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            loginModal.classList.remove('is-active');
+        } catch (error) {
+            errorMessage.textContent = 'Email ou senha inválidos.';
         }
-      } else {
-        console.log('Usuário já existe');
-      }
     }
-  });
-</script>
 
+    async function handleGoogleLogin() {
+        errorMessage.textContent = '';
+        await supabaseClient.auth.signInWithOAuth({ 
+            provider: 'google', 
+            options: { redirectTo: window.location.origin + window.location.pathname } 
+        });
+    }
+
+    async function handleLogout() {
+        await supabaseClient.auth.signOut();
+    }
+
+    function updateUI(user) {
+        loginButton.classList.toggle('is-hidden', !!user);
+        logoutButton.classList.toggle('is-hidden', !user);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // O "guarda" da autenticação
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            const user = session?.user;
+            if (user) {
+                localStorage.setItem('userToken', session.access_token);
+            } else {
+                localStorage.removeItem('userToken');
+                localStorage.removeItem('adminToken');
+            }
+            updateUI(user);
+        });
+
+        // Configuração dos botões
+        loginButton.addEventListener('click', () => loginModal.classList.add('is-active'));
+        logoutButton.addEventListener('click', handleLogout);
+        document.getElementById('loginWithEmail').addEventListener('click', handleEmailLogin);
+        document.getElementById('loginWithGoogle').addEventListener('click', handleGoogleLogin);
+        loginModal.querySelector('.modal-background').addEventListener('click', () => loginModal.classList.remove('is-active'));
+        loginModal.querySelector('.delete').addEventListener('click', () => loginModal.classList.remove('is-active'));
+    });
+</script>
 
 </body>
 </html>
