@@ -1,0 +1,9 @@
+# Ficheiro de variáveis de ambiente - NUNCA ENVIE SUAS CHAVES!
+BackEnd/.env
+
+# Pasta de dependências do Node.js
+BackEnd/node_modules/
+
+# Ficheiros do sistema operacional
+.DS_Store
+Thumbs.db

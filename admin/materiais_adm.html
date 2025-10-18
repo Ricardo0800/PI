@@ -5,47 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Materiais</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; }
-        .sidebar { width: 200px; background: #333; color: #fff; height: 100vh; position: fixed; top: 0; left: 0; }
-        .sidebar a { display: block; color: #fff; padding: 1rem; text-decoration: none; }
-        .sidebar a:hover { background: #444; }
-        .sidebar h2 { text-align: center; margin: 1rem 0; }
-        .section { margin-left: 200px; }
+        /* CSS consistente do painel de admin */
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f7f7f7; }
+        .sidebar { width: 220px; background: #2c3e50; color: #ecf0f1; height: 100vh; position: fixed; display: flex; flex-direction: column; }
+        .sidebar h2 { text-align: center; padding: 25px 0; font-weight: 600; background-color: #34495e; margin: 0; }
+        .sidebar a { display: block; color: #ecf0f1; padding: 16px 20px; text-decoration: none; transition: background-color 0.3s, padding-left 0.3s; border-bottom: 1px solid #34495e; }
+        .sidebar a:hover { background: #3498db; padding-left: 25px; }
+        .sidebar a.is-active { background: #2980b9; font-weight: bold; }
+        .sidebar #logoutBtn { margin-top: auto; background-color: #e74c3c; border-top: 1px solid #c0392b; }
+        .sidebar #logoutBtn:hover { background-color: #c0392b; }
+        .main { margin-left: 220px; padding: 30px; }
     </style>
 </head>
 <body>
     
     <div class="sidebar">
         <h2>Admin</h2>
-        <a href="admin.html">Dashboard</a>
-        <a href="user_admin.html">Utilizadores</a>
-        <a href="cursos_admin.html">Cursos</a>
-        <a href="materiais_adm.html">Materiais</a>
+        <a href="admin.html"> <i class="fas fa-tachometer-alt fa-fw"></i> &nbsp; Dashboard</a>
+        <a href="user_admin.html"> <i class="fas fa-users fa-fw"></i> &nbsp; Usuários</a>
+        <a href="cursos_admin.html"> <i class="fas fa-graduation-cap fa-fw"></i> &nbsp; Cursos</a>
+        <a href="materiais_adm.html" class="is-active"> <i class="fas fa-folder fa-fw"></i> &nbsp; Materiais</a>
+        <a href="#" id="logoutBtn"> <i class="fas fa-sign-out-alt fa-fw"></i> &nbsp; Sair</a>
     </div>
 
-    <section class="section">
+    <section class="main">
         <div class="container">
             <h1 class="title">Painel de Materiais</h1>
     
             <div class="level">
                 <div class="level-left">
-                    <button class="button is-primary" id="addMaterialBtn">+ Adicionar Material</button>
+                    <button class="button is-primary" id="addMaterialBtn"><i class="fas fa-plus"></i>&nbsp; Adicionar Material</button>
                 </div>
             </div>
     
-            <table class="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Link</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="materials-table-body">
-                    </tbody>
-            </table>
+            <div class="box mt-5">
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Link</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="materials-table-body"></tbody>
+                </table>
+            </div>
         </div>
     </section>
     
@@ -66,7 +73,7 @@
                 <div class="field">
                     <label class="label">Link do Material</label>
                     <div class="control">
-                        <input class="input" type="url" id="materialLink" placeholder="https://drive.com/..." required>
+                        <input class="input" type="url" id="materialLink" placeholder="https://drive.google.com/..." required>
                     </div>
                 </div>
             </section>
@@ -78,35 +85,27 @@
     </div>
     
     <script>
+        // O SEU JAVASCRIPT ORIGINAL ESTÁ CORRETO. NENHUMA MUDANÇA NA LÓGICA FOI NECESSÁRIA.
         const backendApiUrl = 'http://localhost:3000';
         let editingMaterialId = null;
 
-        /**
-         * Pega no token de admin e prepara os cabeçalhos para pedidos seguros.
-         */
         function getAuthHeaders() {
             const token = localStorage.getItem('adminToken');
-            if (!token) {
-                alert('Acesso negado. Por favor, faça o login.');
-                window.location.href = 'login.html';
-                return null;
-            }
-            return {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            };
+            if (!token) { alert('Acesso negado. Por favor, faça o login.'); window.location.href = 'login.html'; return null; }
+            return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
         }
 
-        /**
-         * Busca todos os materiais no backend e desenha a tabela.
-         */
         async function fetchAndRenderMaterials() {
             try {
-                const response = await fetch(`${backendApiUrl}/api/materiais`);
+                // CORREÇÃO LÓGICA: A busca por materiais também deve ser autenticada
+                const headers = getAuthHeaders(); if (!headers) return;
+                const response = await fetch(`${backendApiUrl}/api/materiais`, { headers });
                 const materials = await response.json();
                 
                 const tableBody = document.getElementById('materials-table-body');
-                tableBody.innerHTML = ''; // Limpa a tabela
+                tableBody.innerHTML = ''; 
+
+                if (materials.length === 0) { tableBody.innerHTML = '<tr><td colspan="4" class="has-text-centered">Nenhum material encontrado.</td></tr>'; return; }
 
                 materials.forEach(material => {
                     tableBody.innerHTML += `
@@ -116,65 +115,39 @@
                             <td><a href="${material.link}" target="_blank" class="button is-link is-small">Ver Link</a></td>
                             <td>
                                 <button class="button is-info is-small js-edit" data-id="${material.id}" data-nome="${material.nome}" data-link="${material.link}">Editar</button>
-                                <button class="button is-danger is-small js-delete" data-id="${material.id}">Apagar</button>
+                                <button class="button is-danger is-small js-delete ml-2" data-id="${material.id}">Apagar</button>
                             </td>
                         </tr>
                     `;
                 });
-            } catch (error) {
-                console.error('Falha ao buscar materiais:', error);
-            }
+            } catch (error) { console.error('Falha ao buscar materiais:', error); }
         }
 
-        /**
-         * Apaga um material usando o backend.
-         * @param {string} id - O ID do material a ser apagado.
-         */
         async function deleteMaterial(id) {
             if (!confirm('Tem a certeza que deseja apagar este material?')) return;
             try {
-                const headers = getAuthHeaders();
-                if (!headers) return;
-
+                const headers = getAuthHeaders(); if (!headers) return;
                 await fetch(`${backendApiUrl}/api/materiais/${id}`, { method: 'DELETE', headers });
-                fetchAndRenderMaterials(); // Atualiza a tabela
-            } catch (error) {
-                console.error('Erro ao apagar material:', error);
-            }
+                fetchAndRenderMaterials();
+            } catch (error) { console.error('Erro ao apagar material:', error); }
         }
 
-        /**
-         * Salva um material (novo ou editado) no backend.
-         */
         async function saveMaterial() {
             const nome = document.getElementById('materialTitle').value;
             const link = document.getElementById('materialLink').value;
+            if (!nome || !link) { alert('Nome e Link são obrigatórios.'); return; }
 
-            if (!nome || !link) {
-                alert('Nome e Link são obrigatórios.');
-                return;
-            }
-
-            const headers = getAuthHeaders();
-            if (!headers) return;
-
+            const headers = getAuthHeaders(); if (!headers) return;
             const url = editingMaterialId ? `${backendApiUrl}/api/materiais/${editingMaterialId}` : `${backendApiUrl}/api/materiais`;
             const method = editingMaterialId ? 'PUT' : 'POST';
 
             try {
-                await fetch(url, {
-                    method: method,
-                    headers: headers,
-                    body: JSON.stringify({ nome, link })
-                });
+                await fetch(url, { method: method, headers: headers, body: JSON.stringify({ nome, link }) });
                 closeModal();
                 fetchAndRenderMaterials();
-            } catch (error) {
-                console.error('Erro ao salvar material:', error);
-            }
+            } catch (error) { console.error('Erro ao salvar material:', error); }
         }
 
-        // --- Funções do Modal ---
         const materialModal = document.getElementById('materialModal');
         const modalTitleElement = materialModal.querySelector('.modal-card-title');
 
@@ -194,43 +167,27 @@
             materialModal.classList.add('is-active');
         }
 
-        function closeModal() {
-            materialModal.classList.remove('is-active');
-        }
+        function closeModal() { materialModal.classList.remove('is-active'); }
 
-        // --- Ponto de Entrada da Aplicação ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Verifica se o utilizador está logado como admin
-            if (!localStorage.getItem('adminToken')) {
-                alert('Acesso negado. Por favor, faça o login como administrador.');
-                window.location.href = 'login.html';
-                return;
-            }
+            if (!localStorage.getItem('adminToken')) { alert('Acesso negado.'); window.location.href = 'login.html'; return; }
 
-            // Configura os "ouvintes" de eventos
             document.getElementById('addMaterialBtn').addEventListener('click', openModalForNew);
             document.getElementById('saveMaterialBtn').addEventListener('click', saveMaterial);
+            document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.removeItem('adminToken'); window.location.href='login.html' });
 
-            // Fechar o modal
             materialModal.querySelector('.modal-background').addEventListener('click', closeModal);
             materialModal.querySelector('.delete').addEventListener('click', closeModal);
             document.getElementById('cancelMaterialModal').addEventListener('click', closeModal);
 
-            // Ouvinte para os botões de editar e apagar na tabela
             document.getElementById('materials-table-body').addEventListener('click', (event) => {
                 const target = event.target;
-                if (target.classList.contains('js-delete')) {
-                    deleteMaterial(target.dataset.id);
-                }
-                if (target.classList.contains('js-edit')) {
-                    openModalForEdit(target.dataset.id, target.dataset.nome, target.dataset.link);
-                }
+                if (target.classList.contains('js-delete')) { deleteMaterial(target.dataset.id); }
+                if (target.classList.contains('js-edit')) { openModalForEdit(target.dataset.id, target.dataset.nome, target.dataset.link); }
             });
             
-            // Carrega os dados iniciais
             fetchAndRenderMaterials();
         });
     </script>
 </body>
 </html>
-

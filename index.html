@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,122 +8,211 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        main { display: flex; flex-direction: row; justify-content: center; gap: 60px; padding: 2rem; flex-wrap: wrap; }
-        .divs_path { width: 30vw; height: 300px; min-width: 300px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; transition: transform 0.2s, box-shadow 0.2s; }
-        .divs_path:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
-        .divs_path img { max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 8px; }
-        #texts { display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 450px; }
+        main {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 60px;
+            padding: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .divs_path {
+            width: 30vw;
+            height: 300px;
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .divs_path:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #texts {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 450px;
+        }
     </style>
 </head>
+
 <body>
 
-<header class="box navbar is-primary" id="navbar-flex">
-    <div class="navbar-brand"><a class="navbar-item" href="index.html"><h1 class="title" id="title">Jogos Na Educação</h1></a></div>
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <a class="navbar-item" href="index.html">Início</a>
-            <a class="navbar-item" href="frontend/pages/biblioteca.html">Biblioteca</a>
-            <a class="navbar-item" href="frontend/pages/materiais.html">Materiais</a>
-            <a class="navbar-item" href="frontend/pages/quemSomos.html">Quem Somos</a>
-        </div>
-        <div class="navbar-end">
-            <div class="navbar-item" id="nav-buttons">
-                <div class="buttons">
-                    <button class="button is-light" id="loginButton"><strong>Entrar</strong></button>
-                    <button class="button is-danger is-hidden" id="logoutButton"><strong>Sair</strong></button>
+    <header class="box navbar is-primary" id="navbar-flex">
+        <div class="navbar-brand"><a class="navbar-item" href="index.html">
+                <h1 class="title" id="title">Et Education</h1>
+            </a></div>
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="frontend/pages/biblioteca.html">Biblioteca</a>
+                <a class="navbar-item" href="frontend/pages/materiais.html">Materiais</a>
+                <a class="navbar-item" href="frontend/pages/quemSomos.html">Quem Somos</a>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item" id="nav-buttons">
+                    <div class="buttons">
+                        <button class="button is-light" id="loginButton"><strong>Entrar</strong></button>
+                        <button class="button is-danger is-hidden" id="logoutButton"><strong>Sair</strong></button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 
-<main>
-    <section id="texts"><p class="title is-size-3">Quer melhorar seu aprendizado utilizando jogos digitais incríveis? Conheça nosso site:</p></section>
-    <section id="divs">
-        <div class="box divs_path"><a href="pages/biblioteca.html"><img src="assets/img/Biblioteca de.png" alt="Biblioteca"></a></div>
-        <div class="box divs_path"><a href="pages/materiais.html"><img src="assets/img/Materiais.png" alt="Materiais"></a></div>
-        <div class="box divs_path"><a href="pages/quemSomos.html"><img src="assets/img/Materiais (1).png" alt="Quem Somos"></a></div>
-    </section>
-</main>
-
-<div class="modal" id="loginModal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <header class="modal-card-head"><p class="modal-card-title">Entrar</p><button class="delete" aria-label="close"></button></header>
-        <section class="modal-card-body">
-            <div class="field"><label class="label">Email</label><div class="control"><input class="input" type="email" id="emailInput"></div></div>
-            <div class="field"><label class="label">Senha</label><div class="control"><input class="input" type="password" id="passwordInput"></div></div>
-            <div class="field"><button class="button is-primary is-fullwidth" id="loginWithEmail">Entrar com Email</button></div>
-            <div class="field"><button class="button is-danger is-fullwidth" id="loginWithGoogle"><span class="icon"><i class="fab fa-google"></i></span><span>Entrar com Google</span></button></div>
-            <div class="field has-text-centered"><a href="pages/cadastro.html">Não tem uma conta? Cadastre-se</a></div>
-            <p id="error-message" class="has-text-danger has-text-centered mt-2"></p>
+    <main>
+        <section id="texts">
+            <p class="title is-size-3">Quer melhorar seu aprendizado utilizando jogos digitais incríveis? Conheça nosso
+                site:</p>
         </section>
+        <section id="divs">
+            <div class="box divs_path"><a href="frontend/pages/biblioteca.html"><img
+                        src="frontend/assets/img/Biblioteca de.png" alt="Biblioteca"></a></div>
+            <div class="box divs_path"><a href="frontend/pages/materiais.html"><img
+                        src="frontend/assets/img/Materiais.png" alt="Materiais"></a></div>
+            <div class="box divs_path"><a href="frontend/pages/quemSomos.html"><img
+                        src="frontend/assets/img/Materiais (1).png" alt="Quem Somos"></a></div>
+        </section>
+    </main>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Entrar</p><button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field"><label class="label">Email</label>
+                    <div class="control"><input class="input" type="email" id="emailInput"></div>
+                </div>
+                <div class="field"><label class="label">Senha</label>
+                    <div class="control"><input class="input" type="password" id="passwordInput"></div>
+                </div>
+                <div class="field"><button class="button is-primary is-fullwidth" id="loginWithEmail">Entrar com
+                        Email</button></div>
+                <div class="field"><button class="button is-danger is-fullwidth" id="loginWithGoogle"><span
+                            class="icon"><i class="fab fa-google"></i></span><span>Entrar com Google</span></button>
+                </div>
+                <div class="field has-text-centered"><a href="frontend/pages/cadastro.html">Não tem uma conta?
+                        Cadastre-se</a>
+                </div>
+                <p id="error-message" class="has-text-danger has-text-centered mt-2"></p>
+            </section>
+        </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://mmegueeiaqwsrswgmwbx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZWd1ZWVpYXF3c3Jzd2dtd2J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUzMjIwNjUsImV4cCI6MjA2MDg5ODA2NX0.JEEKLpDoJRG87FFGNB8YP5k8F-TPCJvbqpoJQTupdcc';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="frontend/supabaseConfig.js"></script>
 
-    const loginModal = document.getElementById('loginModal');
-    const loginButton = document.getElementById('loginButton');
-    const logoutButton = document.getElementById('logoutButton');
-    const errorMessage = document.getElementById('error-message');
-    
-    async function handleEmailLogin() {
-        errorMessage.textContent = '';
-        const email = document.getElementById('emailInput').value;
-        const password = document.getElementById('passwordInput').value;
-        try {
-            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-            loginModal.classList.remove('is-active');
-        } catch (error) {
-            errorMessage.textContent = 'Email ou senha inválidos.';
+    <script>
+        // --- Elementos do DOM ---
+        const loginModal = document.getElementById("loginModal");
+        const loginButton = document.getElementById("loginButton");
+        const logoutButton = document.getElementById("logoutButton");
+        const errorMessage = document.getElementById("error-message");
+
+        // --- Atualiza UI ---
+        function updateUI(user) {
+            loginButton.classList.toggle("is-hidden", !!user);
+            logoutButton.classList.toggle("is-hidden", !user);
+            if (user) loginModal.classList.remove("is-active");
         }
-    }
 
-    async function handleGoogleLogin() {
-        errorMessage.textContent = '';
-        await supabaseClient.auth.signInWithOAuth({ 
-            provider: 'google', 
-            options: { redirectTo: window.location.origin + window.location.pathname } 
-        });
-    }
+        // --- Função para acessar dados do próprio usuário ---
+        async function fetchMyUserData() {
+            const sessionData = supabaseClient.auth.getSession();
+            const token = sessionData?.data?.session?.access_token;
 
-    async function handleLogout() {
-        await supabaseClient.auth.signOut();
-    }
+            if (!token) return null; // sem sessão, não faz nada
 
-    function updateUI(user) {
-        loginButton.classList.toggle('is-hidden', !!user);
-        logoutButton.classList.toggle('is-hidden', !user);
-    }
+            const { data: user, error } = await supabaseClient
+                .from("Users")
+                .select("*")
+                .eq("auth_user_id", sessionData.data.session.user.id)
+                .single();
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // O "guarda" da autenticação
-        supabaseClient.auth.onAuthStateChange((event, session) => {
-            const user = session?.user;
-            if (user) {
-                localStorage.setItem('userToken', session.access_token);
-            } else {
-                localStorage.removeItem('userToken');
-                localStorage.removeItem('adminToken');
+            if (error) console.error("Erro ao buscar dados do usuário:", error);
+            else console.log("Meu usuário:", user);
+
+            return user;
+        }
+
+        // --- Login com Email/Password ---
+        async function handleEmailLogin() {
+            errorMessage.textContent = "";
+            const email = document.getElementById("emailInput").value;
+            const password = document.getElementById("passwordInput").value;
+
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+
+                // Busca os dados do usuário depois que a sessão está pronta
+                await fetchMyUserData();
+            } catch (error) {
+                errorMessage.textContent = "Email ou senha inválidos.";
+                console.error("Erro no login com email:", error);
             }
-            updateUI(user);
-        });
+        }
 
-        // Configuração dos botões
-        loginButton.addEventListener('click', () => loginModal.classList.add('is-active'));
-        logoutButton.addEventListener('click', handleLogout);
-        document.getElementById('loginWithEmail').addEventListener('click', handleEmailLogin);
-        document.getElementById('loginWithGoogle').addEventListener('click', handleGoogleLogin);
-        loginModal.querySelector('.modal-background').addEventListener('click', () => loginModal.classList.remove('is-active'));
-        loginModal.querySelector('.delete').addEventListener('click', () => loginModal.classList.remove('is-active'));
-    });
-</script>
+        // --- Login com Google ---
+        async function handleGoogleLogin() {
+            errorMessage.textContent = "";
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: "google",
+                options: {
+                    redirectTo: window?.ENV?.SUPABASE_REDIRECT_URL || window.location.origin // configurable base URL
+                }
+            });
+
+            if (error) {
+                errorMessage.textContent = "Erro ao tentar login com Google.";
+                console.error("Erro no login com Google:", error);
+            }
+        }
+
+        // --- Logout ---
+        async function handleLogout() {
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) console.error("Erro ao fazer logout:", error);
+        }
+
+        // --- Evento principal ---
+        document.addEventListener("DOMContentLoaded", () => {
+            // Observa mudanças de sessão
+            supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                console.log("onAuthStateChange EVENTO:", event, "SESSÃO:", session);
+
+                const user = session?.user;
+                if (session) localStorage.setItem("userToken", session.access_token);
+                else localStorage.removeItem("userToken");
+
+                updateUI(user);
+
+                // Se logou, busca os dados do usuário
+                if (user) await fetchMyUserData();
+            });
+
+            // Eventos dos botões
+            loginButton.addEventListener("click", () => loginModal.classList.add("is-active"));
+            logoutButton.addEventListener("click", handleLogout);
+            document.getElementById("loginWithEmail").addEventListener("click", handleEmailLogin);
+            document.getElementById("loginWithGoogle").addEventListener("click", handleGoogleLogin);
+
+            // Fechar modal
+            loginModal.querySelector(".modal-background").addEventListener("click", () => loginModal.classList.remove("is-active"));
+            loginModal.querySelector(".delete").addEventListener("click", () => loginModal.classList.remove("is-active"));
+        });
+    </script>
+
 
 </body>
+
 </html>

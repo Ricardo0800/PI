@@ -15,7 +15,7 @@
 </head>
 <body>
     <header class="box navbar" id="navbar-flex">
-        <div class="navbar-brand"><a class="navbar-item" href="../../index.html"><h1 class="title" id="title">Jogos Na Educação</h1></a></div>
+        <div class="navbar-brand"><a class="navbar-item" href="../../index.html"><h1 class="title" id="title">ET Education</h1></a></div>
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start" id="links-start">
                 <a class="navbar-item" href="../../index.html">Início</a>
@@ -45,47 +45,51 @@
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabaseConfig.js"></script>
     <script>
-        const backendApiUrl = 'http://localhost:3000';
+        // Use uma variável de ambiente ou um arquivo de configuração para a URL da API do backend em produção
+        // Por enquanto, vamos usar um placeholder. Você precisará substituir isso pela URL real do seu backend.
+        const backendApiUrl = "http://localhost:3000"; 
 
         // Função "ajudante" para obter o token do utilizador logado
         function getAuthHeaders() {
-            const token = localStorage.getItem('userToken'); // Usa o mesmo token do index.html
+            const token = localStorage.getItem("userToken"); // Usa o mesmo token do index.html
             if (!token) {
-                alert('Você precisa de estar logado para ver os materiais.');
-                window.location.href = '../../index.html'; // Redireciona para o login
+                alert("Você precisa de estar logado para ver os materiais.");
+                window.location.href = "../../index.html"; // Redireciona para o login
                 return null;
             }
             return {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             };
         }
 
         // Busca os materiais no nosso backend seguro
         async function fetchAndRenderMaterials() {
-            const materialsList = document.getElementById('materials-list');
+            const materialsList = document.getElementById("materials-list");
             try {
                 const headers = getAuthHeaders();
                 if (!headers) return; // Para se não houver token
 
                 const response = await fetch(`${backendApiUrl}/api/materiais`, { headers });
                 if (!response.ok) {
-                    throw new Error('Falha ao carregar os materiais. Tente novamente mais tarde.');
+                    throw new Error("Falha ao carregar os materiais. Tente novamente mais tarde.");
                 }
                 
                 const materials = await response.json();
                 
-                materialsList.innerHTML = ''; // Limpa a mensagem "A carregar..."
+                materialsList.innerHTML = ""; // Limpa a mensagem "A carregar..."
 
                 if (materials.length === 0) {
-                    materialsList.innerHTML = '<p>Nenhum material de estudo disponível no momento.</p>';
+                    materialsList.innerHTML = "<p>Nenhum material de estudo disponível no momento.</p>";
                     return;
                 }
 
                 materials.forEach(material => {
-                    const listItem = document.createElement('div');
-                    listItem.classList.add('box', 'mb-4');
+                    const listItem = document.createElement("div");
+                    listItem.classList.add("box", "mb-4");
                     // Usamos os nomes das colunas da sua tabela: 'nome' e 'link'
                     listItem.innerHTML = `
                         <p class="title is-5">${material.nome}</p>
@@ -93,8 +97,8 @@
                     `;
                     
                     // Adiciona o evento de clique para abrir o modal
-                    const button = listItem.querySelector('button');
-                    button.addEventListener('click', () => {
+                    const button = listItem.querySelector("button");
+                    button.addEventListener("click", () => {
                         openPdfModal(material.link);
                     });
             
@@ -108,41 +112,43 @@
         }
 
         // Funções para controlar o modal
-        const pdfModal = document.getElementById('pdf-modal');
-        const pdfFrame = document.getElementById('pdf-frame');
+        const pdfModal = document.getElementById("pdf-modal");
+        const pdfFrame = document.getElementById("pdf-frame");
 
         function openPdfModal(url) {
             // Para links do Google Drive, precisamos de um formato de "embed"
-            if (url.includes('drive.google.com')) {
+            if (url.includes("drive.google.com")) {
                 // Transforma um link de partilha num link de visualização incorporado
-                const embedUrl = url.replace('/view', '/preview');
+                const embedUrl = url.replace("/view", "/preview");
                 pdfFrame.src = embedUrl;
             } else {
                 pdfFrame.src = url;
             }
-            pdfModal.classList.add('is-active');
+            pdfModal.classList.add("is-active");
         }
 
         function closeModal() {
-            pdfModal.classList.remove('is-active');
-            pdfFrame.src = ''; // Limpa o iframe para parar o carregamento
+            pdfModal.classList.remove("is-active");
+            pdfFrame.src = ""; // Limpa o iframe para parar o carregamento
         }
 
         // Ponto de entrada da aplicação
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener("DOMContentLoaded", () => {
             // Verifica o login antes de fazer qualquer coisa
-            if (!localStorage.getItem('userToken')) {
-                alert('Acesso negado. Por favor, faça o login.');
-                window.location.href = '../../index.html';
+            if (!localStorage.getItem("userToken")) {
+                alert("Acesso negado. Por favor, faça o login.");
+                window.location.href = "../../index.html";
                 return;
             }
 
             fetchAndRenderMaterials();
 
             // Adiciona eventos para fechar o modal
-            pdfModal.querySelector('.modal-close').addEventListener('click', closeModal);
-            pdfModal.querySelector('.modal-background').addEventListener('click', closeModal);
+            pdfModal.querySelector(".modal-close").addEventListener("click", closeModal);
+            pdfModal.querySelector(".modal-background").addEventListener("click", closeModal);
         });
     </script>
 </body>
 </html>
+
+

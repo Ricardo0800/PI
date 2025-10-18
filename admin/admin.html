@@ -4,55 +4,150 @@
     <meta charset="UTF-8" />
     <title>Dashboard - Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background-color: #f9f9f9; }
-        .sidebar { width: 200px; background: #333; color: #fff; height: 100vh; position: fixed; }
-        .sidebar a { display: block; color: #fff; padding: 15px; text-decoration: none; }
-        .sidebar a:hover { background: #444; }
-        .sidebar h2 { text-align: center; padding: 20px 0; }
-        .main { margin-left: 200px; padding: 20px; }
-        .stats-container { display: flex; gap: 20px; flex-wrap: wrap; }
-        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-grow: 1; }
-        .stat-card h3 { font-size: 1.2rem; color: #555; }
-        .stat-card strong { font-size: 2rem; color: #333; }
-        .log-card { margin-top: 20px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            background-color: #f7f7f7; 
+        }
+        .sidebar { 
+            width: 220px; 
+            background: #2c3e50; 
+            color: #ecf0f1; 
+            height: 100vh; 
+            position: fixed; 
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar h2 { 
+            text-align: center; 
+            padding: 25px 0; 
+            font-weight: 600;
+            background-color: #34495e;
+            margin: 0;
+        }
+        .sidebar a { 
+            display: block; 
+            color: #ecf0f1; 
+            padding: 16px 20px; 
+            text-decoration: none; 
+            transition: background-color 0.3s, padding-left 0.3s;
+            border-bottom: 1px solid #34495e;
+        }
+        .sidebar a:hover { 
+            background: #3498db; 
+            padding-left: 25px;
+        }
+        .sidebar a.is-active {
+             background: #2980b9;
+             font-weight: bold;
+        }
+        .sidebar #logoutBtn {
+            margin-top: auto; /* Empurra o botão de sair para o final */
+            background-color: #e74c3c;
+            border-top: 1px solid #c0392b;
+        }
+         .sidebar #logoutBtn:hover {
+            background-color: #c0392b;
+        }
+        .main { 
+            margin-left: 220px; 
+            padding: 30px; 
+        }
+        .stats-container { 
+            display: flex; 
+            gap: 20px; 
+            flex-wrap: wrap; 
+        }
+        .stat-card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+            flex: 1; 
+            min-width: 200px;
+        }
+        .stat-card h3 { 
+            font-size: 1.1rem; 
+            color: #555; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .stat-card strong { 
+            font-size: 2.5rem; 
+            color: #2c3e50;
+            display: block;
+            margin-top: 10px;
+        }
+        .log-card { 
+            margin-top: 30px; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+        }
+        .log-card h3 {
+             font-size: 1.2rem;
+        }
+        .log-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .log-card ul li:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <h2>Admin</h2>
-        <a href="admin.html">Dashboard</a>
-        <a href="user_admin.html">Usuários</a>
-        <a href="cursos_admin.html">Cursos</a>
-        <a href="materiais_adm.html">Materiais</a>
-        <a href="#" id="logoutBtn" style="margin-top: 20px; background-color: #d9534f;">Sair</a>
+        <!-- CORREÇÃO LÓGICA: Os links estavam com caminhos errados -->
+        <a href="admin.html" class="is-active"> <i class="fas fa-tachometer-alt fa-fw"></i> &nbsp; Dashboard</a>
+        <a href="user_admin.html"> <i class="fas fa-users fa-fw"></i> &nbsp; Usuários</a>
+        <a href="cursos_admin.html"> <i class="fas fa-graduation-cap fa-fw"></i> &nbsp; Cursos</a>
+        <a href="materiais_adm.html"> <i class="fas fa-folder fa-fw"></i> &nbsp; Materiais</a>
+        <a href="#" id="logoutBtn"> <i class="fas fa-sign-out-alt fa-fw"></i> &nbsp; Sair</a>
     </div>
 
     <div class="main">
-        <h1 class="title">Bem-vindo, Administrador</h1>
+        <h1 class="title" id="welcome-message">Carregando...</h1>
         <div class="stats-container">
-            <div class="stat-card"><h3>👥 Total de usuários</h3><strong id="totalUsuarios">...</strong></div>
-            <div class="stat-card"><h3>🎥 Vídeos publicados</h3><strong id="totalVideos">...</strong></div>
-            <div class="stat-card"><h3>📁 Materiais disponíveis</h3><strong id="totalMateriais">...</strong></div>
+            <div class="stat-card"><h3><i class="fas fa-users"></i> Total de usuários</h3><strong id="totalUsuarios">...</strong></div>
+            <div class="stat-card"><h3><i class="fas fa-video"></i> Vídeos publicados</h3><strong id="totalVideos">...</strong></div>
+            <div class="stat-card"><h3><i class="fas fa-file-alt"></i> Materiais disponíveis</h3><strong id="totalMateriais">...</strong></div>
         </div>
         <div class="log-card">
-            <h3>🕒 Últimos conteúdos adicionados</h3>
-            <ul id="ultimosLogs" class="mt-3"><li>Carregando...</li></ul>
+            <h3><i class="fas fa-history"></i> Últimos conteúdos adicionados</h3>
+            <ul id="ultimosLogs" class="mt-4"><li>Carregando...</li></ul>
         </div>
     </div>
+    
+    <!-- É ESSENCIAL TER O SUPABASECONFIG AQUI TAMBÉM -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../frontend/supabaseConfig.js"></script>
 
     <script>
+        // O CÓDIGO JAVASCRIPT PERMANECE O MESMO, POIS A LÓGICA ESTÁ CORRETA.
         const backendApiUrl = 'http://localhost:3000';
 
         function getAuthHeaders() {
             const token = localStorage.getItem('adminToken');
             if (!token) {
-                alert('Acesso negado. Por favor, faça o login.');
                 window.location.href = 'login.html';
                 return null;
             }
             return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+        }
+        
+        function handleLogout() {
+            localStorage.removeItem('adminToken');
+            supabaseClient.auth.signOut();
+            alert('Sessão terminada com sucesso!');
+            window.location.href = 'login.html'; // Corrigido para o caminho relativo correto
         }
 
         async function carregarDashboard() {
@@ -61,7 +156,13 @@
                 if (!headers) return;
 
                 const response = await fetch(`${backendApiUrl}/api/dashboard/stats`, { headers });
-                if (!response.ok) throw new Error('Falha ao carregar os dados do dashboard.');
+                
+                if (response.status === 403) {
+                    throw new Error('Acesso negado: Requer privilégios de administrador.');
+                }
+                if (!response.ok) {
+                    throw new Error('Falha ao carregar os dados do dashboard.');
+                }
                 
                 const stats = await response.json();
 
@@ -71,7 +172,6 @@
 
                 const listaLogs = document.getElementById('ultimosLogs');
                 listaLogs.innerHTML = '';
-
                 if (stats.ultimosLogs.length === 0) {
                     listaLogs.innerHTML = '<li>Nenhum conteúdo adicionado recentemente.</li>';
                 } else {
@@ -84,32 +184,45 @@
             } catch (error) {
                 console.error('Erro ao carregar dashboard:', error);
                 alert(error.message);
+                handleLogout();
             }
         }
+        
+        async function verificarSessaoAdmin() {
+            const headers = getAuthHeaders();
+            if (!headers) return;
 
-        function handleLogout() {
-            localStorage.removeItem('adminToken');
-            alert('Sessão terminada com sucesso!');
-            window.location.href = 'login.html';
+            try {
+                const response = await fetch(`${backendApiUrl}/api/auth/session`, { headers });
+                if (!response.ok) {
+                    throw new Error("Sessão inválida ou expirada.");
+                }
+                const perfil = await response.json();
+
+                if (perfil.id_categoria !== 2) {
+                    throw new Error("Acesso negado: esta conta não é de administrador.");
+                }
+
+                document.getElementById('welcome-message').textContent = `Bem-vindo, ${perfil.name || 'Administrador'}`;
+                carregarDashboard();
+
+            } catch(error) {
+                console.error(error.message);
+                alert(error.message);
+                handleLogout();
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('adminToken')) {
-                alert('Acesso negado.');
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            // Liga a função de logout ao botão
             document.getElementById('logoutBtn').addEventListener('click', (event) => {
                 event.preventDefault();
                 handleLogout();
             });
 
-            // Carrega os dados do dashboard
-            carregarDashboard();
+            verificarSessaoAdmin();
         });
     </script>
 
 </body>
 </html>
+

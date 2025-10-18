@@ -28,7 +28,7 @@
 <header class="box navbar is-primary">
     <div class="navbar-brand">
         <a class="navbar-item" href="../index.html">
-            <h1 class="title">Jogos Na Educação</h1>
+            <h1 class="title" id="title">ET Education</h1>
         </a>
     </div>
     <div id="navbarBasicExample" class="navbar-menu">
@@ -51,8 +51,8 @@
 
 <section class="section">
     <div class="container">
-        <h1 class="title has-text-centered">A Nossa Equipa</h1>
-        <p class="subtitle has-text-centered">As mentes por trás do projeto "Jogos na Educação".</p>
+        <h1 class="title has-text-centered">A Nossa Equipe</h1>
+        <p class="subtitle has-text-centered">As mentes por trás do projeto "ET Education".</p>
         
         <div class="columns is-multiline is-centered mt-5">
 
@@ -101,48 +101,39 @@
                 </div>
             </div>
             
-            <div class="column is-one-quarter">
-                <div class="card team-member-card">
-                    <div class="card-content has-text-centered">
-                        <p class="title is-4">Ariel Silva</p>
-                        <p class="subtitle is-6">Parte Escrita</p>
-                    </div>
-                </div>
-            </div>
+          
 
         </div>
     </div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../supabaseConfig.js"></script>
 <script>
-    // Este script é apenas para garantir que o botão de Entrar/Sair funciona aqui também.
-    const SUPABASE_URL = 'https://mmegueeiaqwsrswgmwbx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZWd1ZWVpYXF3c3Jzd2dtd2J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTg3NDYxODgsImV4cCI6MjAzNDMyMjE4OH0.Cr9UML3qEMHwzUOKp5k9ub99w0s9aPzn22E94N2Hx20';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const loginButton = document.getElementById('loginButton');
-        const logoutButton = document.getElementById('logoutButton');
+    document.addEventListener("DOMContentLoaded", () => {
+        const loginButton = document.getElementById("loginButton");
+        const logoutButton = document.getElementById("logoutButton");
 
         supabaseClient.auth.onAuthStateChange((_, session) => {
             const user = session?.user;
-            loginButton.classList.toggle('is-hidden', !!user);
-            logoutButton.classList.toggle('is-hidden', !user);
+            loginButton.classList.toggle("is-hidden", !!user);
+            logoutButton.classList.toggle("is-hidden", !user);
         });
 
-        logoutButton.addEventListener('click', async () => {
+        logoutButton.addEventListener("click", async () => {
             await supabaseClient.auth.signOut();
             // Redireciona para a página inicial após o logout
-            window.location.href = '../index.html';
+            window.location.href = "../index.html";
         });
 
-        loginButton.addEventListener('click', () => {
+        loginButton.addEventListener("click", () => {
             // Se o utilizador não está logado e clica em Entrar, manda-o para a página inicial para abrir o modal.
-            window.location.href = '../index.html';
+            window.location.href = "../index.html";
         });
     });
 </script>
 
 </body>
 </html>
+
+

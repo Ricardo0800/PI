@@ -55,24 +55,21 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabaseConfig.js"></script>
     <script>
-        const SUPABASE_URL = 'https://mmegueeiaqwsrswgmwbx.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZWd1ZWVpYXF3c3Jzd2dtd2J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTg3NDYxODgsImV4cCI6MjAzNDMyMjE4OH0.Cr9UML3qEMHwzUOKp5k9ub99w0s9aPzn22E94N2Hx20';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        const form = document.getElementById('signup-form');
-        const googleButton = document.getElementById('registerWithGoogle');
-        const messageEl = document.getElementById('message');
+        const form = document.getElementById("signup-form");
+        const googleButton = document.getElementById("registerWithGoogle");
+        const messageEl = document.getElementById("message");
 
         // Cadastro com Email
-        form.addEventListener('submit', async (event) => {
+        form.addEventListener("submit", async (event) => {
             event.preventDefault();
-            messageEl.textContent = '';
-            messageEl.classList.remove('has-text-success', 'has-text-danger');
+            messageEl.textContent = "";
+            messageEl.classList.remove("has-text-success", "has-text-danger");
 
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
 
             try {
                 const { error } = await supabaseClient.auth.signUp({
@@ -82,24 +79,25 @@
                 });
                 if (error) throw error;
                 
-                messageEl.textContent = 'Sucesso! Verifique o seu email para confirmar a conta.';
-                messageEl.classList.add('has-text-success');
+                messageEl.textContent = "Sucesso! Verifique o seu email para confirmar a conta.";
+                messageEl.classList.add("has-text-success");
                 form.reset();
             } catch (error) {
                 messageEl.textContent = error.message;
-                messageEl.classList.add('has-text-danger');
+                messageEl.classList.add("has-text-danger");
             }
         });
 
         // Cadastro com Google
-        googleButton.addEventListener('click', async () => {
-            messageEl.textContent = '';
-            const { error } = await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
+        googleButton.addEventListener("click", async () => {
+            messageEl.textContent = "";
+            const { error } = await supabaseClient.auth.signInWithOAuth({ provider: "google" });
             if (error) {
-                messageEl.textContent = 'Erro ao tentar cadastro com o Google.';
-                messageEl.classList.add('has-text-danger');
+                messageEl.textContent = "Erro ao tentar cadastro com o Google.";
+                messageEl.classList.add("has-text-danger");
             }
         });
     </script>
 </body>
 </html>
+

@@ -16,7 +16,7 @@
 </head>
 <body>
     <header class="box navbar is-primary">
-        <div class="navbar-brand"><a class="navbar-item" href="../../index.html"><h1 class="title">Jogos Na Educação</h1></a></div>
+        <div class="navbar-brand"><a class="navbar-item" href="../../index.html"><h1 class="title" id="title">ET Education</h1></a></div>
         <div class="navbar-menu">
             <div class="navbar-start">
                 <a class="navbar-item" href="../../index.html">Início</a>
@@ -49,38 +49,40 @@
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabaseConfig.js"></script>
     <script>
-        const backendApiUrl = 'http://localhost:3000';
+        const backendApiUrl = "http://localhost:3000";
         let currentVideos = [];
         let currentVideoIndex = 0;
 
         // Função "ajudante" que usa o passe do utilizador
         function getAuthHeaders() {
-            const token = localStorage.getItem('userToken');
+            const token = localStorage.getItem("userToken");
             if (!token) {
-                alert('Você precisa estar logado para ver esta página.');
-                window.location.href = '../../index.html'; // Redireciona para o login
+                alert("Você precisa estar logado para ver esta página.");
+                window.location.href = "../../index.html"; // Redireciona para o login
                 return null;
             }
-            return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+            return { "Content-Type": "application/json", "Authorization": `Bearer ${token}` };
         }
 
         async function fetchAndRenderCourses() {
-            const coursesContainer = document.getElementById('courses-container');
+            const coursesContainer = document.getElementById("courses-container");
             try {
                 const headers = getAuthHeaders(); if (!headers) return;
                 const response = await fetch(`${backendApiUrl}/api/biblioteca/cursos`, { headers });
-                if (!response.ok) throw new Error('Falha ao carregar os cursos.');
+                if (!response.ok) throw new Error("Falha ao carregar os cursos.");
                 
                 const cursos = await response.json();
                 
-                document.getElementById('loading-cursos').style.display = 'none';
+                document.getElementById("loading-cursos").style.display = "none";
                 if (cursos.length === 0) {
-                    coursesContainer.innerHTML = '<div class="notification is-info">Nenhum curso disponível.</div>';
+                    coursesContainer.innerHTML = "<div class=\"notification is-info\">Nenhum curso disponível.</div>";
                     return;
                 }
 
-                coursesContainer.innerHTML = '';
+                coursesContainer.innerHTML = "";
                 cursos.forEach(curso => {
                     coursesContainer.innerHTML += `
                         <div class="column is-one-quarter">
@@ -90,32 +92,32 @@
                                 </div>
                                 <div class="card-content">
                                     <p class="title is-4">${curso.nome}</p>
-                                    <p class="subtitle is-6">${curso.descricao || ''}</p>
+                                    <p class="subtitle is-6">${curso.descricao || ""}</p>
                                     <button class="button is-primary open-curso" data-curso-id="${curso.id_course}" data-curso-nome="${curso.nome}">Assistir</button>
                                 </div>
                             </div>
                         </div>`;
                 });
             } catch (error) {
-                console.error('Erro ao carregar cursos:', error);
-                coursesContainer.innerHTML = '<div class="notification is-danger">Ocorreu um erro ao carregar os cursos.</div>';
+                console.error("Erro ao carregar cursos:", error);
+                coursesContainer.innerHTML = "<div class=\"notification is-danger\">Ocorreu um erro ao carregar os cursos.</div>";
             }
         }
 
         async function openCourseModal(cursoId, cursoNome) {
-            const videoModal = document.getElementById('videoModal');
+            const videoModal = document.getElementById("videoModal");
             try {
-                document.getElementById('modal-title').textContent = `Carregando: ${cursoNome}...`;
-                videoModal.classList.add('is-active');
+                document.getElementById("modal-title").textContent = `Carregando: ${cursoNome}...`;
+                videoModal.classList.add("is-active");
 
                 const headers = getAuthHeaders(); if (!headers) return;
                 const response = await fetch(`${backendApiUrl}/api/biblioteca/curso/${cursoId}/videos`, { headers });
-                if (!response.ok) throw new Error('Não foi possível carregar os vídeos.');
+                if (!response.ok) throw new Error("Não foi possível carregar os vídeos.");
                 
                 currentVideos = await response.json();
                 
                 if (currentVideos.length === 0) {
-                    document.getElementById('video-container').innerHTML = '<div class="notification is-warning">Este curso ainda não tem vídeos.</div>';
+                    document.getElementById("video-container").innerHTML = "<div class=\"notification is-warning\">Este curso ainda não tem vídeos.</div>";
                     return;
                 }
 
@@ -123,33 +125,33 @@
                 currentVideoIndex = primeiroNaoAssistido >= 0 ? primeiroNaoAssistido : 0;
                 renderVideo(currentVideoIndex);
             } catch (error) {
-                console.error('Erro ao abrir curso:', error);
+                console.error("Erro ao abrir curso:", error);
                 alert(error.message);
-                videoModal.classList.remove('is-active');
+                videoModal.classList.remove("is-active");
             }
         }
         
         function renderVideo(index) {
             const video = currentVideos[index];
-            const url = video.url || '';
-            const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+            const url = video.url || "";
+            const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*$/);
             const videoId = (match && match[2].length === 11) ? match[2] : null;
 
             if (!videoId) {
-                document.getElementById('video-container').innerHTML = '<div class="notification is-danger">URL do vídeo inválida.</div>';
+                document.getElementById("video-container").innerHTML = "<div class=\"notification is-danger\">URL do vídeo inválida.</div>";
                 return;
             }
             
-            document.getElementById('video-container').innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" title="${video.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            document.getElementById('video-description').textContent = video.descricao;
-            document.getElementById('video-counter').textContent = `Vídeo ${index + 1} de ${currentVideos.length}`;
+            document.getElementById("video-container").innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" title="${video.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            document.getElementById("video-description").textContent = video.descricao;
+            document.getElementById("video-counter").textContent = `Vídeo ${index + 1} de ${currentVideos.length}`;
             
-            const markAsWatchedBtn = document.getElementById('markAsWatched');
+            const markAsWatchedBtn = document.getElementById("markAsWatched");
             markAsWatchedBtn.disabled = video.assistido;
-            markAsWatchedBtn.textContent = video.assistido ? 'Vídeo Assistido' : 'Marcar como Assistido';
+            markAsWatchedBtn.textContent = video.assistido ? "Vídeo Assistido" : "Marcar como Assistido";
 
-            document.getElementById('prevVideo').disabled = index === 0;
-            document.getElementById('nextVideo').disabled = index === currentVideos.length - 1;
+            document.getElementById("prevVideo").disabled = index === 0;
+            document.getElementById("nextVideo").disabled = index === currentVideos.length - 1;
         }
 
         async function markVideoAsWatched() {
@@ -157,7 +159,7 @@
             try {
                 const headers = getAuthHeaders(); if (!headers) return;
                 await fetch(`${backendApiUrl}/api/progresso`, {
-                    method: 'POST',
+                    method: "POST",
                     headers,
                     body: JSON.stringify({ video_id: video.id })
                 });
@@ -166,35 +168,37 @@
                 renderVideo(currentVideoIndex);
                 await fetchAndRenderCourses();
             } catch (error) {
-                console.error('Erro ao marcar como assistido:', error);
+                console.error("Erro ao marcar como assistido:", error);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('userToken')) {
-                alert('Acesso negado. Faça o login para continuar.');
-                window.location.href = '../../index.html';
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!localStorage.getItem("userToken")) {
+                alert("Acesso negado. Faça o login para continuar.");
+                window.location.href = "../../index.html";
                 return;
             }
 
             fetchAndRenderCourses();
 
-            document.getElementById('courses-container').addEventListener('click', (event) => {
-                const button = event.target.closest('.open-curso');
+            document.getElementById("courses-container").addEventListener("click", (event) => {
+                const button = event.target.closest(".open-curso");
                 if (button) {
                     openCourseModal(button.dataset.cursoId, button.dataset.cursoNome);
                 }
             });
 
-            document.getElementById('prevVideo').addEventListener('click', () => renderVideo(--currentVideoIndex));
-            document.getElementById('nextVideo').addEventListener('click', () => renderVideo(++currentVideoIndex));
-            document.getElementById('markAsWatched').addEventListener('click', markVideoAsWatched);
+            document.getElementById("prevVideo").addEventListener("click", () => renderVideo(--currentVideoIndex));
+            document.getElementById("nextVideo").addEventListener("click", () => renderVideo(++currentVideoIndex));
+            document.getElementById("markAsWatched").addEventListener("click", markVideoAsWatched);
 
-            const modal = document.getElementById('videoModal');
-            modal.querySelector('.modal-background').addEventListener('click', () => modal.classList.remove('is-active'));
-            modal.querySelector('.delete').addEventListener('click', () => modal.classList.remove('is-active'));
-            document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('is-active'));
+            const modal = document.getElementById("videoModal");
+            modal.querySelector(".modal-background").addEventListener("click", () => modal.classList.remove("is-active"));
+            modal.querySelector(".delete").addEventListener("click", () => modal.classList.remove("is-active"));
+            // Removido o botão closeModalBtn, pois não existe no HTML
         });
     </script>
 </body>
 </html>
+
+
