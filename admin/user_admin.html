@@ -63,7 +63,7 @@
 // =================================================================
 // SCRIPT FINAL E ROBUSTO PARA user_admin.html
 // =================================================================
-const backendApiUrl = 'http://localhost:3000';
+const backendApiUrl = 'https://pi-y7u4.onrender.com';
 
 function getAuthHeaders() {const token = localStorage.getItem('adminToken'); if (!token) { alert('Acesso negado.'); window.location.href = 'login.html'; return null; } return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };}
 

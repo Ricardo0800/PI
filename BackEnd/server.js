@@ -15,7 +15,31 @@ if (!supabaseUrl || !supabaseKey) {
 }
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-app.use(cors());
+
+
+const allowedOrigins = [
+    'http://localhost:8080',        // Para os seus testes locais com http-server
+    'http://127.0.0.1:8080',      // Também para testes locais
+    'https://SEU_SITE_NO_VERCEL.vercel.app' // IMPORTANTE: Substitua pela sua URL final do Vercel
+    // Adicione aqui a URL do seu domínio personalizado quando o configurar
+];
+
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Permite requisições sem 'origin' (como apps mobile ou Postman) OU se a origem está na lista
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Não permitido por CORS'));
+        }
+    },
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Métodos permitidos
+    allowedHeaders: "Content-Type,Authorization", // Cabeçalhos permitidos
+    credentials: true, // Se precisar de enviar cookies (não parece ser o caso aqui)
+    optionsSuccessStatus: 204 // Para compatibilidade
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get("/", (req, res) => res.send("Servidor do Projeto Integrado está a funcionar!"));
