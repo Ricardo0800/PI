@@ -20,7 +20,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const allowedOrigins = [
     'http://localhost:8080',        // Para os seus testes locais com http-server
     'http://127.0.0.1:8080',      // Também para testes locais
-    'https://SEU_SITE_NO_VERCEL.vercel.app' // IMPORTANTE: Substitua pela sua URL final do Vercel
+    'https://eteducation.netlify.app/' // IMPORTANTE: Substitua pela sua URL final do Vercel
     // Adicione aqui a URL do seu domínio personalizado quando o configurar
 ];
 
