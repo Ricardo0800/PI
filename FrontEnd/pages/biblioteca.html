@@ -7,8 +7,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <style>
         /* O seu CSS original */
+
+        /* --- Ajustes de Responsividade (Adicionados) --- */
+
+        /* 1. Modal de Vídeo: Aumenta o tamanho do modal em telas maiores para melhor visualização */
+        @media screen and (min-width: 769px) {
+            .modal-card {
+                width: 80vw; /* Largura maior para desktop */
+            }
+        }
+
         main { padding: 2rem; }
-        .card { width: 300px; margin: 10px; }
+        .card { margin: 10px; } /* Mantém a margem, mas a largura é controlada pelas classes do Bulma */
         .card .card-image img { height: 180px; object-fit: cover; }
         .modal-card-body iframe { width: 100%; height: 315px; }
         .curso-progresso { position: absolute; top: 10px; right: 10px; background-color: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 10px; font-size: 0.8rem; }
@@ -16,8 +26,15 @@
 </head>
 <body>
     <header class="box navbar is-primary">
-        <div class="navbar-brand"><a class="navbar-item" href="../../index.html"><h1 class="title" id="title">ET Education</h1></a></div>
-        <div class="navbar-menu">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="../../index.html"><h1 class="title" id="title">ET Education</h1></a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
                 <a class="navbar-item" href="../../index.html">Início</a>
                 <a class="navbar-item" href="biblioteca.html">Biblioteca</a>
@@ -85,7 +102,7 @@
                 coursesContainer.innerHTML = "";
                 cursos.forEach(curso => {
                     coursesContainer.innerHTML += `
-                        <div class="column is-one-quarter">
+                      <div class="column is-one-quarter is-half-tablet is-full-mobile">
                             <div class="card">
                                 <div class="card-image">
                                     <figure class="image is-4by3"><img src="../assets/img/MINECRAFT.png" alt="${curso.nome}"><div class="curso-progresso">${curso.progresso}% concluído</div></figure>
@@ -173,6 +190,18 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
+            // --- Lógica do Menu Hamburger ---
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            if ($navbarBurgers.length > 0) {
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
             if (!localStorage.getItem("userToken")) {
                 alert("Acesso negado. Faça o login para continuar.");
                 window.location.href = "../../index.html";

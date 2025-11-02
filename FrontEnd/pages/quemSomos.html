@@ -7,6 +7,28 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* --- Ajustes de Responsividade (Adicionados) --- */
+
+        /* 1. Cards de Membros: Ajusta o layout dos cards para telas menores */
+        @media screen and (max-width: 768px) {
+            /* Em celulares, os cards ocupam metade da largura (duas colunas) */
+            .column.is-one-quarter {
+                width: 50% !important; /* Sobrescreve Bulma para 2 colunas */
+            }
+        }
+        @media screen and (max-width: 480px) {
+            /* Em celulares muito pequenos, os cards ocupam a largura total (uma coluna) */
+            .column.is-one-quarter {
+                width: 100% !important; /* Sobrescreve Bulma para 1 coluna */
+            }
+        }
+
+        /* 2. Navbar: O Bulma já é responsivo, mas garantimos o comportamento do menu em mobile */
+        /* Nota: O Bulma requer um toggle JavaScript para o menu mobile, mas os estilos base estão aqui */
+
+        /* Fim dos Ajustes de Responsividade */
+
+        
         .team-member-card {
             display: flex;
             flex-direction: column;
@@ -29,6 +51,11 @@
     <div class="navbar-brand">
         <a class="navbar-item" href="../index.html">
             <h1 class="title" id="title">ET Education</h1>
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
         </a>
     </div>
     <div id="navbarBasicExample" class="navbar-menu">
@@ -54,9 +81,9 @@
         <h1 class="title has-text-centered">A Nossa Equipe</h1>
         <p class="subtitle has-text-centered">As mentes por trás do projeto "ET Education".</p>
         
-        <div class="columns is-multiline is-centered mt-5">
+        <div class="columns is-multiline is-centered mt-5 is-mobile">
 
-            <div class="column is-one-quarter">
+            <div class="column is-one-quarter is-half-mobile is-full-mobile">
                 <div class="card team-member-card">
                     <div class="card-content has-text-centered">
                         <p class="title is-4">Guilherme Cunha</p>
@@ -65,7 +92,7 @@
                 </div>
             </div>
 
-            <div class="column is-one-quarter">
+            <div class="column is-one-quarter is-half-mobile is-full-mobile">
                 <div class="card team-member-card">
                     <div class="card-content has-text-centered">
                         <p class="title is-4">Ricardo Felix</p>
@@ -74,7 +101,7 @@
                 </div>
             </div>
 
-            <div class="column is-one-quarter">
+            <div class="column is-one-quarter is-half-mobile is-full-mobile">
                 <div class="card team-member-card">
                     <div class="card-content has-text-centered">
                         <p class="title is-4">Lucas</p>
@@ -83,7 +110,7 @@
                 </div>
             </div>
 
-            <div class="column is-one-quarter">
+            <div class="column is-one-quarter is-half-mobile is-full-mobile">
                 <div class="card team-member-card">
                     <div class="card-content has-text-centered">
                         <p class="title is-4">Miguel Ângelo</p>
@@ -92,7 +119,7 @@
                 </div>
             </div>
             
-            <div class="column is-one-quarter">
+            <div class="column is-one-quarter is-half-mobile is-full-mobile">
                 <div class="card team-member-card">
                     <div class="card-content has-text-centered">
                         <p class="title is-4">Keven</p>
@@ -111,6 +138,19 @@
 <script src="../supabaseConfig.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        // --- Lógica do Menu Hamburger ---
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        if ($navbarBurgers.length > 0) {
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+        }
+
         const loginButton = document.getElementById("loginButton");
         const logoutButton = document.getElementById("logoutButton");
 

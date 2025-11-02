@@ -7,9 +7,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* --- Ajustes de Responsividade (Adicionados) --- */
+
+        /* 1. Container: Em telas menores, reduz o max-width e aumenta o padding */
+        @media screen and (max-width: 480px) {
+            .container {
+                max-width: 95%; /* Ocupa quase toda a largura da tela */
+                padding: 15px; /* Reduz o padding interno */
+            }
+        }
+        /* Fim dos Ajustes de Responsividade */
+
+        
         html, body { height: 100%; }
         body { display: flex; align-items: center; justify-content: center; background-color: #f5f5f5; }
-        .container { width: 100%; max-width: 400px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+        .container { width: 100%; max-width: 400px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); } /* Largura máxima para desktop/tablet */
         .field { margin-bottom: 20px; }
     </style>
 </head>

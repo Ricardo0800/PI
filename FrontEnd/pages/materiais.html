@@ -7,15 +7,50 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* --- Ajustes de Responsividade (Adicionados) --- */
+
+        /* 1. Navbar: Ajusta o campo de pesquisa para telas menores */
+        @media screen and (max-width: 1023px) {
+            /* Em tablets e celulares */
+            #pesquisa {
+                width: 100%; /* Ocupa a largura total */
+                margin-top: 10px; /* Adiciona margem superior */
+            }
+        }
+
+        /* 2. Modal de PDF: Torna o modal mais adaptável em telas menores */
+        .modal-content {
+            width: 90%; /* Largura do modal em telas pequenas */
+        }
+        @media screen and (min-width: 769px) {
+            .modal-content {
+                width: 80%; /* Largura maior para desktop */
+            }
+        }
+
+        /* 3. Iframe: Ajusta a altura do iframe do PDF para telas menores */
+        iframe {
+            height: 80vh; /* Altura relativa à altura da viewport */
+        }
+        /* Fim dos Ajustes de Responsividade */
+
+        
         /* O seu CSS original, sem alterações */
-        #pesquisa { margin-top: 4px; width: 30vw; }
+        #pesquisa { margin-top: 4px; width: 30vw; } /* Largura base para desktop */
         #links-start { gap: 10px; }
-        iframe { width: 100%; height: 500px; border: none; }
+        iframe { width: 100%; border: none; } /* A altura será controlada pela regra de responsividade */
     </style>
 </head>
 <body>
     <header class="box navbar" id="navbar-flex">
-        <div class="navbar-brand"><a class="navbar-item" href="../../index.html"><h1 class="title" id="title">ET Education</h1></a></div>
+        <div class="navbar-brand">
+            <a class="navbar-item" href="../../index.html"><h1 class="title" id="title">ET Education</h1></a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start" id="links-start">
                 <a class="navbar-item" href="../../index.html">Início</a>
@@ -134,6 +169,19 @@
 
         // Ponto de entrada da aplicação
         document.addEventListener("DOMContentLoaded", () => {
+            // --- Lógica do Menu Hamburger ---
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            if ($navbarBurgers.length > 0) {
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
+
             // Verifica o login antes de fazer qualquer coisa
             if (!localStorage.getItem("userToken")) {
                 alert("Acesso negado. Por favor, faça o login.");

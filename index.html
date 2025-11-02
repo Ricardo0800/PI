@@ -8,6 +8,42 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* --- Ajustes de Responsividade (Adicionados) --- */
+
+        /* 1. Layout Principal (main): Em telas menores, muda para layout de coluna. */
+        @media screen and (max-width: 768px) {
+            main {
+                flex-direction: column; /* Empilha as seções verticalmente */
+                gap: 30px; /* Reduz o espaço entre as seções */
+                padding: 1rem; /* Reduz o padding em telas pequenas */
+            }
+            .divs_path {
+                width: 90vw; /* Ocupa quase toda a largura da tela */
+                min-width: unset; /* Remove a largura mínima fixa */
+                height: 250px; /* Altura fixa para dispositivos móveis */
+            }
+            #texts {
+                max-width: 100%; /* Ocupa a largura total */
+                text-align: center; /* Centraliza o texto */
+            }
+            .title.is-size-3 {
+                font-size: 1.5rem !important; /* Reduz o tamanho da fonte do título */
+            }
+        }
+
+        /* 2. Navbar: O Bulma já é responsivo, mas garantimos que o flex-wrap esteja ativado para evitar overflow */
+        .navbar-menu {
+            flex-grow: 1;
+            flex-shrink: 1;
+        }
+
+        /* 3. Modal de Login: Ajuste para telas pequenas (o Bulma já ajuda muito) */
+        .modal-card {
+            margin: 0 10px; /* Adiciona margem lateral em telas pequenas */
+        }
+        /* Fim dos Ajustes de Responsividade */
+
+        
         main {
             display: flex;
             flex-direction: row;
@@ -18,6 +54,7 @@
         }
 
         .divs_path {
+            /* Largura base para desktop */
             width: 30vw;
             height: 300px;
             min-width: 300px;
@@ -47,9 +84,16 @@
 <body>
 
     <header class="box navbar is-primary" id="navbar-flex">
-        <div class="navbar-brand"><a class="navbar-item" href="index.html">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html">
                 <h1 class="title" id="title">Et Education</h1>
-            </a></div>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
                 <a class="navbar-item" href="frontend/pages/biblioteca.html">Biblioteca</a>
@@ -186,6 +230,20 @@
 
         // --- Evento principal ---
         document.addEventListener("DOMContentLoaded", () => {
+
+            // --- Lógica do Menu Hamburger ---
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            if ($navbarBurgers.length > 0) {
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
+
             // Observa mudanças de sessão
             supabaseClient.auth.onAuthStateChange(async (event, session) => {
                 console.log("onAuthStateChange EVENTO:", event, "SESSÃO:", session);
