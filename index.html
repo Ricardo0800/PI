@@ -1,180 +1,204 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogos na Educação</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <title>ET Education - Aprenda com Jogos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon" href="/frontend/assets/img/favSvg.svg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* --- Ajustes de Responsividade (Adicionados) --- */
-
-        /* 1. Layout Principal (main): Em telas menores, muda para layout de coluna. */
-        @media screen and (max-width: 768px) {
-            main {
-                flex-direction: column; /* Empilha as seções verticalmente */
-                gap: 30px; /* Reduz o espaço entre as seções */
-                padding: 1rem; /* Reduz o padding em telas pequenas */
-            }
-            .divs_path {
-                width: 90vw; /* Ocupa quase toda a largura da tela */
-                min-width: unset; /* Remove a largura mínima fixa */
-                height: 250px; /* Altura fixa para dispositivos móveis */
-            }
-            #texts {
-                max-width: 100%; /* Ocupa a largura total */
-                text-align: center; /* Centraliza o texto */
-            }
-            .title.is-size-3 {
-                font-size: 1.5rem !important; /* Reduz o tamanho da fonte do título */
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#16A34A',
+                            600: '#15803D',
+                            700: '#166534',
+                        }
+                    }
+                }
             }
         }
-
-        /* 2. Navbar: O Bulma já é responsivo, mas garantimos que o flex-wrap esteja ativado para evitar overflow */
-        .navbar-menu {
-            flex-grow: 1;
-            flex-shrink: 1;
-        }
-
-        /* 3. Modal de Login: Ajuste para telas pequenas (o Bulma já ajuda muito) */
-        .modal-card {
-            margin: 0 10px; /* Adiciona margem lateral em telas pequenas */
-        }
-        /* Fim dos Ajustes de Responsividade */
-
-        
-        main {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 60px;
-            padding: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .divs_path {
-            /* Largura base para desktop */
-            width: 30vw;
-            height: 300px;
-            min-width: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 8px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .divs_path:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        #texts {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            max-width: 450px;
-        }
-    </style>
+    </script>
 </head>
-
-<body>
-
-    <header class="box navbar is-primary" id="navbar-flex">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="index.html">
-                <h1 class="title" id="title">Et Education</h1>
-            </a>
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="frontend/pages/biblioteca.html">Biblioteca</a>
-                <a class="navbar-item" href="frontend/pages/materiais.html">Materiais</a>
-                <a class="navbar-item" href="frontend/pages/quemSomos.html">Quem Somos</a>
-            </div>
-            <div class="navbar-end">
-                <div class="navbar-item" id="nav-buttons">
-                    <div class="buttons">
-                        <button class="button is-light" id="loginButton"><strong>Entrar</strong></button>
-                        <button class="button is-danger is-hidden" id="logoutButton"><strong>Sair</strong></button>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-primary-500 shadow-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center gap-3 text-white font-bold text-xl">
+                    <div class="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img src="/frontend/assets/img/favSvg.svg" alt="ET Education" class="w-full h-full object-cover">
                     </div>
+                    <span class="hidden sm:block">ET Education</span>
+                </a>
+                
+                <ul class="hidden md:flex items-center gap-6">
+                    <li><a href="frontend/pages/biblioteca.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Biblioteca</a></li>
+                    <li><a href="frontend/pages/materiais.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Materiais</a></li>
+                    <li><a href="frontend/pages/quemSomos.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Quem Somos</a></li>
+                </ul>
+
+                <div class="flex items-center gap-3">
+                    <button id="mobileMenuBtn" class="md:hidden text-white text-2xl p-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button id="loginButton" class="bg-white text-primary-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-semibold text-sm transition">
+                        Entrar
+                    </button>
+                    <button id="logoutButton" class="hidden text-white border border-white/30 hover:bg-white/10 px-4 py-2 rounded-lg font-semibold text-sm transition">
+                        Sair
+                    </button>
                 </div>
             </div>
-        </div>
+
+            <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 py-4">
+                <ul class="space-y-2">
+                    <li><a href="frontend/pages/biblioteca.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Biblioteca</a></li>
+                    <li><a href="frontend/pages/materiais.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Materiais</a></li>
+                    <li><a href="frontend/pages/quemSomos.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Quem Somos</a></li>
+                </ul>
+            </div>
+        </nav>
     </header>
 
-    <main>
-        <section id="texts">
-            <p class="title is-size-3">Quer melhorar seu aprendizado utilizando jogos digitais incríveis? Conheça nosso
-                site:</p>
-        </section>
-        <section id="divs">
-            <div class="box divs_path"><a href="frontend/pages/biblioteca.html"><img
-                        src="frontend/assets/img/Biblioteca de.png" alt="Biblioteca"></a></div>
-            <div class="box divs_path"><a href="frontend/pages/materiais.html"><img
-                        src="frontend/assets/img/Materiais.png" alt="Materiais"></a></div>
-            <div class="box divs_path"><a href="frontend/pages/quemSomos.html"><img
-                        src="frontend/assets/img/Materiais (1).png" alt="Quem Somos"></a></div>
-        </section>
-    </main>
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center">
+       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight flex flex-wrap items-center flex items-center justify-center gap-4">
+    <img src="/frontend/assets/img/favSvg.svg" alt="Mascote ET Education apontando" width="160" height="160" class="w-80 h-80" />
+    Aprenda Matemática e Computação jogando Minecraft!
+</h1>
+        <p class="text-lg sm:text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Uma nova forma de aprender. Cursos práticos, com projetos reais para melhorar a qualidade do aprendizado
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button id="startLearning" class="bg-primary-500 hover:bg-primary-600 text-white px-8 py-3.5 rounded-lg font-semibold text-base transition flex items-center justify-center gap-2 shadow-lg shadow-primary-500/30">
+                Iniciar estudos
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <a href="frontend/pages/quemSomos.html" class="bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 px-8 py-3.5 rounded-lg font-semibold text-base transition">
+                Sobre o projeto
+            </a>
+        </div>
+    </section>
 
-    <div class="modal" id="loginModal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title">Entrar</p><button class="delete" aria-label="close"></button>
-            </header>
-            <section class="modal-card-body">
-                <div class="field"><label class="label">Email</label>
-                    <div class="control"><input class="input" type="email" id="emailInput"></div>
+    <!-- Features Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="frontend/pages/biblioteca.html" class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:border-primary-500 hover:shadow-lg transition group">
+                <div class="w-16 h-16 bg-gray-100 group-hover:bg-primary-50 rounded-xl flex items-center justify-center mx-auto mb-6 transition">
+                    <i class="fas fa-graduation-cap text-3xl text-primary-500"></i>
                 </div>
-                <div class="field"><label class="label">Senha</label>
-                    <div class="control"><input class="input" type="password" id="passwordInput"></div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Biblioteca de Cursos</h3>
+                <p class="text-gray-600 leading-relaxed">Cursos estruturados com videoaulas e projetos práticos em Minecraft</p>
+            </a>
+
+            <a href="frontend/pages/materiais.html" class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:border-primary-500 hover:shadow-lg transition group">
+                <div class="w-16 h-16 bg-gray-100 group-hover:bg-primary-50 rounded-xl flex items-center justify-center mx-auto mb-6 transition">
+                    <i class="fas fa-file-alt text-3xl text-primary-500"></i>
                 </div>
-                <div class="field"><button class="button is-primary is-fullwidth" id="loginWithEmail">Entrar com
-                        Email</button></div>
-                <div class="field"><button class="button is-danger is-fullwidth" id="loginWithGoogle"><span
-                            class="icon"><i class="fab fa-google"></i></span><span>Entrar com Google</span></button>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Materiais de Estudo</h3>
+                <p class="text-gray-600 leading-relaxed">PDFs, guias e recursos complementares para seu aprendizado</p>
+            </a>
+
+            <a href="frontend/pages/biblioteca.html" class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:border-primary-500 hover:shadow-lg transition group">
+                <div class="w-16 h-16 bg-gray-100 group-hover:bg-primary-50 rounded-xl flex items-center justify-center mx-auto mb-6 transition">
+                    <i class="fas fa-chart-line text-3xl text-primary-500"></i>
                 </div>
-                <div class="field has-text-centered"><a href="frontend/pages/cadastro.html">Não tem uma conta?
-                        Cadastre-se</a>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Acompanhe seu Progresso</h3>
+                <p class="text-gray-600 leading-relaxed">Sistema de tracking com estatísticas </p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/50 z-50 p-4">
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-md">
+                <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                    <h3 class="text-2xl font-bold text-gray-900">Entrar na plataforma</h3>
+                    <button class="modal-close text-gray-500 hover:text-gray-700 hover:bg-gray-100 w-8 h-8 rounded-lg flex items-center justify-center transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
                 </div>
-                <p id="error-message" class="has-text-danger has-text-centered mt-2"></p>
-            </section>
+
+                <div class="p-6">
+                    <form id="loginForm">
+                        <div class="mb-5">
+                            <label class="block text-gray-900 font-semibold text-sm mb-2">Email</label>
+                            <input type="email" id="emailInput" placeholder="seu@email.com" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="block text-gray-900 font-semibold text-sm mb-2">Senha</label>
+                            <input type="password" id="passwordInput" placeholder="••••••••" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                        </div>
+
+                        <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold transition">
+                            Entrar
+                        </button>
+
+                        <div class="flex items-center my-5">
+                            <div class="flex-1 border-t border-gray-200"></div>
+                            <span class="px-3 text-sm text-gray-500">ou continue com</span>
+                            <div class="flex-1 border-t border-gray-200"></div>
+                        </div>
+
+                        <button type="button" id="loginWithGoogle" class="w-full bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2">
+                            <i class="fab fa-google"></i>
+                            Google
+                        </button>
+
+                        <p class="text-center text-gray-600 text-sm mt-6">
+                            Não tem conta? <a href="frontend/pages/cadastro.html" class="text-primary-500 font-semibold hover:underline">Criar conta</a>
+                        </p>
+
+                        <p id="error-message" class="hidden text-red-600 text-sm text-center mt-4"></p>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="frontend/supabaseConfig.js"></script>
-
     <script>
-        // --- Elementos do DOM ---
         const loginModal = document.getElementById("loginModal");
         const loginButton = document.getElementById("loginButton");
         const logoutButton = document.getElementById("logoutButton");
+        const startLearning = document.getElementById("startLearning");
         const errorMessage = document.getElementById("error-message");
 
-        // --- Atualiza UI ---
+        // Mobile menu
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener("click", () => {
+                    mobileMenu.classList.toggle("hidden");
+                    const icon = mobileMenuBtn.querySelector("i");
+                    icon.className = mobileMenu.classList.contains("hidden") ? "fas fa-bars" : "fas fa-times";
+                });
+            }
+        });
+
         function updateUI(user) {
-            loginButton.classList.toggle("is-hidden", !!user);
-            logoutButton.classList.toggle("is-hidden", !user);
-            if (user) loginModal.classList.remove("is-active");
+            loginButton.classList.toggle("hidden", !!user);
+            logoutButton.classList.toggle("hidden", !user);
+            if (user) loginModal.classList.add("hidden");
         }
 
-        // --- Função para acessar dados do próprio usuário ---
         async function fetchMyUserData() {
-            const sessionData = supabaseClient.auth.getSession();
+            const sessionData = await supabaseClient.auth.getSession();
             const token = sessionData?.data?.session?.access_token;
 
-            if (!token) return null; // sem sessão, não faz nada
+            if (!token) return null;
 
             const { data: user, error } = await supabaseClient
                 .from("Users")
@@ -183,94 +207,74 @@
                 .single();
 
             if (error) console.error("Erro ao buscar dados do usuário:", error);
-            else console.log("Meu usuário:", user);
-
             return user;
         }
 
-        // --- Login com Email/Password ---
-        async function handleEmailLogin() {
+        async function handleEmailLogin(e) {
+            e.preventDefault();
             errorMessage.textContent = "";
+            errorMessage.classList.add("hidden");
+            
             const email = document.getElementById("emailInput").value;
             const password = document.getElementById("passwordInput").value;
 
             try {
                 const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) throw error;
-
-                // Busca os dados do usuário depois que a sessão está pronta
                 await fetchMyUserData();
             } catch (error) {
                 errorMessage.textContent = "Email ou senha inválidos.";
-                console.error("Erro no login com email:", error);
+                errorMessage.classList.remove("hidden");
+                console.error("Erro no login:", error);
             }
         }
 
-        // --- Login com Google ---
         async function handleGoogleLogin() {
             errorMessage.textContent = "";
+            errorMessage.classList.add("hidden");
+            
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: "google",
                 options: {
-                    redirectTo: window?.ENV?.SUPABASE_REDIRECT_URL || window.location.origin // configurable base URL
+                    redirectTo: window.location.origin
                 }
             });
 
             if (error) {
                 errorMessage.textContent = "Erro ao tentar login com Google.";
+                errorMessage.classList.remove("hidden");
                 console.error("Erro no login com Google:", error);
             }
         }
 
-        // --- Logout ---
         async function handleLogout() {
             const { error } = await supabaseClient.auth.signOut();
             if (error) console.error("Erro ao fazer logout:", error);
+            localStorage.removeItem("userToken");
         }
 
-        // --- Evento principal ---
         document.addEventListener("DOMContentLoaded", () => {
-
-            // --- Lógica do Menu Hamburger ---
-            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-            if ($navbarBurgers.length > 0) {
-                $navbarBurgers.forEach(el => {
-                    el.addEventListener('click', () => {
-                        const target = el.dataset.target;
-                        const $target = document.getElementById(target);
-                        el.classList.toggle('is-active');
-                        $target.classList.toggle('is-active');
-                    });
-                });
-            }
-
-            // Observa mudanças de sessão
             supabaseClient.auth.onAuthStateChange(async (event, session) => {
-                console.log("onAuthStateChange EVENTO:", event, "SESSÃO:", session);
-
                 const user = session?.user;
                 if (session) localStorage.setItem("userToken", session.access_token);
                 else localStorage.removeItem("userToken");
 
                 updateUI(user);
-
-                // Se logou, busca os dados do usuário
                 if (user) await fetchMyUserData();
             });
 
-            // Eventos dos botões
-            loginButton.addEventListener("click", () => loginModal.classList.add("is-active"));
+            loginButton.addEventListener("click", () => loginModal.classList.remove("hidden"));
+            startLearning.addEventListener("click", () => loginModal.classList.remove("hidden"));
             logoutButton.addEventListener("click", handleLogout);
-            document.getElementById("loginWithEmail").addEventListener("click", handleEmailLogin);
+            
+            document.getElementById("loginForm").addEventListener("submit", handleEmailLogin);
             document.getElementById("loginWithGoogle").addEventListener("click", handleGoogleLogin);
 
-            // Fechar modal
-            loginModal.querySelector(".modal-background").addEventListener("click", () => loginModal.classList.remove("is-active"));
-            loginModal.querySelector(".delete").addEventListener("click", () => loginModal.classList.remove("is-active"));
+            loginModal.querySelector(".modal-close").addEventListener("click", () => loginModal.classList.add("hidden"));
+            loginModal.addEventListener("click", (e) => {
+                if (e.target === loginModal) loginModal.classList.add("hidden");
+            });
         });
     </script>
-
-
 </body>
-
 </html>

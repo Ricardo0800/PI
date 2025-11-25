@@ -3,177 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quem Somos - Jogos na Educação</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <title>ET Education - Quem Somos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="shortcut icon" href="/frontend/assets/img/favSvg.svg" type="image/x-icon">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* --- Ajustes de Responsividade (Adicionados) --- */
-
-        /* 1. Cards de Membros: Ajusta o layout dos cards para telas menores */
-        @media screen and (max-width: 768px) {
-            /* Em celulares, os cards ocupam metade da largura (duas colunas) */
-            .column.is-one-quarter {
-                width: 50% !important; /* Sobrescreve Bulma para 2 colunas */
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#16A34A',
+                            600: '#15803D',
+                            700: '#166534',
+                        }
+                    }
+                }
             }
         }
-        @media screen and (max-width: 480px) {
-            /* Em celulares muito pequenos, os cards ocupam a largura total (uma coluna) */
-            .column.is-one-quarter {
-                width: 100% !important; /* Sobrescreve Bulma para 1 coluna */
-            }
-        }
-
-        /* 2. Navbar: O Bulma já é responsivo, mas garantimos o comportamento do menu em mobile */
-        /* Nota: O Bulma requer um toggle JavaScript para o menu mobile, mas os estilos base estão aqui */
-
-        /* Fim dos Ajustes de Responsividade */
-
-        
-        .team-member-card {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .team-member-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        .card-footer-item {
-            font-weight: bold;
-            color: #4a4a4a;
-        }
-    </style>
+    </script>
 </head>
-<body>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-primary-500 shadow-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="../../index.html" class="flex items-center gap-3 text-white font-bold text-xl">
+                    <div class="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img src="/frontend/assets/img/favSvg.svg" alt="ET Education" class="w-full h-full object-cover">
+                    </div>
+                    <span class="hidden sm:block">ET Education</span>
+                </a>
+                
+                <ul class="hidden md:flex items-center gap-6">
+                    <li><a href="../../index.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Início</a></li>
+                    <li><a href="biblioteca.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Biblioteca</a></li>
+                    <li><a href="materiais.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Materiais</a></li>
+                    <li><a href="quemSomos.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Quem Somos</a></li>
+                </ul>
 
-<header class="box navbar is-primary">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="../index.html">
-            <h1 class="title" id="title">ET Education</h1>
-        </a>
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <a class="navbar-item" href="../../index.html">Início</a>
-            <a class="navbar-item" href="biblioteca.html">Biblioteca</a>
-            <a class="navbar-item" href="materiais.html">Materiais</a>
-            <a class="navbar-item" href="quemSomos.html">Quem Somos</a>
+                <div class="flex items-center gap-3">
+                    <button id="mobileMenuBtn" class="md:hidden text-white text-2xl p-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button id="loginButton" class="bg-white text-primary-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-semibold text-sm transition">
+                        Entrar
+                    </button>
+                    <button id="logoutButton" class="hidden text-white border border-white/30 hover:bg-white/10 px-4 py-2 rounded-lg font-semibold text-sm transition">
+                        Sair
+                    </button>
+                </div>
+            </div>
+
+            <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 py-4">
+                <ul class="space-y-2">
+                    <li><a href="../../index.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Início</a></li>
+                    <li><a href="biblioteca.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Biblioteca</a></li>
+                    <li><a href="materiais.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Materiais</a></li>
+                    <li><a href="quemSomos.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Quem Somos</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">Conheça Nossa Equipe</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">As mentes criativas por trás do ET Education, trabalhando para revolucionar o aprendizado através dos jogos</p>
         </div>
-        <div class="navbar-end">
-            <div class="navbar-item" id="nav-buttons">
-                <div class="buttons">
-                    <button class="button is-light" id="loginButton"><strong>Entrar</strong></button>
-                    <button class="button is-danger is-hidden" id="logoutButton"><strong>Sair</strong></button>
+
+        <!-- Team Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12">
+            <div class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:border-primary-500 hover:shadow-lg transition">
+                <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-5 text-white text-2xl font-bold">
+                    GC
                 </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Guilherme Cunha</h3>
+                <p class="text-gray-600">Líder do Projeto</p>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:border-primary-500 hover:shadow-lg transition">
+                <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-5 text-white text-2xl font-bold">
+                    RF
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Ricardo Felix</h3>
+                <p class="text-gray-600">Desenvolvedor</p>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:border-primary-500 hover:shadow-lg transition">
+                <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-5 text-white text-2xl font-bold">
+                    L
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Lucas</h3>
+                <p class="text-gray-600">Desenvolvedor</p>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:border-primary-500 hover:shadow-lg transition">
+                <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-5 text-white text-2xl font-bold">
+                    MA
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Miguel Ângelo</h3>
+                <p class="text-gray-600">Designer</p>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-8 text-center hover:border-primary-500 hover:shadow-lg transition">
+                <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-5 text-white text-2xl font-bold">
+                    K
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Keven</h3>
+                <p class="text-gray-600">Editor de Vídeo</p>
             </div>
         </div>
-    </div>
-</header>
 
-<section class="section">
-    <div class="container">
-        <h1 class="title has-text-centered">A Nossa Equipe</h1>
-        <p class="subtitle has-text-centered">As mentes por trás do projeto "ET Education".</p>
-        
-        <div class="columns is-multiline is-centered mt-5 is-mobile">
-
-            <div class="column is-one-quarter is-half-mobile is-full-mobile">
-                <div class="card team-member-card">
-                    <div class="card-content has-text-centered">
-                        <p class="title is-4">Guilherme Cunha</p>
-                        <p class="subtitle is-6">Líder do Projeto</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="column is-one-quarter is-half-mobile is-full-mobile">
-                <div class="card team-member-card">
-                    <div class="card-content has-text-centered">
-                        <p class="title is-4">Ricardo Felix</p>
-                        <p class="subtitle is-6">Desenvolvedor</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="column is-one-quarter is-half-mobile is-full-mobile">
-                <div class="card team-member-card">
-                    <div class="card-content has-text-centered">
-                        <p class="title is-4">Lucas</p>
-                        <p class="subtitle is-6">Desenvolvedor</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="column is-one-quarter is-half-mobile is-full-mobile">
-                <div class="card team-member-card">
-                    <div class="card-content has-text-centered">
-                        <p class="title is-4">Miguel Ângelo</p>
-                        <p class="subtitle is-6">Design</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="column is-one-quarter is-half-mobile is-full-mobile">
-                <div class="card team-member-card">
-                    <div class="card-content has-text-centered">
-                        <p class="title is-4">Keven</p>
-                        <p class="subtitle is-6">Edição de Vídeo</p>
-                    </div>
-                </div>
-            </div>
-            
-          
-
+        <!-- About Section -->
+        <div class="bg-white border border-gray-200 rounded-xl p-8 lg:p-10">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-6">Sobre o Projeto</h2>
+            <p class="text-gray-600 text-lg leading-relaxed">
+                O ET Education nasceu da visão de transformar a educação através da gamificação. 
+                Acreditamos que aprender pode e deve ser divertido, engajante e eficaz. 
+                Utilizando jogos como Minecraft, criamos experiências educacionais imersivas que 
+                desenvolvem habilidades técnicas, criatividade e pensamento crítico em estudantes 
+                de todas as idades.
+            </p>
         </div>
-    </div>
-</section>
+    </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../supabaseConfig.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // --- Lógica do Menu Hamburger ---
-        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-        if ($navbarBurgers.length > 0) {
-            $navbarBurgers.forEach(el => {
-                el.addEventListener('click', () => {
-                    const target = el.dataset.target;
-                    const $target = document.getElementById(target);
-                    el.classList.toggle('is-active');
-                    $target.classList.toggle('is-active');
-                });
-            });
-        }
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../supabaseConfig.js"></script>
+    <script>
         const loginButton = document.getElementById("loginButton");
         const logoutButton = document.getElementById("logoutButton");
 
+        // Mobile menu
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener("click", () => {
+                    mobileMenu.classList.toggle("hidden");
+                    const icon = mobileMenuBtn.querySelector("i");
+                    icon.className = mobileMenu.classList.contains("hidden") ? "fas fa-bars" : "fas fa-times";
+                });
+            }
+        });
+
         supabaseClient.auth.onAuthStateChange((_, session) => {
             const user = session?.user;
-            loginButton.classList.toggle("is-hidden", !!user);
-            logoutButton.classList.toggle("is-hidden", !user);
+            loginButton.classList.toggle("hidden", !!user);
+            logoutButton.classList.toggle("hidden", !user);
         });
 
         logoutButton.addEventListener("click", async () => {
             await supabaseClient.auth.signOut();
-            // Redireciona para a página inicial após o logout
-            window.location.href = "../index.html";
+            localStorage.removeItem("userToken");
+            window.location.href = "../../index.html";
         });
 
         loginButton.addEventListener("click", () => {
-            // Se o utilizador não está logado e clica em Entrar, manda-o para a página inicial para abrir o modal.
-            window.location.href = "../index.html";
+            window.location.href = "../../index.html";
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>
-
-

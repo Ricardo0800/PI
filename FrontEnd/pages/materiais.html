@@ -1,98 +1,128 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materiais</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <title>ET Education - Materiais de Estudo</title>
+        <link rel="shortcut icon" href="/frontend/assets/img/favSvg.svg" type="image/x-icon">
+
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* --- Ajustes de Responsividade (Adicionados) --- */
-
-        /* 1. Navbar: Ajusta o campo de pesquisa para telas menores */
-        @media screen and (max-width: 1023px) {
-            /* Em tablets e celulares */
-            #pesquisa {
-                width: 100%; /* Ocupa a largura total */
-                margin-top: 10px; /* Adiciona margem superior */
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#16A34A',
+                            600: '#15803D',
+                            700: '#166534',
+                        }
+                    }
+                }
             }
         }
-
-        /* 2. Modal de PDF: Torna o modal mais adaptável em telas menores */
-        .modal-content {
-            width: 90%; /* Largura do modal em telas pequenas */
-        }
-        @media screen and (min-width: 769px) {
-            .modal-content {
-                width: 80%; /* Largura maior para desktop */
-            }
-        }
-
-        /* 3. Iframe: Ajusta a altura do iframe do PDF para telas menores */
-        iframe {
-            height: 80vh; /* Altura relativa à altura da viewport */
-        }
-        /* Fim dos Ajustes de Responsividade */
-
-        
-        /* O seu CSS original, sem alterações */
-        #pesquisa { margin-top: 4px; width: 30vw; } /* Largura base para desktop */
-        #links-start { gap: 10px; }
-        iframe { width: 100%; border: none; } /* A altura será controlada pela regra de responsividade */
-    </style>
+    </script>
 </head>
-<body>
-    <header class="box navbar" id="navbar-flex">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="../../index.html"><h1 class="title" id="title">ET Education</h1></a>
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start" id="links-start">
-                <a class="navbar-item" href="../../index.html">Início</a>
-                <a class="navbar-item" href="biblioteca.html">Biblioteca</a>
-                <a class="navbar-item" href="materiais.html">Materiais</a>
-                <a class="navbar-item" href="quemSomos.html">Quem Somos</a>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-primary-500 sticky top-0 z-50 shadow-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="../../index.html" class="flex items-center gap-3 text-white font-bold text-xl">
+                    <div class="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img src="/frontend/assets/img/favSvg.svg" alt="ET Education" class="w-full h-full object-cover">
+                    </div>
+                    <span class="hidden sm:block">ET Education</span>
+                </a>
+                
+                <ul class="hidden md:flex items-center gap-6">
+                    <li><a href="../../index.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Início</a></li>
+                    <li><a href="biblioteca.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Biblioteca</a></li>
+                    <li><a href="materiais.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Materiais</a></li>
+                    <li><a href="quemSomos.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Quem Somos</a></li>
+                </ul>
+
+                <div class="flex items-center gap-3">
+                    <button id="mobileMenuBtn" class="md:hidden text-white text-2xl p-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button id="logoutBtn" class="text-white border border-white/30 hover:bg-white/10 px-4 py-2 rounded-lg font-semibold text-sm transition flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="hidden sm:inline">Sair</span>
+                    </button>
+                </div>
             </div>
+
+            <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 py-4">
+                <ul class="space-y-2">
+                    <li><a href="../../index.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Início</a></li>
+                    <li><a href="biblioteca.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Biblioteca</a></li>
+                    <li><a href="materiais.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Materiais</a></li>
+                    <li><a href="quemSomos.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Quem Somos</a></li>
+                </ul>
             </div>
+        </nav>
     </header>
 
-    <section class="section">
-        <div class="container">
-            <h2 class="title">Materiais de Estudo</h2>
-            <div id="materials-list">
-                <p>A carregar materiais...</p>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Materiais de Estudo</h1>
+            <p class="text-lg text-gray-600">Baixe PDFs, guias e recursos complementares</p>
+        </div>
+
+        <div id="materials-list">
+            <div class="flex justify-center items-center min-h-[400px]">
+                <div class="w-10 h-10 border-4 border-gray-200 border-t-primary-500 rounded-full animate-spin"></div>
             </div>
         </div>
-    </section>
-    
-    <div id="pdf-modal" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <div class="box">
-                <iframe id="pdf-frame" src=""></iframe>
+    </main>
+
+    <!-- PDF Modal -->
+    <div id="pdf-modal" class="hidden fixed inset-0 bg-black/50 z-50 p-4">
+        <div class="h-full flex items-center justify-center">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                    <h3 id="modal-material-title" class="text-xl sm:text-2xl font-bold text-gray-900">Material</h3>
+                    <button class="modal-close text-gray-500 hover:text-gray-700 hover:bg-gray-100 w-8 h-8 rounded-lg flex items-center justify-center transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-hidden">
+                    <iframe id="pdf-frame" src="" class="w-full h-full"></iframe>
+                </div>
             </div>
         </div>
-        <button class="modal-close is-large" aria-label="close"></button>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../supabaseConfig.js"></script>
     <script>
-        // Use uma variável de ambiente ou um arquivo de configuração para a URL da API do backend em produção
-        // Por enquanto, vamos usar um placeholder. Você precisará substituir isso pela URL real do seu backend.
-        const backendApiUrl = "https://pi-y7u4.onrender.com"; 
+        const backendApiUrl = "https://pi-y7u4.onrender.com";
 
-        // Função "ajudante" para obter o token do utilizador logado
+        // Mobile menu toggle
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener("click", () => {
+                    mobileMenu.classList.toggle("hidden");
+                    const icon = mobileMenuBtn.querySelector("i");
+                    icon.className = mobileMenu.classList.contains("hidden") ? "fas fa-bars" : "fas fa-times";
+                });
+            }
+        });
+
         function getAuthHeaders() {
-            const token = localStorage.getItem("userToken"); // Usa o mesmo token do index.html
+            const token = localStorage.getItem("userToken");
             if (!token) {
-                alert("Você precisa de estar logado para ver os materiais.");
-                window.location.href = "../../index.html"; // Redireciona para o login
+                alert("Você precisa estar logado para ver os materiais.");
+                window.location.href = "../../index.html";
                 return null;
             }
             return {
@@ -101,88 +131,82 @@
             };
         }
 
-        // Busca os materiais no nosso backend seguro
         async function fetchAndRenderMaterials() {
             const materialsList = document.getElementById("materials-list");
             try {
                 const headers = getAuthHeaders();
-                if (!headers) return; // Para se não houver token
+                if (!headers) return;
 
                 const response = await fetch(`${backendApiUrl}/api/materiais`, { headers });
                 if (!response.ok) {
-                    throw new Error("Falha ao carregar os materiais. Tente novamente mais tarde.");
+                    throw new Error("Falha ao carregar os materiais.");
                 }
                 
                 const materials = await response.json();
                 
-                materialsList.innerHTML = ""; // Limpa a mensagem "A carregar..."
-
                 if (materials.length === 0) {
-                    materialsList.innerHTML = "<p>Nenhum material de estudo disponível no momento.</p>";
+                    materialsList.innerHTML = `
+                        <div class="text-center py-16">
+                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-file-alt text-2xl text-gray-400"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Nenhum material disponível</h3>
+                            <p class="text-gray-600">Novos materiais serão adicionados em breve</p>
+                        </div>
+                    `;
                     return;
                 }
 
-                materials.forEach(material => {
-                    const listItem = document.createElement("div");
-                    listItem.classList.add("box", "mb-4");
-                    // Usamos os nomes das colunas da sua tabela: 'nome' e 'link'
-                    listItem.innerHTML = `
-                        <p class="title is-5">${material.nome}</p>
-                        <button class="button is-link" data-url="${material.link}">Ver Material</button>
-                    `;
-                    
-                    // Adiciona o evento de clique para abrir o modal
-                    const button = listItem.querySelector("button");
-                    button.addEventListener("click", () => {
-                        openPdfModal(material.link);
-                    });
-            
-                    materialsList.appendChild(listItem);
-                });
+                const gridHTML = materials.map(material => `
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 hover:border-primary-500 hover:shadow-lg transition cursor-pointer material-card group" data-url="${material.link}" data-title="${material.nome}">
+                        <div class="w-12 h-12 bg-gray-100 group-hover:bg-primary-50 rounded-xl flex items-center justify-center mb-4 transition">
+                            <i class="fas fa-file-pdf text-2xl text-primary-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">${material.nome}</h3>
+                        <button class="w-full bg-primary-500 hover:bg-primary-600 text-white px-4 py-2.5 rounded-lg font-semibold transition flex items-center justify-center gap-2">
+                            <i class="fas fa-eye"></i>
+                            Ver Material
+                        </button>
+                    </div>
+                `).join('');
+
+                materialsList.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">${gridHTML}</div>`;
 
             } catch (error) {
                 console.error(error);
-                materialsList.innerHTML = `<div class="notification is-danger">${error.message}</div>`;
+                materialsList.innerHTML = `
+                    <div class="text-center py-16">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-exclamation-circle text-2xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Erro ao carregar materiais</h3>
+                        <p class="text-gray-600">${error.message}</p>
+                    </div>
+                `;
             }
         }
 
-        // Funções para controlar o modal
         const pdfModal = document.getElementById("pdf-modal");
         const pdfFrame = document.getElementById("pdf-frame");
 
-        function openPdfModal(url) {
-            // Para links do Google Drive, precisamos de um formato de "embed"
+        function openPdfModal(url, title) {
+            document.getElementById("modal-material-title").textContent = title;
+            
             if (url.includes("drive.google.com")) {
-                // Transforma um link de partilha num link de visualização incorporado
                 const embedUrl = url.replace("/view", "/preview");
                 pdfFrame.src = embedUrl;
             } else {
                 pdfFrame.src = url;
             }
-            pdfModal.classList.add("is-active");
+            pdfModal.classList.remove("hidden");
         }
 
         function closeModal() {
-            pdfModal.classList.remove("is-active");
-            pdfFrame.src = ""; // Limpa o iframe para parar o carregamento
+            pdfModal.classList.add("hidden");
+            pdfFrame.src = "";
         }
 
-        // Ponto de entrada da aplicação
         document.addEventListener("DOMContentLoaded", () => {
-            // --- Lógica do Menu Hamburger ---
-            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-            if ($navbarBurgers.length > 0) {
-                $navbarBurgers.forEach(el => {
-                    el.addEventListener('click', () => {
-                        const target = el.dataset.target;
-                        const $target = document.getElementById(target);
-                        el.classList.toggle('is-active');
-                        $target.classList.toggle('is-active');
-                    });
-                });
-            }
-
-            // Verifica o login antes de fazer qualquer coisa
             if (!localStorage.getItem("userToken")) {
                 alert("Acesso negado. Por favor, faça o login.");
                 window.location.href = "../../index.html";
@@ -191,12 +215,24 @@
 
             fetchAndRenderMaterials();
 
-            // Adiciona eventos para fechar o modal
+            document.getElementById("materials-list").addEventListener("click", (event) => {
+                const card = event.target.closest(".material-card");
+                if (card) {
+                    openPdfModal(card.dataset.url, card.dataset.title);
+                }
+            });
+
             pdfModal.querySelector(".modal-close").addEventListener("click", closeModal);
-            pdfModal.querySelector(".modal-background").addEventListener("click", closeModal);
+            pdfModal.addEventListener("click", (e) => {
+                if (e.target === pdfModal) closeModal();
+            });
+
+            document.getElementById("logoutBtn").addEventListener("click", async () => {
+                await supabaseClient.auth.signOut();
+                localStorage.removeItem("userToken");
+                window.location.href = "../../index.html";
+            });
         });
     </script>
 </body>
 </html>
-
-

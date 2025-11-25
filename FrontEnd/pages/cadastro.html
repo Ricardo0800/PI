@@ -3,67 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Jogos na Educação</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* --- Ajustes de Responsividade (Adicionados) --- */
+    <title>ET Education - Criar Conta</title>
+        <link rel="shortcut icon" href="/frontend/assets/img/favSvg.svg" type="image/x-icon">
 
-        /* 1. Container: Em telas menores, reduz o max-width e aumenta o padding */
-        @media screen and (max-width: 480px) {
-            .container {
-                max-width: 95%; /* Ocupa quase toda a largura da tela */
-                padding: 15px; /* Reduz o padding interno */
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#16A34A',
+                            600: '#15803D',
+                            700: '#166534',
+                        }
+                    }
+                }
             }
         }
-        /* Fim dos Ajustes de Responsividade */
-
-        
-        html, body { height: 100%; }
-        body { display: flex; align-items: center; justify-content: center; background-color: #f5f5f5; }
-        .container { width: 100%; max-width: 400px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); } /* Largura máxima para desktop/tablet */
-        .field { margin-bottom: 20px; }
-    </style>
+    </script>
 </head>
-<body>
-    <div class="container">
-        <h2 class="title has-text-centered">Crie a sua Conta</h2>
-        
-        <form id="signup-form">
-            <div class="field">
-                <label class="label" for="name">Nome Completo</label>
-                <div class="control">
-                    <input class="input" type="text" id="name" required>
-                </div>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-8 sm:p-10">
+        <!-- Logo Section -->
+        <div class="text-center mb-8">
+            <div class="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img src="/frontend/assets/img/favSvg.svg" alt="ET Education" class="w-full h-full object-cover">
+                    </div>
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Criar sua conta</h1>
+            <p class="text-gray-600">Comece sua jornada de aprendizado hoje</p>
+        </div>
+
+        <!-- Message -->
+        <div id="message" class="hidden mb-6"></div>
+
+        <!-- Form -->
+        <form id="signup-form" class="space-y-5">
+            <div>
+                <label for="name" class="block text-gray-900 font-semibold text-sm mb-2">Nome completo</label>
+                <input type="text" id="name" placeholder="João Silva" required 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
             </div>
-            <div class="field">
-                <label class="label" for="email">Email</label>
-                <div class="control">
-                    <input class="input" type="email" id="email" required>
-                </div>
+
+            <div>
+                <label for="email" class="block text-gray-900 font-semibold text-sm mb-2">Email</label>
+                <input type="email" id="email" placeholder="seu@email.com" required 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
             </div>
-            <div class="field">
-                <label class="label" for="password">Senha (mínimo 6 caracteres)</label>
-                <div class="control">
-                    <input class="input" type="password" id="password" required>
-                </div>
+
+            <div>
+                <label for="password" class="block text-gray-900 font-semibold text-sm mb-2">Senha (mínimo 6 caracteres)</label>
+                <input type="password" id="password" placeholder="••••••••" required 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
             </div>
-            <div class="field">
-                <button class="button is-primary is-fullwidth" type="submit">Criar Conta</button>
-            </div>
+
+            <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white px-4 py-3.5 rounded-lg font-semibold transition flex items-center justify-center gap-2 shadow-lg shadow-primary-500/30">
+                <i class="fas fa-user-plus"></i>
+                Criar conta
+            </button>
         </form>
 
-        <div class="field">
-            <button class="button is-danger is-fullwidth" id="registerWithGoogle">
-                <span class="icon"><i class="fab fa-google"></i></span>
-                <span>Cadastrar com Google</span>
-            </button>
+        <!-- Divider -->
+        <div class="flex items-center my-6">
+            <div class="flex-1 border-t border-gray-200"></div>
+            <span class="px-3 text-sm text-gray-500">ou cadastre-se com</span>
+            <div class="flex-1 border-t border-gray-200"></div>
         </div>
-        
-        <p id="message" class="has-text-centered mt-2"></p>
-        <div class="has-text-centered mt-4">
-            <a href="../../index.html">Já tem uma conta? Faça o login</a>
-        </div>
+
+        <!-- Google Button -->
+        <button id="registerWithGoogle" class="w-full bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 px-4 py-3.5 rounded-lg font-semibold transition flex items-center justify-center gap-2">
+            <i class="fab fa-google text-lg"></i>
+            Google
+        </button>
+
+        <!-- Login Link -->
+        <p class="text-center text-gray-600 text-sm mt-6">
+            Já tem uma conta? <a href="../../index.html" class="text-primary-500 font-semibold hover:underline">Fazer login</a>
+        </p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -73,11 +92,21 @@
         const googleButton = document.getElementById("registerWithGoogle");
         const messageEl = document.getElementById("message");
 
-        // Cadastro com Email
+        function showMessage(text, type) {
+            messageEl.textContent = text;
+            messageEl.className = type === 'success' 
+                ? 'bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg text-sm text-center' 
+                : 'bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm text-center';
+            messageEl.classList.remove("hidden");
+        }
+
+        function hideMessage() {
+            messageEl.classList.add("hidden");
+        }
+
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
-            messageEl.textContent = "";
-            messageEl.classList.remove("has-text-success", "has-text-danger");
+            hideMessage();
 
             const name = document.getElementById("name").value;
             const email = document.getElementById("email").value;
@@ -89,27 +118,30 @@
                     password: password,
                     options: { data: { full_name: name } }
                 });
+                
                 if (error) throw error;
                 
-                messageEl.textContent = "Sucesso! Verifique o seu email para confirmar a conta.";
-                messageEl.classList.add("has-text-success");
+                showMessage("Sucesso! Verifique seu email para confirmar a conta.", "success");
                 form.reset();
             } catch (error) {
-                messageEl.textContent = error.message;
-                messageEl.classList.add("has-text-danger");
+                showMessage(error.message, "error");
             }
         });
 
-        // Cadastro com Google
         googleButton.addEventListener("click", async () => {
-            messageEl.textContent = "";
-            const { error } = await supabaseClient.auth.signInWithOAuth({ provider: "google" });
+            hideMessage();
+            
+            const { error } = await supabaseClient.auth.signInWithOAuth({ 
+                provider: "google",
+                options: {
+                    redirectTo: window.location.origin
+                }
+            });
+            
             if (error) {
-                messageEl.textContent = "Erro ao tentar cadastro com o Google.";
-                messageEl.classList.add("has-text-danger");
+                showMessage("Erro ao tentar cadastro com o Google.", "error");
             }
         });
     </script>
 </body>
 </html>
-

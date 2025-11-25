@@ -1,70 +1,131 @@
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca de Cursos</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-    <style>
-        /* O seu CSS original */
+    <title>ET Education - Biblioteca de Cursos</title>
+        <link rel="shortcut icon" href="/frontend/assets/img/favSvg.svg" type="image/x-icon">
 
-        /* --- Ajustes de Responsividade (Adicionados) --- */
-
-        /* 1. Modal de Vídeo: Aumenta o tamanho do modal em telas maiores para melhor visualização */
-        @media screen and (min-width: 769px) {
-            .modal-card {
-                width: 80vw; /* Largura maior para desktop */
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#16A34A',
+                            600: '#15803D',
+                            700: '#166534',
+                        }
+                    }
+                }
             }
         }
-
-        main { padding: 2rem; }
-        .card { margin: 10px; } /* Mantém a margem, mas a largura é controlada pelas classes do Bulma */
-        .card .card-image img { height: 180px; object-fit: cover; }
-        .modal-card-body iframe { width: 100%; height: 315px; }
-        .curso-progresso { position: absolute; top: 10px; right: 10px; background-color: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 10px; font-size: 0.8rem; }
-    </style>
+    </script>
 </head>
-<body>
-    <header class="box navbar is-primary">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="../../index.html"><h1 class="title" id="title">ET Education</h1></a>
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="../../index.html">Início</a>
-                <a class="navbar-item" href="biblioteca.html">Biblioteca</a>
-                <a class="navbar-item" href="materiais.html">Materiais</a>
-                <a class="navbar-item" href="quemSomos.html">Quem Somos</a>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-primary-500 sticky top-0 z-50 shadow-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="../../index.html" class="flex items-center gap-3 text-white font-bold text-xl">
+                    <div class="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img src="/frontend/assets/img/favSvg.svg" alt="ET Education" class="w-full h-full object-cover">
+                    </div>
+                    <span class="hidden sm:block">ET Education</span>
+                </a>
+                
+                <ul class="hidden md:flex items-center gap-6">
+                    <li><a href="../../index.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Início</a></li>
+                    <li><a href="biblioteca.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Biblioteca</a></li>
+                    <li><a href="materiais.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Materiais</a></li>
+                    <li><a href="quemSomos.html" class="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition">Quem Somos</a></li>
+                </ul>
+
+                <div class="flex items-center gap-3">
+                    <button id="mobileMenuBtn" class="md:hidden text-white text-2xl p-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button id="logoutBtn" class="text-white border border-white/30 hover:bg-white/10 px-4 py-2 rounded-lg font-semibold text-sm transition flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="hidden sm:inline">Sair</span>
+                    </button>
+                </div>
             </div>
-        </div>
+
+            <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 py-4">
+                <ul class="space-y-2">
+                    <li><a href="../../index.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Início</a></li>
+                    <li><a href="biblioteca.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Biblioteca</a></li>
+                    <li><a href="materiais.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Materiais</a></li>
+                    <li><a href="quemSomos.html" class="block text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-lg transition">Quem Somos</a></li>
+                </ul>
+            </div>
+        </nav>
     </header>
 
-    <main class="section">
-        <h2 class="subtitle">Nossos Cursos</h2>
-        <section id="courses-container" class="columns is-multiline">
-            <div id="loading-cursos" class="column is-full has-text-centered">
-                <button class="button is-loading is-large">Carregando</button>
-            </div>
-        </section>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Biblioteca de Cursos</h1>
+            <p class="text-lg text-gray-600">Explore nossos cursos e continue seu aprendizado</p>
+        </div>
 
-        <div id="videoModal" class="modal">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-                <header class="modal-card-head"><p class="modal-card-title" id="modal-title">Carregando...</p><button class="delete"></button></header>
-                <section class="modal-card-body">
-                    <div id="video-container"></div>
-                    <div class="video-counter" id="video-counter"></div>
-                    <p id="video-description"></p>
-                    <div class="video-navigation mt-4"><button class="button is-info" id="prevVideo" disabled>Anterior</button><button class="button is-success" id="markAsWatched">Marcar como assistido</button><button class="button is-info" id="nextVideo" disabled>Próximo</button></div>
-                </section>
+        <div id="courses-container">
+            <div class="flex justify-center items-center min-h-[400px]" id="loading-cursos">
+                <div class="w-10 h-10 border-4 border-gray-200 border-t-primary-500 rounded-full animate-spin"></div>
             </div>
         </div>
     </main>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="hidden fixed inset-0 bg-black/50 z-50 p-4 overflow-y-auto">
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+                <div class="flex justify-between items-center p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
+                    <h2 id="modal-title" class="text-xl sm:text-2xl font-bold text-gray-900">Carregando...</h2>
+                    <button class="modal-close text-gray-500 hover:text-gray-700 hover:bg-gray-100 w-8 h-8 rounded-lg flex items-center justify-center transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-6">
+                    <div id="video-container-wrapper"></div>
+                    
+                    <div class="mt-6">
+                        <div id="video-counter" class="inline-block bg-gray-100 px-3 py-1.5 rounded-lg text-sm font-semibold text-gray-600 mb-4"></div>
+                        <p id="video-description" class="text-gray-600 leading-relaxed"></p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-6 border-t border-gray-200">
+                        <button id="prevVideo" disabled class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                            <i class="fas fa-arrow-left"></i>
+                            Anterior
+                        </button>
+                        <button id="markAsWatched" class="flex-1 bg-primary-500 hover:bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2">
+                            <i class="fas fa-check"></i>
+                            Marcar como assistido
+                        </button>
+                        <button id="nextVideo" disabled class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                            Próximo
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../supabaseConfig.js"></script>
@@ -73,12 +134,25 @@
         let currentVideos = [];
         let currentVideoIndex = 0;
 
-        // Função "ajudante" que usa o passe do utilizador
+        // Mobile menu toggle
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener("click", () => {
+                    mobileMenu.classList.toggle("hidden");
+                    const icon = mobileMenuBtn.querySelector("i");
+                    icon.className = mobileMenu.classList.contains("hidden") ? "fas fa-bars" : "fas fa-times";
+                });
+            }
+        });
+
         function getAuthHeaders() {
             const token = localStorage.getItem("userToken");
             if (!token) {
                 alert("Você precisa estar logado para ver esta página.");
-                window.location.href = "../../index.html"; // Redireciona para o login
+                window.location.href = "../../index.html";
                 return null;
             }
             return { "Content-Type": "application/json", "Authorization": `Bearer ${token}` };
@@ -87,54 +161,85 @@
         async function fetchAndRenderCourses() {
             const coursesContainer = document.getElementById("courses-container");
             try {
-                const headers = getAuthHeaders(); if (!headers) return;
+                const headers = getAuthHeaders(); 
+                if (!headers) return;
+                
                 const response = await fetch(`${backendApiUrl}/api/biblioteca/cursos`, { headers });
                 if (!response.ok) throw new Error("Falha ao carregar os cursos.");
                 
                 const cursos = await response.json();
                 
-                document.getElementById("loading-cursos").style.display = "none";
+                document.getElementById("loading-cursos").classList.add("hidden");
+                
                 if (cursos.length === 0) {
-                    coursesContainer.innerHTML = "<div class=\"notification is-info\">Nenhum curso disponível.</div>";
+                    coursesContainer.innerHTML = `
+                        <div class="text-center py-16">
+                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-inbox text-2xl text-gray-400"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Nenhum curso disponível</h3>
+                            <p class="text-gray-600">Novos cursos serão adicionados em breve!</p>
+                        </div>
+                    `;
                     return;
                 }
 
-                coursesContainer.innerHTML = "";
-                cursos.forEach(curso => {
-                    coursesContainer.innerHTML += `
-                      <div class="column is-one-quarter is-half-tablet is-full-mobile">
-                            <div class="card">
-                                <div class="card-image">
-                                    <figure class="image is-4by3"><img src="../assets/img/MINECRAFT.png" alt="${curso.nome}"><div class="curso-progresso">${curso.progresso}% concluído</div></figure>
-                                </div>
-                                <div class="card-content">
-                                    <p class="title is-4">${curso.nome}</p>
-                                    <p class="subtitle is-6">${curso.descricao || ""}</p>
-                                    <button class="button is-primary open-curso" data-curso-id="${curso.id_course}" data-curso-nome="${curso.nome}">Assistir</button>
-                                </div>
+                const gridHTML = cursos.map(curso => `
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-primary-500 hover:shadow-lg transition cursor-pointer course-card" data-curso-id="${curso.id_course}" data-curso-nome="${curso.nome}">
+                        <div class="relative h-48 bg-gray-100">
+                            <img src="../assets/img/MINECRAFT.png" alt="${curso.nome}" class="w-full h-full object-cover">
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-3 py-1.5 rounded-full text-sm font-semibold">
+                                ${curso.progresso}% concluído
                             </div>
-                        </div>`;
-                });
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">${curso.nome}</h3>
+                            <p class="text-gray-600 mb-4">${curso.descricao || 'Explore este curso incrível'}</p>
+                            <button class="w-full bg-primary-500 hover:bg-primary-600 text-white px-4 py-2.5 rounded-lg font-semibold transition flex items-center justify-center gap-2">
+                                <i class="fas fa-play"></i>
+                                Assistir Curso
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                coursesContainer.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">${gridHTML}</div>`;
             } catch (error) {
                 console.error("Erro ao carregar cursos:", error);
-                coursesContainer.innerHTML = "<div class=\"notification is-danger\">Ocorreu um erro ao carregar os cursos.</div>";
+                coursesContainer.innerHTML = `
+                    <div class="text-center py-16">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-exclamation-circle text-2xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Erro ao carregar cursos</h3>
+                        <p class="text-gray-600">Tente novamente mais tarde</p>
+                    </div>
+                `;
             }
         }
 
         async function openCourseModal(cursoId, cursoNome) {
             const videoModal = document.getElementById("videoModal");
             try {
-                document.getElementById("modal-title").textContent = `Carregando: ${cursoNome}...`;
-                videoModal.classList.add("is-active");
+                document.getElementById("modal-title").textContent = cursoNome;
+                videoModal.classList.remove("hidden");
 
-                const headers = getAuthHeaders(); if (!headers) return;
+                const headers = getAuthHeaders(); 
+                if (!headers) return;
+                
                 const response = await fetch(`${backendApiUrl}/api/biblioteca/curso/${cursoId}/videos`, { headers });
                 if (!response.ok) throw new Error("Não foi possível carregar os vídeos.");
                 
                 currentVideos = await response.json();
                 
                 if (currentVideos.length === 0) {
-                    document.getElementById("video-container").innerHTML = "<div class=\"notification is-warning\">Este curso ainda não tem vídeos.</div>";
+                    document.getElementById("video-container-wrapper").innerHTML = `
+                        <div class="text-center py-12 bg-yellow-50 rounded-lg">
+                            <i class="fas fa-video-slash text-4xl text-yellow-600 mb-3"></i>
+                            <h3 class="text-lg font-bold text-gray-900 mb-1">Sem vídeos disponíveis</h3>
+                            <p class="text-gray-600">Este curso ainda não tem vídeos</p>
+                        </div>
+                    `;
                     return;
                 }
 
@@ -144,7 +249,7 @@
             } catch (error) {
                 console.error("Erro ao abrir curso:", error);
                 alert(error.message);
-                videoModal.classList.remove("is-active");
+                videoModal.classList.add("hidden");
             }
         }
         
@@ -155,17 +260,38 @@
             const videoId = (match && match[2].length === 11) ? match[2] : null;
 
             if (!videoId) {
-                document.getElementById("video-container").innerHTML = "<div class=\"notification is-danger\">URL do vídeo inválida.</div>";
+                document.getElementById("video-container-wrapper").innerHTML = `
+                    <div class="text-center py-12 bg-red-50 rounded-lg">
+                        <i class="fas fa-exclamation-triangle text-4xl text-red-600 mb-3"></i>
+                        <p class="text-gray-600">URL do vídeo inválida</p>
+                    </div>
+                `;
                 return;
             }
             
-            document.getElementById("video-container").innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" title="${video.titulo}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            document.getElementById("video-description").textContent = video.descricao;
+            document.getElementById("video-container-wrapper").innerHTML = `
+                <div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg bg-gray-900">
+                    <iframe src="https://www.youtube.com/embed/${videoId}" 
+                            title="${video.titulo}" 
+                            class="absolute top-0 left-0 w-full h-full"
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            `;
+            
+            document.getElementById("video-description").textContent = video.descricao || 'Sem descrição disponível';
             document.getElementById("video-counter").textContent = `Vídeo ${index + 1} de ${currentVideos.length}`;
             
             const markAsWatchedBtn = document.getElementById("markAsWatched");
             markAsWatchedBtn.disabled = video.assistido;
-            markAsWatchedBtn.textContent = video.assistido ? "Vídeo Assistido" : "Marcar como Assistido";
+            markAsWatchedBtn.innerHTML = video.assistido 
+                ? '<i class="fas fa-check"></i> Vídeo Assistido' 
+                : '<i class="fas fa-check"></i> Marcar como Assistido';
+            markAsWatchedBtn.className = video.assistido 
+                ? 'flex-1 bg-gray-400 text-white px-4 py-3 rounded-lg font-semibold cursor-not-allowed flex items-center justify-center gap-2'
+                : 'flex-1 bg-primary-500 hover:bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2';
 
             document.getElementById("prevVideo").disabled = index === 0;
             document.getElementById("nextVideo").disabled = index === currentVideos.length - 1;
@@ -173,8 +299,12 @@
 
         async function markVideoAsWatched() {
             const video = currentVideos[currentVideoIndex];
+            if (video.assistido) return;
+            
             try {
-                const headers = getAuthHeaders(); if (!headers) return;
+                const headers = getAuthHeaders(); 
+                if (!headers) return;
+                
                 await fetch(`${backendApiUrl}/api/progresso`, {
                     method: "POST",
                     headers,
@@ -190,18 +320,6 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            // --- Lógica do Menu Hamburger ---
-            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-            if ($navbarBurgers.length > 0) {
-                $navbarBurgers.forEach(el => {
-                    el.addEventListener('click', () => {
-                        const target = el.dataset.target;
-                        const $target = document.getElementById(target);
-                        el.classList.toggle('is-active');
-                        $target.classList.toggle('is-active');
-                    });
-                });
-            }
             if (!localStorage.getItem("userToken")) {
                 alert("Acesso negado. Faça o login para continuar.");
                 window.location.href = "../../index.html";
@@ -211,9 +329,9 @@
             fetchAndRenderCourses();
 
             document.getElementById("courses-container").addEventListener("click", (event) => {
-                const button = event.target.closest(".open-curso");
-                if (button) {
-                    openCourseModal(button.dataset.cursoId, button.dataset.cursoNome);
+                const card = event.target.closest(".course-card");
+                if (card) {
+                    openCourseModal(card.dataset.cursoId, card.dataset.cursoNome);
                 }
             });
 
@@ -222,9 +340,16 @@
             document.getElementById("markAsWatched").addEventListener("click", markVideoAsWatched);
 
             const modal = document.getElementById("videoModal");
-            modal.querySelector(".modal-background").addEventListener("click", () => modal.classList.remove("is-active"));
-            modal.querySelector(".delete").addEventListener("click", () => modal.classList.remove("is-active"));
-            // Removido o botão closeModalBtn, pois não existe no HTML
+            modal.querySelector(".modal-close").addEventListener("click", () => modal.classList.add("hidden"));
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) modal.classList.add("hidden");
+            });
+            
+            document.getElementById("logoutBtn").addEventListener("click", async () => {
+                await supabaseClient.auth.signOut();
+                localStorage.removeItem("userToken");
+                window.location.href = "../../index.html";
+            });
         });
     </script>
 </body>
