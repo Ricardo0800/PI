@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**ET Education** is an innovative educational platform that revolutionizes how students learn **Mathematics** and **Computer Science** by integrating **Minecraft** as the primary teaching methodology. This integrated project combines practical learning with engaging game-based education, developed by students from the Federal Institute of Brasília (Instituto Federal de Brasília).
+**ET Education** is an innovative educational platform that revolutionizes how students learn **Mathematics** and **Computer Science** by integrating **Minecraft** as the primary teaching methodology. This project combines game-based learning with solid pedagogical principles to create an engaging learning experience for high school students.
 
 ### 👥 Development Team
 - **Ricardo Guilherme** (3A)
@@ -16,7 +16,7 @@
 ## 🎯 Mission & Vision
 
 ### Mission
-To make STEM education more engaging and accessible by leveraging Minecraft as an interactive learning tool, demonstrating complex mathematical and computational concepts through practical, hands-on gameplay.
+To make STEM education more engaging and accessible by leveraging Minecraft as an interactive learning tool, demonstrating complex mathematical and computational concepts through practical, hands-on experiences.
 
 ### Vision
 Create a comprehensive learning ecosystem where students can:
@@ -67,7 +67,7 @@ Create a comprehensive learning ecosystem where students can:
 
 ### **Frontend Stack**
 - **HTML5** - Semantic markup and structure
-- **Tailwind CSS** - Responsive UI framework (81.1% of codebase)
+- **CSS3** - Responsive styling (81.1% of codebase)
 - **JavaScript** - Interactive functionality (18.9% of codebase)
 - **Bulma CSS** - Admin panel styling
 - **Font Awesome** - Icon library
@@ -310,7 +310,7 @@ supabase.from('Materiais').delete().eq('id', materialId)
 - [ ] Certification system
 
 ### Phase 4 (2027)
-- [ ] Support for other games (MinecraftBedrock, educational platforms)
+- [ ] Support for other games (Minecraft Bedrock, educational platforms)
 - [ ] International language support
 - [ ] Advanced analytics and reporting
 - [ ] API for third-party integrations
@@ -402,7 +402,7 @@ This project is open source and available under the MIT License. See the LICENSE
 
 ## 🎓 About Educational Innovation
 
-ET Education represents a paradigm shift in STEM education. By leveraging the immersive nature of Minecraft, this platform demonstrates that engaging, practical learning experiences are not only more enjoyable but also more effective at building deep understanding of complex concepts.
+ET Education represents a paradigm shift in STEM education. By leveraging the immersive nature of Minecraft, this platform demonstrates that engaging, practical learning experiences are not only possible but essential for modern education.
 
 Our vision is to empower educators and students worldwide to see gaming not as a distraction from learning, but as a powerful tool FOR learning.
 
@@ -411,3 +411,15 @@ Our vision is to empower educators and students worldwide to see gaming not as a
 ---
 
 **Made with ❤️ by Ricardo Guilherme, Ariel Kevenn, Miguel, and Lucas**
+
+---
+
+## 📝 Documentation Validation
+
+✅ **Validated**: A comprehensive technical documentation of this project (v2_Jogos_Educacionais.md) has been verified against this README and all project specifications are 100% aligned.
+
+**Documented by**: **Ricardo Félix Guedes Silva Nonato**  
+**Date**: June 10, 2026  
+**Role**: Project Documentation and Validation
+
+---
