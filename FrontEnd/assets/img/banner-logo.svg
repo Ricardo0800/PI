@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400">
   <!-- Fundo verde oliva escuro -->
-  <rect width="1200" height="400" fill="#556B2F"/>
+  <rect width="1200" height="400" fill="#153d01"/>
   
   <!-- Logo aumentada (reposicionada e escalada) -->
   <g transform="translate(100, 80) scale(4)">
