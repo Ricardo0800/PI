@@ -1,9 +1,10 @@
-![The Logo](FrontEnd/assets/img/favSvg.svg)
+![ET Education Banner](FrontEnd/assets/img/banner-logo.svg)
+
 # 🎮 ET Education - Learn Through Gaming
 
 ## Project Overview
 
-**ET Education** is an innovative educational platform that revolutionizes how students learn **Mathematics** and **Computer Science** by integrating **Minecraft** as the primary teaching methodology. This project combines game-based learning with solid pedagogical principles to create an engaging learning experience for high school students.
+**ET Education** is an innovative educational platform that revolutionizes how students learn **Mathematics** and **Computer Science** by integrating **Minecraft** as the primary teaching methodology.
 
 ### 👥 Development Team
 - **Ricardo Guilherme** (3A)
@@ -104,7 +105,8 @@ PI/
 │   │   └── cadastro.html         # User registration
 │   ├── assets/
 │   │   └── img/
-│   │       └── favSvg.svg        # Project mascot/logo
+│   │       ├── favSvg.svg        # Project mascot/logo
+│   │       └── banner-logo.svg   # Banner with logo and title
 │   └── supabaseConfig.js         # Supabase initialization
 ├── admin/                        # Administrative pages
 │   ├── admin.html                # Dashboard
@@ -403,7 +405,7 @@ This project is open source and available under the MIT License. See the LICENSE
 
 ## 🎓 About Educational Innovation
 
-ET Education represents a paradigm shift in STEM education. By leveraging the immersive nature of Minecraft, this platform demonstrates that engaging, practical learning experiences are not only possible but essential for modern education.
+ET Education represents a paradigm shift in STEM education. By leveraging the immersive nature of Minecraft, this platform demonstrates that engaging, practical learning experiences are not only possible but essential for 21st-century learners.
 
 Our vision is to empower educators and students worldwide to see gaming not as a distraction from learning, but as a powerful tool FOR learning.
 
