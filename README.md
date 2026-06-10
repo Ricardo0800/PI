@@ -1,3 +1,4 @@
+![The Logo](FrontEnd/assets/img/favSvg.svg)
 # 🎮 ET Education - Learn Through Gaming
 
 ## Project Overview
